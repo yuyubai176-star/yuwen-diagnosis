@@ -1,0 +1,427 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>语文学情诊断 · 学生版</title>
+<style>
+:root {
+  --red:#B83A2A; --gold:#B8860B; --cream:#FBF7F2; --ink:#2C1810;
+  --ink-light:#5E5046; --white:#FFF; --border:#E0D5C9; --bg-card:#FFFBF7;
+  --green:#5B8C5A; --blue:#4A7B9D;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:"Microsoft YaHei","PingFang SC",sans-serif;background:var(--cream);color:var(--ink);min-height:100vh}
+.container{max-width:720px;margin:0 auto;padding:24px 20px}
+
+.header{text-align:center;padding:36px 0 24px}
+.header .icon{font-size:48px;margin-bottom:8px}
+.header h1{font-size:28px;color:var(--red);font-weight:700;letter-spacing:3px;margin-bottom:4px}
+.header .sub{font-size:13px;color:var(--ink-light);letter-spacing:1px}
+
+.card{background:var(--bg-card);border-radius:14px;padding:22px 20px;margin-bottom:12px;box-shadow:0 2px 8px rgba(44,24,16,0.04);border:1px solid var(--border)}
+.card h3{font-size:16px;color:var(--ink);margin-bottom:12px;line-height:1.7}
+
+.section-badge{display:inline-block;padding:3px 12px;border-radius:12px;font-size:12px;font-weight:600;letter-spacing:1px;margin-bottom:10px}
+.badge-reading{background:#FFF0EE;color:var(--red)}
+.badge-poetry{background:#F3F0EB;color:#8B7355}
+.badge-writing{background:#EEF4F0;color:var(--green)}
+.badge-language{background:#F0F0F8;color:var(--blue)}
+
+.q-num{display:inline-block;background:var(--red);color:#fff;font-size:11px;padding:2px 9px;border-radius:9px;margin-right:7px;vertical-align:middle}
+
+.options{display:flex;flex-direction:column;gap:8px}
+.option{display:flex;align-items:flex-start;gap:10px;padding:12px 14px;border:1.5px solid var(--border);border-radius:10px;cursor:pointer;transition:all .18s;background:var(--white)}
+.option:hover{border-color:var(--gold);background:#FFFBF2}
+.option.selected{border-color:var(--red);background:#FFF5F3}
+.option .label{width:24px;height:24px;border-radius:50%;background:var(--cream);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:var(--ink-light);flex-shrink:0;margin-top:1px}
+.option.selected .label{background:var(--red);color:#fff}
+.option .text{font-size:14px;line-height:1.55;flex:1}
+
+.btn{display:block;width:100%;padding:12px;border:none;border-radius:10px;font-size:15px;font-weight:600;cursor:pointer;transition:all .2s;letter-spacing:1px}
+.btn-primary{background:var(--red);color:#fff}
+.btn-primary:hover{opacity:.9;transform:translateY(-1px)}
+.btn-primary:disabled{opacity:.35;cursor:not-allowed;transform:none}
+.btn-outline{background:var(--white);color:var(--red);border:2px solid var(--red)}
+.btn-outline:hover{background:#FFF5F3}
+.btn-small{padding:8px 16px;font-size:13px;width:auto;display:inline-block}
+
+.progress-wrap{margin-bottom:16px}
+.progress-bar{height:5px;background:var(--border);border-radius:3px;overflow:hidden}
+.progress-fill{height:100%;background:var(--red);border-radius:3px;transition:width .3s}
+.progress-text{display:flex;justify-content:space-between;font-size:11px;color:var(--ink-light);margin-top:4px}
+
+.radar-wrap{max-width:380px;margin:0 auto}
+.radar-wrap canvas{width:100%!important;height:auto!important}
+
+.type-badge{display:inline-block;padding:10px 28px;border:2px solid var(--gold);border-radius:24px;font-size:20px;font-weight:700;color:var(--gold);letter-spacing:3px;margin:8px 0}
+.type-desc{font-size:14px;color:var(--ink-light);margin-top:4px}
+
+.report-section{margin-top:16px}
+.report-section h4{font-size:15px;margin-bottom:8px;padding-left:10px;border-left:3px solid var(--red);color:var(--ink)}
+.report-section p{font-size:14px;line-height:1.85;color:var(--ink-light);margin-bottom:8px}
+
+.advice-item{padding:11px 13px;margin-bottom:6px;background:var(--white);border-radius:9px;border:1px solid var(--border);font-size:13.5px;line-height:1.75;color:var(--ink-light)}
+.advice-item .advice-num{display:inline-block;width:22px;height:22px;border-radius:50%;background:var(--red);color:#fff;text-align:center;line-height:22px;font-size:11px;font-weight:700;margin-right:7px;flex-shrink:0}
+.advice-item strong{color:var(--ink)}
+
+.copy-box{background:var(--white);border:2px dashed var(--border);border-radius:10px;padding:14px;margin-top:10px;text-align:center}
+.copy-box .code{font-family:monospace;font-size:11px;color:var(--ink-light);word-break:break-all;margin-bottom:8px}
+.hidden{display:none!important}
+.footer-note{text-align:center;padding:24px 0 12px;font-size:11px;color:var(--ink-light)}
+
+@media print{
+  body{background:#fff;color:#000}
+  .btn,.footer-note,.progress-wrap{display:none!important}
+  .card{box-shadow:none;border:1px solid #ccc;break-inside:avoid;margin-bottom:8px;padding:14px 16px}
+  .header{padding:16px 0 8px}
+  .header h1{color:#000;font-size:22px}
+  .type-badge{border-color:#000;color:#000}
+  .radar-wrap{max-width:280px}
+  .report-section h4{border-left-color:#000}
+}
+
+.step-indicator{display:flex;align-items:center;justify-content:center;gap:8px;margin-bottom:16px}
+.step-dot{width:10px;height:10px;border-radius:50%;background:var(--border)}
+.step-dot.active{background:var(--red)}
+.step-dot.done{background:var(--green)}
+.step-line{width:30px;height:1px;background:var(--border)}
+</style>
+</head>
+<body>
+<div class="container" id="app">
+
+<!-- ====== 开始页 ====== -->
+<div id="screen-start">
+  <div class="header">
+    <div class="icon">📖</div>
+    <h1>语文学情诊断</h1>
+    <div class="sub">发现你的语文学力特点 · 八维能力评估</div>
+  </div>
+  <div class="card">
+    <p style="font-size:14px;line-height:1.9;color:var(--ink-light);">
+      欢迎你参加这次特别的语文诊断！<br><br>
+      这里没有标准答案，<b>每一个选择都在帮你发现自己的语文学力特点</b>。<br><br>
+      共 <b>20 道</b>场景题，分为现代文阅读、古诗文阅读、写作、语言基础与运用四个板块。请根据你的真实习惯作答——
+      诚实面对自己，是成长的开始。
+    </p>
+  </div>
+  <div class="card">
+    <p style="font-size:13px;color:var(--ink-light);margin-bottom:8px;">📝 作答前，请先填上你的名字：</p>
+    <input id="student-name" type="text" placeholder="输入你的姓名" style="width:100%;padding:11px 14px;border:1.5px solid var(--border);border-radius:10px;font-size:15px;outline:none;background:var(--white)">
+  </div>
+  <button class="btn btn-primary" onclick="startDiagnosis()">开始诊断</button>
+  <div class="footer-note">预计用时 8-12 分钟</div>
+</div>
+
+<!-- ====== 答题页 ====== -->
+<div id="screen-quiz" class="hidden">
+  <div class="progress-wrap">
+    <div class="progress-bar"><div class="progress-fill" id="progress-fill" style="width:0%"></div></div>
+    <div class="progress-text"><span id="section-label"></span><span id="progress-num">1 / 20</span></div>
+  </div>
+  <div class="card" id="question-card"></div>
+  <button class="btn btn-primary" id="btn-next" disabled onclick="nextQuestion()">下一题</button>
+  <div class="footer-note" style="padding-top:12px;">没有标准答案，选最像你的就好 😊</div>
+</div>
+
+<!-- ====== 结果页 ====== -->
+<div id="screen-result" class="hidden">
+  <div class="header"><div class="icon">🎉</div><h1>你的诊断报告</h1></div>
+
+  <!-- 总评 -->
+  <div class="card" id="card-overview"></div>
+
+  <!-- 类型标签 -->
+  <div class="card" style="text-align:center;">
+    <div class="type-badge" id="type-badge"></div>
+    <div class="type-desc" id="type-desc"></div>
+  </div>
+
+  <!-- 雷达图 -->
+  <div class="card"><div class="radar-wrap"><canvas id="radar-student"></canvas></div></div>
+
+  <!-- 优势 -->
+  <div class="card"><div class="report-section" id="section-strengths"></div></div>
+
+  <!-- 成长中 -->
+  <div class="card"><div class="report-section" id="section-growing"></div></div>
+
+  <!-- 学习建议 -->
+  <div class="card"><div class="report-section" id="section-advice"></div></div>
+
+  <!-- 诊断码 -->
+  <div class="card" id="card-code" style="text-align:center;">
+    <h4 style="margin-bottom:8px;">请将诊断码发送给老师</h4>
+    <div class="copy-box">
+      <div class="code" id="diagnosis-code" style="font-size:11px;word-break:break-all;margin-bottom:8px;max-height:80px;overflow-y:auto;text-align:left;"></div>
+      <button class="btn btn-primary btn-small" onclick="copyDiagnosisCode()" id="btn-copy-code">一键复制诊断码</button>
+      <p style="font-size:11px;color:var(--ink-light);margin-top:8px;">复制后发送给老师（微信 / 钉钉 / 班级群均可），老师即可在后台查看你的诊断报告</p>
+    </div>
+  </div>
+
+  <!-- 操作 -->
+  <div style="display:flex;gap:8px;margin-top:10px;">
+    <button class="btn btn-outline btn-small" onclick="printReport()" style="flex:1;">🖨️ 保存 / 打印报告</button>
+    <button class="btn btn-outline btn-small" onclick="restart()" style="flex:1;">重新诊断</button>
+  </div>
+  <div class="footer-note">每个人都有自己的语文学习方式，没有好坏之分 🌱</div>
+</div>
+</div>
+
+<script>
+// ====== 核心数据（共用的部分后续提取为 data.js） ======
+const DIMS = [
+  {id:0,name:'审题与题意理解',icon:'🔍',sname:'审题能力'},
+  {id:1,name:'信息提取与概括',icon:'📋',sname:'信息提取'},
+  {id:2,name:'语言组织与表达',icon:'✍️',sname:'语言表达'},
+  {id:3,name:'文本分析与鉴赏',icon:'📖',sname:'文本鉴赏'},
+  {id:4,name:'情感体悟与共情',icon:'💛',sname:'情感共情'},
+  {id:5,name:'逻辑思维与结构',icon:'🧩',sname:'逻辑思维'},
+  {id:6,name:'知识识记与积累',icon:'📚',sname:'知识积累'},
+  {id:7,name:'迁移运用与应变',icon:'🔄',sname:'迁移运用'}
+];
+const SECTIONS=[
+  {name:'现代文阅读',cls:'badge-reading',start:0,end:4},
+  {name:'古诗文阅读',cls:'badge-poetry',start:5,end:9},
+  {name:'写作',cls:'badge-writing',start:10,end:14},
+  {name:'语言基础与运用',cls:'badge-language',start:15,end:19}
+];
+const QUESTIONS=[{"q":"做阅读理解题时，你通常采用什么阅读顺序？","opts":[{"text":"先快速浏览题目，带着问题有针对性地读文章","scores":[[0,3],[1,2],[4,-1]]},{"text":"先仔细通读全文，把握大意后再逐题回原文找答案","scores":[[4,2],[1,3],[0,-1]]},{"text":"边读边圈画关键词和关键句，读完后凭批注印象做题","scores":[[0,2],[3,3],[1,-2]]},{"text":"直接看题目，在原文中找和题干关键词相同的句子来匹配作答","scores":[[1,-2],[0,-3],[3,-1]]}]},{"q":"面对「请用简洁的语言概括本文主要内容」这类概括题时，你通常怎么做？","opts":[{"text":"先找文中中心句或总起句，围绕它来概括核心事件","scores":[[1,3],[5,2],[2,-1]]},{"text":"用自己的话把事情的起因、经过、结果重新讲一遍","scores":[[2,3],[1,1],[5,-1]]},{"text":"把文中每个段落的大意串起来，但概括得比较长，容易写成复述","scores":[[1,-2],[2,-1],[5,1]]},{"text":"先圈出文中关键人物和事件要素，再串联成一句话","scores":[[0,3],[1,3],[2,-2]]}]},{"q":"面对「联系上下文，解释加点词语在文中的含义」这类含义题时，你通常？","opts":[{"text":"结合词语所在句子的前后文语境，用自己的话解释它在「这里」的意思","scores":[[1,3],[7,2],[6,-1]]},{"text":"先回忆这个词的字典义（本义），再根据上下文做适当调整","scores":[[6,2],[7,1],[1,-1]]},{"text":"直接把字典义写上去，不太会结合具体语境做变通","scores":[[6,2],[7,-3],[1,-2]]},{"text":"反复读这个词所在的句子，从上下文找线索推断它的临时含义","scores":[[1,3],[3,2],[6,-1]]}]},{"q":"面对「画线句子运用了什么描写方法？有什么表达效果？」这类赏析题时，你的答题思路是？","opts":[{"text":"先判断手法，再分析它写出了什么特点，最后说表达了什么情感","scores":[[3,3],[5,1],[4,-1]]},{"text":"能感觉到这句话写得好，写出自己的感受，但不太用专业术语分析","scores":[[4,3],[2,2],[3,-2]]},{"text":"回忆老师讲过的答题模板和常用术语，按照「手法+内容+效果」的套路写","scores":[[7,2],[3,2],[4,-2]]},{"text":"不太确定怎么分析，通常会把自己对这句话的理解写上去，但缺乏层次","scores":[[2,-2],[3,-3],[7,-1]]}]},{"q":"面对「文章最后一段在全文中有何作用？」这类作用题时，你的答题思路是？","opts":[{"text":"从「内容」和「结构」两个维度分别思考","scores":[[5,3],[0,2],[3,-1]]},{"text":"能想到结构上的作用，但内容上的作用分析不够深入","scores":[[5,1],[0,-1],[3,-2]]},{"text":"容易把作用题和赏析题混淆，把「手法+效果」当成「作用」来答","scores":[[0,-3],[3,-1],[5,-1]]},{"text":"先判断结尾类型，再根据类型确定具体作用","scores":[[0,3],[5,2],[3,-2]]}]},{"q":"背诵古诗词时，你更倾向于哪种方式？","opts":[{"text":"先理解诗歌的创作背景、字词含义和思想感情，在理解的基础上背诵","scores":[[4,3],[7,2],[6,-1]]},{"text":"反复大声朗读，利用节奏和韵律帮助记忆，不太关注诗意","scores":[[6,3],[4,-2],[7,-1]]},{"text":"边抄写边默记，通过动笔来加强记忆","scores":[[6,2],[2,1],[4,-1]]},{"text":"在脑中构想诗歌的画面和意境，用图像联想来辅助记忆","scores":[[4,3],[7,3],[6,-2]]}]},{"q":"做课外文言文阅读，遇到不认识的文言实词时，你最常用的策略是？","opts":[{"text":"联系课内学过的同一字词的释义，尝试迁移到新语境中理解","scores":[[7,3],[6,2],[1,-1]]},{"text":"结合上下文语境和现代汉语中该字的含义来推断","scores":[[1,3],[7,2],[6,-1]]},{"text":"遇到陌生字词容易卡住，反复纠结导致整篇理解受影响","scores":[[7,-3],[1,-2],[0,-2]]},{"text":"先通读全文注释，把已知的注释串起来推理剩余部分的大意","scores":[[1,3],[0,2],[7,-1]]}]},{"q":"面对「这首诗表达了诗人怎样的思想感情？」这类情感主旨题时，你通常？","opts":[{"text":"从意象、关键词、注释三方面入手，综合判断情感倾向","scores":[[4,3],[3,2],[1,1]]},{"text":"能整体感受到诗人的情绪，但说不出具体是通过什么感受到的","scores":[[4,2],[3,-2],[1,-1]]},{"text":"主要依赖老师讲过的「常见情感套路」，套用为主","scores":[[7,-2],[4,-2],[3,-2]]},{"text":"重点关注诗中直接表达情感的字眼，不太分析间接抒情","scores":[[1,2],[4,-1],[3,-1]]}]},{"q":"做诗歌鉴赏选择题时，你的做法是？","opts":[{"text":"逐项对照原文，检查每项的意象解读、手法判断和情感分析是否与诗歌一致","scores":[[0,3],[3,3],[4,-1]]},{"text":"凭对诗歌的整体感觉来判断，觉得不对劲的选项就选它","scores":[[4,3],[0,-2],[3,-1]]},{"text":"先排除明显正确的选项，对纠结的选项回到原诗找依据","scores":[[0,2],[5,2],[4,-1]]},{"text":"容易被选项中「高大上」的术语迷惑，看到不熟悉的术语就觉得是错的","scores":[[0,-3],[3,-2],[6,1]]}]},{"q":"面对「请用自己的话描绘诗句所展现的画面」这类意境概括题时，你通常？","opts":[{"text":"抓住诗句中的意象，用生动的语言展开画面描写，还原意境","scores":[[2,3],[4,3],[5,-1]]},{"text":"把诗句逐字翻译成白话文，画面感不强，更像直译而非描绘","scores":[[6,2],[2,-2],[4,-1]]},{"text":"脑中能形成画面，但写成文字时表达干涩，画面描绘不出来","scores":[[4,1],[2,-3],[5,-1]]},{"text":"先分析意象特点，再组织语言分层描绘","scores":[[5,2],[2,2],[4,-2]]}]},{"q":"看到作文题目后，你的第一步通常是什么？","opts":[{"text":"圈出题目中的关键词，明确写作对象、范围和重点","scores":[[0,3],[5,2],[4,-1]]},{"text":"脑子里快速搜索自己写过或看过的类似题目来构思","scores":[[7,2],[6,1],[0,-2]]},{"text":"脑子里冒出什么就写什么，边写边想","scores":[[4,2],[0,-3],[5,-2]]},{"text":"先花几分钟列提纲：开头、中间、结尾怎么安排","scores":[[5,3],[2,2],[4,-2]]}]},{"q":"写作选取素材时，你优先考虑的是什么？","opts":[{"text":"选自己亲身经历、有真情实感的事情","scores":[[4,3],[2,2],[7,-1]]},{"text":"选新颖独特、别人可能想不到的事例","scores":[[7,3],[4,-1],[6,-1]]},{"text":"选自己最熟悉、最有把握写好的素材，宁可平淡也不冒险","scores":[[6,2],[7,-2],[2,-1]]},{"text":"看哪个素材能用上积累的好词好句和修辞手法","scores":[[6,2],[2,2],[4,-2]]}]},{"q":"作文写到一半，隐约发现可能偏离题意了，这时你会？","opts":[{"text":"立刻停下来，重新审题，想办法在剩余部分把主题拉回正轨","scores":[[0,3],[7,3],[2,-1]]},{"text":"继续往下写，在结尾部分巧妙「扣题」来补救前面的偏离","scores":[[2,2],[7,2],[0,-1]]},{"text":"马上划掉重写，时间来得及的话尽量重新来一遍","scores":[[0,1],[7,-1],[5,-1]]},{"text":"心里着急但不知道怎么办，只能硬着头皮写完","scores":[[0,-3],[7,-3],[2,-2]]}]},{"q":"你的作文结尾通常是怎样写的？","opts":[{"text":"呼应开头和题目，在结尾升华主题，让全文形成完整的闭环","scores":[[5,3],[0,2],[2,1]]},{"text":"用一句「金句」或名言收尾，让结尾有亮点和力度","scores":[[6,2],[2,3],[5,-2]]},{"text":"写得比较仓促，通常是「这件事让我明白了……」然后草草收尾","scores":[[5,-3],[2,-1],[0,-1]]},{"text":"尝试留白或含蓄收束，不把话说满，给读者回味空间","scores":[[3,2],[4,3],[5,-1]]}]},{"q":"对于作文的语言表达，你最在意的是什么？","opts":[{"text":"表达准确、流畅、有条理，能把想说的意思清晰地传递给读者","scores":[[2,3],[5,2],[4,-1]]},{"text":"语言优美有文采，多用修辞手法和成语，让文字「好看」","scores":[[6,1],[2,3],[4,-2]]},{"text":"不追求华丽的词藻，但力求每句话都有真情实感、不说套话","scores":[[4,3],[2,2],[6,-1]]},{"text":"比较依赖平时积累的「好词好句」，写作时尽量把它们用进去","scores":[[6,2],[7,-1],[2,-2]]}]},{"q":"做字形辨析题时，你的方法是？","opts":[{"text":"从字义入手——理解每个偏旁/部件的含义，根据意思来判断正确的写法","scores":[[6,2],[7,2],[5,1]]},{"text":"凭视觉记忆和语感，平时见得多、写得多的自然就能判断","scores":[[6,3],[7,-1],[5,-1]]},{"text":"不太有把握，经常在两个形近字之间纠结，容易选错","scores":[[6,-2],[7,-2],[5,-1]]},{"text":"靠死记硬背——把老师总结的易错字列表反复抄写记忆","scores":[[6,1],[7,-2],[5,-1]]}]},{"q":"做「下列句子中加点成语使用不正确的一项是」这类成语正误判断题时，你通常？","opts":[{"text":"逐项分析成语的意思、适用对象、感情色彩，再代入语境判断","scores":[[6,2],[1,2],[7,1]]},{"text":"凭语感读句子，感觉不顺的、成语用得很别扭的就选它","scores":[[2,2],[6,-1],[5,-1]]},{"text":"先排除自己确定会的选项，再用排除法缩小范围","scores":[[0,2],[5,1],[6,-1]]},{"text":"有些成语不认识意思，只能靠猜，正确率看运气","scores":[[6,-3],[7,-2],[1,-1]]}]},{"q":"做病句修改题时，你的诊断方法是？","opts":[{"text":"用六大病句类型逐一排查","scores":[[5,3],[6,1],[2,-1]]},{"text":"凭语感读一遍，觉得哪里读着不对劲就直接改哪里","scores":[[2,3],[5,-2],[6,-1]]},{"text":"把句子拆开，分析主谓宾定状补等句子成分","scores":[[5,3],[0,1],[2,-1]]},{"text":"对各种病句类型的特征分辨不清，经常凭感觉蒙一个","scores":[[5,-3],[6,-2],[2,-1]]}]},{"q":"做仿写句子题时，你从哪些方面入手？","opts":[{"text":"先分析原句的句式结构、修辞手法和语言风格，再替换内容","scores":[[3,3],[7,3],[6,-1]]},{"text":"凭语感模仿原句的「味道」和节奏，写出风格相似但内容不同的句子","scores":[[2,3],[4,2],[3,-2]]},{"text":"从记忆里搜索之前写过的类似句子，在此基础上稍作改动","scores":[[6,1],[7,-1],[3,-2]]},{"text":"不太会仿写，写出来的句子和原句在结构和风格上差距较大","scores":[[2,-3],[3,-3],[7,-2]]}]},{"q":"期末复习语文时，你整体的复习方式是？","opts":[{"text":"按板块系统复习，每个板块有明确的复习目标","scores":[[5,2],[6,1],[7,1]]},{"text":"大量做真题和模拟卷，通过刷题找薄弱点","scores":[[7,3],[0,2],[6,-2]]},{"text":"重点翻看笔记、错题本和老师划的重点","scores":[[0,2],[6,2],[7,-2]]},{"text":"不太有清晰的复习计划，翻到哪本书复习哪本","scores":[[5,-3],[7,-2],[6,-1]]}]}];
+
+// ====== 状态 ======
+let currentQ=0, scores=[50,50,50,50,50,50,50,50], answers=[];
+function getSection(i){return SECTIONS.find(s=>i>=s.start&&i<=s.end)}
+
+// ====== 答题引擎 ======
+function startDiagnosis(){
+  const nameEl=document.getElementById('student-name');
+  if(!nameEl.value.trim()){alert('请先填写你的姓名哦~');nameEl.focus();return}
+  currentQ=0;scores=[50,50,50,50,50,50,50,50];answers=[];
+  document.getElementById('screen-start').classList.add('hidden');
+  document.getElementById('screen-quiz').classList.remove('hidden');
+  document.getElementById('screen-result').classList.add('hidden');
+  renderQuestion()
+}
+function renderQuestion(){
+  const q=QUESTIONS[currentQ],sec=getSection(currentQ);
+  document.getElementById('progress-fill').style.width=(currentQ/QUESTIONS.length*100)+'%';
+  document.getElementById('progress-num').textContent=(currentQ+1)+' / '+QUESTIONS.length;
+  document.getElementById('section-label').innerHTML='<span class="section-badge '+sec.cls+'">'+sec.name+'</span>';
+  const btnNext=document.getElementById('btn-next');
+  btnNext.disabled=true;btnNext.textContent=currentQ<QUESTIONS.length-1?'下一题':'查看诊断结果';
+  const labels=['A','B','C','D'];
+  let html='<span class="q-num">'+(currentQ+1)+'</span> ';
+  html+='<h3 style="display:inline;">'+q.q+'</h3><div class="options">';
+  q.opts.forEach((opt,i)=>{
+    const sel=answers[currentQ]===i?' selected':'';
+    html+='<div class="option'+sel+'" onclick="selectOption('+i+')" id="opt-'+i+'">';
+    html+='<div class="label">'+labels[i]+'</div><div class="text">'+opt.text+'</div></div>'
+  });
+  html+='</div>';document.getElementById('question-card').innerHTML=html;
+  if(answers[currentQ]!==undefined)btnNext.disabled=false
+}
+function selectOption(i){
+  answers[currentQ]=i;document.querySelectorAll('.option').forEach(e=>e.classList.remove('selected'));
+  document.getElementById('opt-'+i).classList.add('selected');document.getElementById('btn-next').disabled=false
+}
+function nextQuestion(){
+  const q=QUESTIONS[currentQ];q.opts[answers[currentQ]].scores.forEach(([d,v])=>{scores[d]+=v});
+  if(currentQ<QUESTIONS.length-1){currentQ++;renderQuestion()}else{showResult()}
+}
+
+// ====== 评分 ======
+function mapScore(r){return Math.max(1,Math.min(99,Math.round((r-20)/60*98+1)))}
+function getLv(s){return s>=68?'high':(s<42?'low':'medium')}
+
+// ====== 行为描述库 ======
+const BEHAVIORS={
+0:{high:{strength:'审题习惯良好。做题前能准确圈画题干中的关键词（如"正确""错误""主要""赏析""作用"等限定词和指令词），快速判断题目类型——能区分概括题、含义题、赏析题和作用题的不同设问方式，并据此选择对应的答题策略。面对变换了问法的题目，能透过表面表述看到本质考点，作答方向明确，极少出现答非所问。',weakness:'',warning:'审题能力是语文学习的"方向盘"，当前状态良好。建议持续巩固圈画关键词和判断题型的习惯。',advice_teacher:'可让该生担任课堂练习中的"审题小老师"，向同学展示审题思路。',advice_student:'继续保持做题前圈画关键词的习惯，可以尝试挑战一些题干表述故意"绕弯"的题目。'},
+medium:{strength:'基本能理解题目要求，对于常见问法能做出方向正确的回答。对题干中的明显关键词有一定敏感度。',weakness:'对题干关键词的敏感度还不够稳定——有时会忽略限定词，导致回答不够完整。当题目问法和平常略有不同时，判断题型会犹豫，作答方向偶有偏差。',warning:'如果审题习惯不加强，随着题型越来越丰富，"审题偏差"将逐渐成为失分的第一环节。',advice_teacher:'每周选2-3道题干较长或问法较新的题，让学生只做"审题"这一步——圈关键词、说题型、说答题方向，不要求写出完整答案。',advice_student:'做题时养成"先读两遍题目"的习惯：第一遍通读，第二遍圈出关键词并心里默念"这道题在问我什么"。坚持两周就能形成条件反射。'},
+low:{strength:'对于问法非常直接的题目，基本能理解题目意图。',weakness:'审题习惯薄弱。容易忽略题干中的关键词和限定条件，经常在没完全理解题意的情况下就匆匆作答。对题型的判断模糊——经常将作用题当作赏析题来答、将含义题当作概括题来写。',warning:'审题是答题的第一道关卡。如果审题习惯得不到纠正，后续所有的知识学习和答题技巧训练都会大打折扣。进入初中后，"审题偏差"会导致大面积失分。',advice_teacher:'建立"题型识别卡"——把常见题型的典型问法整理成卡片，每次做题前先让学生对照判断。同时做"只审不答"练习——每周3次，每次3道题，只写题型判断和答题方向。',advice_student:'拿到题目后不要急着写答案，先问自己三个问题：①题目里的关键词是什么？②这道题是哪一类题型？③题目要我答几层意思？想清楚了再动笔。'}},
+1:{high:{strength:'信息提取效率高。能快速在文本中定位关键信息——包括关键人物、核心事件、转折点、中心句等。概括时能抓住主要信息、筛掉次要细节，概括语言简洁准确。',weakness:'',warning:'后续可在"精准概括"上进一步打磨——从"概括得对"到"概括得精"。',advice_teacher:'该生可挑战更高阶的概括训练：如把1000字文章压缩到100字、50字、20字三个版本。',advice_student:'你的信息提取能力很好，可以尝试更有挑战性的练习：读一篇长文后，用三句话、一句话、甚至一个词来概括。'},
+medium:{strength:'基本能在文本中找到关键信息，对于明显的中心句和关键事件能够识别。',weakness:'信息定位的速度和精准度还有提升空间。概括时容易把次要细节也写进去，概括语偏长。在"用自己的话归纳"和"直接照抄原文"之间有时偏向后者。',warning:'概括能力是贯穿整个语文学习的基础能力——阅读理解需要概括、作文审题需要概括材料。如果概括能力停留在"找得到但说不清"的阶段，会在多个板块同时显现问题。',advice_teacher:'推荐"三级压缩训练法"：选一篇500字短文，分三步概括——150字、50字、15字以内。三周练3篇。',advice_student:'试试"30秒口头概括法"——读完一段文章后，合上书，在30秒内用嘴巴说清楚这段在讲什么。录音下来自己听听，说得清楚就写得清楚。'},
+low:{strength:'对于情节明确、结构简单的文本能够把握大意。',weakness:'信息提取效率偏低——读完文章后较难快速定位关键信息，容易遗漏重要内容或把次要细节误判为主要信息。概括时倾向照抄原文原句而非用自己的话重新组织。概括语往往偏长且抓不住核心。',warning:'如果无法准确、高效地从文本中获取关键信息，后续的赏析题、作用题、含义题都会"地基不稳"。最典型的问题是文章读懂了字面意思但答题时找不准对应的文段。',advice_teacher:'从两个维度训练：①"定位训练"——给一篇短文，出5道信息提取题，只练定位不练概括；②"框架概括法"——教学生用固定句式"谁+在什么情况下+做了什么+结果怎样"来概括，先用框架套，熟练后脱框。',advice_student:'读文章的时候手里拿一支笔，边读边圈出你认为重要的词和句子。读完一段就问自己：这一段主要在讲什么？用一句话说出来。记住最简单的概括公式："谁+做了什么+结果怎样"。'}},
+2:{high:{strength:'语言表达清晰、有条理。答题时答案结构完整——有总起、有分述、有总结，逻辑线索清晰。写作中文从字顺，语言干净不啰嗦。',weakness:'',warning:'后续可以在"表达的精准度"和"语言的感染力"上进一步提升——从"表达清楚"到"表达精彩"。',advice_teacher:'给该生提供更多展示和锻炼表达能力的机会——课堂口头汇报、作文范文分享。同时可引导挑战更高阶的表达任务。',advice_student:'你的表达能力已经很好了。下一步可以追求"精准"——同样的意思，能不能用更少的字说清楚？能不能用一个精准的成语替代一句啰嗦的解释？'},
+medium:{strength:'基本能把想表达的意思说清楚。对于熟悉的话题或题型，可以做到条理基本清晰、语句通顺。',weakness:'表达的条理性不够稳定——偶尔会出现"想到哪写到哪"的情况。口头表达和书面表达之间存在落差——说的时候能说清楚，写到纸上就变得零散。',warning:'"说不清楚"往往意味着"想不清楚"。如果语言组织能力不加强，随着初中阅读题对答案分层要求的提高，表达能力的短板会越来越明显。',advice_teacher:'采用"先说后写"训练法：先让学生口头回答并录音，然后听录音把自己的话整理成书面答案。同时提供"表达脚手架"——常用答题句式模板，先借模板建立表达框架，再逐步脱模。',advice_student:'打完草稿或写完答案后，自己大声读一遍。读起来不顺的地方就是需要改的地方。每次做大题时试着用"第一……第二……第三……"来组织你的答案。'},
+low:{strength:'有表达的意愿，对于简单的问题能说出自己的理解。',weakness:'语言组织能力明显偏弱。答题时内容零散、缺乏层次，想到哪写到哪。经常出现"心里明白但说不出来"或"说出来了但写不清楚"的情况。',warning:'语言表达是语文能力的"输出端"——输入再多，如果输出不畅，所有能力和知识都无法在试卷上体现。更需要注意的是，表达困难往往会导致"语文焦虑"——知道自己不会表达，于是越来越不愿意写。',advice_teacher:'三步走：①"降低门槛"——先让学生口头说，老师帮TA把说的整理成文字；②"提供拐杖"——给最简化的答题句式模板，让学生先用最少的自主表达量把答案搭起来；③"逐步放手"——逐步替换模板中的部分为自己组织的语言。',advice_student:'不要怕写得不好。先把你能想到的写下来，然后再"改"——改比写容易。每次做完题，看看参考答案或同学的优秀答案，问问自己：别人写的比我好在哪里？下次试着模仿。'}},
+3:{high:{strength:'文本分析能力强。面对需要赏析的句子或段落，能系统地从写作手法、语言特色和表达效果三个层面进行分析。能用规范的赏析术语组织答案，分析过程有理有据、层次分明。',weakness:'',warning:'随着文本从记叙文向说明文、议论文拓展，可继续丰富分析维度。',advice_teacher:'引导其挑战更复杂的比较鉴赏任务（如两篇同类文章的写法对比分析），或尝试写简短的文学短评。',advice_student:'你的赏析能力很好，下一步可以尝试"比较阅读"——把两篇写同样主题的文章放在一起，比较它们在写法上有什么不同。'},
+medium:{strength:'对于有明显修辞手法或描写方法的句子，能识别出基本手法并说出它写了什么。',weakness:'赏析的深度和系统性还不够。能感觉到句子"写得好"，但分析时往往停留在"用了什么手法"和"写了什么内容"两层，缺少对"产生什么效果"的深入分析。有时会混淆赏析题和作用题。',warning:'初中阅读理解中赏析题的比重逐年增加，且赏析对象会从"有明显修辞的句子"扩展到"看似平淡但含义深刻的句子"。能否进行有深度的文本分析，往往是中考阅读高分和中等分的分水岭。',advice_teacher:'推荐"三问赏析法"系统训练：面对一个句子必须回答——①用了什么手法？②写出了什么特点/内容？③产生了什么表达效果？每周选2句训练。另外需专门做一次"赏析题vs作用题"的区分教学。',advice_student:'遇到写得好的句子，脑子问自己三个问题：①它用了什么写法？②写出了什么？③好在哪里？把这三个问题的答案串起来，就是一份不错的赏析答案。'},
+low:{strength:'对"写得好"的句子有一定的感知力，能感觉到某句话在文中比较特别或重要。',weakness:'文本分析能力明显不足。对文本的感知停留在感性的"好"或"不好"层面，无法从写作手法、语言特色等角度进行理性分析。能说出"这句话写得好"，但说不出"为什么好"和"怎么做到的"。遇到作用题时经常与赏析题混淆。',warning:'"读得懂但答不对"是这类学生最典型的困境。随着初中阅读文本难度和深度不断提升，如果文本分析能力持续薄弱，阅读理解将从"还能应付"变成"大面积失分"。',advice_teacher:'按以下顺序推进：①建立"手法识别"基础——制作常见写作手法一览表，要求学生在阅读中能够"认出来"；②引入"三问赏析法"——对每处需要赏析的句子回答三个问题；③在框架基本熟悉后引入规范术语和句式。文本分析不是靠"讲"学会的，是靠一篇一篇"练"出来的。',advice_student:'不要怕，赏析能力是一步一步练出来的。第一步：先学会"认"——看到比喻能认出是比喻。第二步：学会"说"——认出之后用简单的话说说它写了什么。第三步：学会"评"——说说这样写好不好，好在哪里。每次就做这三步，坚持练就会越来越好。'}},
+4:{high:{strength:'情感体悟能力强。阅读时能敏锐捕捉到作者隐藏在字里行间的情感，不仅关注直接抒情的语句，也能从环境描写、细节描写、语气变化中间接感受到情感波动。写作中能写"有温度"的文字。',weakness:'',warning:'继续保持对文字的敏感和共情能力，同时可尝试把感性体验和理性分析更好地结合起来。',advice_teacher:'推荐阅读情感细腻的名家散文（如朱自清、冰心、汪曾祺），引导关注作者"如何用文字传递情感"。同时可在写作中鼓励发挥这一优势。',advice_student:'你有一颗敏感的心，这是很多人没有的语文天赋。读书时多问自己：作者是怎么让我产生这种感受的？把这些发现记下来，用到你自己的作文里去。'},
+medium:{strength:'对于有明显情感倾向的文章，能够感受到作者的大致情感方向。能识别出文中直接表达情感的关键词句。',weakness:'对隐含在文字背后的情感敏感度不够高——能抓住"直接说出来的"，但对"藏在景物描写中""藏在细节动作中""藏在语气变化中"的间接情感，体悟不够深入。阅读时往往更多关注"事"而非"情"。',warning:'初中阅读中的情感体悟要求比小学高一个层次——不再只是"感受作者的情感"，而是"分析作者如何传递情感"和"体会文中人物复杂的内心世界"。',advice_teacher:'推荐"情感地图"训练：选一篇情感线索清晰的记叙文，让学生用曲线画出文中情感的变化，标注每个情感变化的触发事件。另外可在课堂上做"细节中的情感"小练习。',advice_student:'读文章时不只是看"发生了什么"，还要多想一步："写这件事的时候，作者心里是什么感受？"试着在触动你的地方旁边做个标注，慢慢你就会发现作者把情感藏在了很多以前没注意的地方。'},
+low:{strength:'能够理解文章的基本情节和内容，对于明确标注了情感的场景能识别基本情绪。',weakness:'情感体悟较为薄弱。阅读时主要关注文章"讲了什么"而非"表达了什么感受"，对文字背后的情感和意蕴不够敏感。写作中素材选择偏向"发生过什么事"而非"哪件事让我有感触"，因此作文虽然事件完整但缺乏打动人心的力量。',warning:'如果情感体悟能力持续薄弱，学生的语文学习将越来越偏向"技术流"——会答题模板、会套写法、会背素材，但文章真正的"灵魂"部分理解不了。',advice_teacher:'情感体悟不能靠说教来提升，需要"浸泡"和"引导"：①选"情感浓度高"的短篇范文，挑最打动人的细节深入讨论；②做"情感换位"训练——让学生代入角色"如果是你，会怎么想、怎么感受"；③写作中引导选材向"有感触"而非"有事件"倾斜。',advice_student:'读文章时试着把自己"放进去"——如果你是文中的人，在那个时刻你会想什么、感受什么？有没有哪个细节让你心里动了一下？抓住那个瞬间把它记下来。这就是你独特的情感体验，也是你写作中最珍贵的素材。'}},
+5:{high:{strength:'逻辑思维清晰。面对复杂的问题能快速梳理出答题的层次和顺序，答案组织有明显的逻辑结构。写作前列提纲是习惯性动作，文章结构完整，段与段之间有自然的过渡。',weakness:'',warning:'后续可尝试更具挑战性的思辨任务——如议论文写作、对同一问题的多角度分析。',advice_teacher:'引导尝试更具思辨性的读写任务——如给一篇文章写"结构评析"、围绕一个话题写正反观点议论文。逻辑思维好的学生在说明文和议论文阅读中有天然优势，可以提前培养。',advice_student:'你的逻辑感很好，这是一个很大的优势。可以试试更有挑战的事情——读一篇议论文，分析它是怎么一步步说服你的。'},
+medium:{strength:'对于需要分层作答的题目，经过提醒能够按一定逻辑顺序组织答案。写作前如果能花时间列提纲，文章结构会明显改善。',weakness:'答题时逻辑的自觉性还不够——不提醒时容易"想到哪写到哪"。写作提纲习惯偏弱，有时为了赶时间跳过列提纲环节，导致文章结构松散。在处理需要多角度分析的问题时有时会漏角度。',warning:'初中语文对逻辑思维的要求会越来越高——议论文阅读和写作全面进入，说明文需要分析说明顺序。如果逻辑组织能力不稳定，在面对这些新题型时会感到吃力。',advice_teacher:'两个抓手：①"强制提纲训练"——连续四周，每次写作前花5-8分钟列提纲，不列提纲不动笔；②"金字塔表达法"——教学生用"观点句+支撑句+例子"的结构来组织每个段落。',advice_student:'写作文之前花5分钟列一个提纲：第一段写什么？中间分几段？每段的核心内容是什么？结尾怎么收束？这个5分钟会帮你省下后面很多"写着写着不知道写什么"的时间。'},
+low:{strength:'对于简单直接的任务能够做出基本判断，有想要把答案写完整的意愿。',weakness:'逻辑思维能力偏弱。答题时缺乏明显的组织意识，答案呈现为"想到什么写什么"的状态。写作前基本不列提纲，文章结构比较随意——开头和结尾敷衍、中间段落之间缺乏过渡和照应。',warning:'逻辑思维是语文能力的"骨架"——没有骨架的文章，再好的素材和语言也是一盘散沙。随着初中学段对读写要求的提高，逻辑能力薄弱的负面影响将成倍放大。而且逻辑思维的培养周期较长，越早开始越好。',advice_teacher:'从最基础的结构训练开始：①"读结构"训练——每学一篇课文带学生画出全文结构图；②"搭架子"训练——写作文前老师帮TA一起搭框架；③"段落逻辑"训练——每周精练一个段落，要求"先给中心句，再给解释，再给例子"。',advice_student:'写作文最怕的其实不是"没什么可写"，而是"写着写着乱了"。秘诀只有一个：动笔前列提纲。哪怕只写5分钟，哪怕提纲只有几行字，它就像地图一样帮你指路。'}},
+6:{high:{strength:'知识积累扎实。字音字形、成语、古诗文默写、文学常识等方面储备充足。记忆方法有效——不是死记硬背，而是理解基础上的积累。在写作中能自然地调用积累的素材、诗句和成语。',weakness:'',warning:'后续可在"运用式积累"上进一步提升——不是积累更多，而是把已有的积累用得更好、更自然。',advice_teacher:'引导TA从"积累者"变成"输出者"——整理知识点分享给同学、给全班出题、做课前3分钟的知识小讲座。输出是最好的巩固。',advice_student:'你的积累已经很扎实了。下一步不是"背更多"，而是"用更好"——试着在写作中自然地融入你积累的诗词和成语，不刻意堆砌，而是让它们为你的表达服务。'},
+medium:{strength:'对于课内要求必背的古诗文、词语等基本能够掌握。有基本的积累意识——可能会有一个摘抄本或错题本。',weakness:'知识积累的主动性和系统性不够——处在"老师要求什么就背什么"的状态，缺乏自己主动整理和扩展积累的意识。对已积累的知识存在"忘了再背"的循环，缺乏有效的间隔复习机制。',warning:'初中语文的知识容量是小学的数倍——古诗文篇幅增长、文言实词虚词数量大增、名著阅读多部作品。如果积累方法和习惯跟不上，可能面临"考前背了考后忘、越积越多、越背越乱"的情况。',advice_teacher:'帮助学生从"被动积累"转向"主动积累"：①教"分类积累法"——把知识点分成板块，分类整理；②教"间隔复习法"——新知识当天、三天后、一周后、考前四次复习；③减少机械抄写，增加"运用式巩固"。',advice_student:'准备一个小本子，分成几个区：易错字一个区、成语一个区、好句子一个区。每次遇到新的就随手记进去，排队等车的时候翻翻就够了。关键不是"记了多少"，而是"记了之后有没有再看过"。'},
+low:{strength:'对于反复强调和练习的知识点，在督促下能够完成。',weakness:'知识积累薄弱——字音字形辨析能力不足、成语量少、古诗文默写容易出错。缺乏有效的积累方法和习惯，通常没有分类整理知识的工具。记忆方式比较低效——以临时突击和机械抄写为主，导致"背了就忘、忘了再背"的恶性循环。',warning:'知识积累是语文的"粮仓"——粮仓不满，其他的能力再好也缺乏"弹药"。如果积累方法和习惯在初一上学期得不到改善，学生将面临知识上的"赤字危机"。',advice_teacher:'从"零存整取"的微习惯开始：①每天只积累3个知识点——一个易错字+一个成语+一句诗，不求多只求坚持；②引入"间隔复习轮"——把积累的知识点写在卡片上，每天花5分钟翻卡片；③将积累量可视化——画一张"积累进度表"。',advice_student:'从现在开始，每天只记3个东西——一个你老写错的字、一个有意思的成语、一句你喜欢的诗。把它们写在便签纸上贴在书桌前。不要想着"我要把以前所有的都补回来"（那只会让你想逃跑），就从小小的3个开始。一个月你就有90个了，一学期下来你会有几百个。'}},
+7:{high:{strength:'迁移运用和应变能力强。学了的知识和方法能在新情境中灵活运用——课内学了文言实词能在课外文言文中识别，课内学了赏析方法能在陌生文本中套用。面对没见过的题型不慌乱，能冷静分析找到考点本质。',weakness:'',warning:'这个优势在初中阶段会越来越明显，因为越到高年级"会用"比"记住"更重要。保持这种"以不变应万变"的学习思维。',advice_teacher:'引导挑战更高难度的迁移任务——如用学过的赏析方法独立分析一篇课外散文、用学过的论证方法写短小的议论文。鼓励TA做"方法总结"——每学完一类题型用一两句话总结核心解题逻辑。',advice_student:'你已经掌握了学习语文最重要的能力——"活学活用"。继续保持这个习惯：每学完一个新知识点或新题型，问一下自己"这个还能用在什么地方"。平时遇到陌生的题目不要紧张，先看看它和学过的哪类题目最像。'},
+medium:{strength:'对于和课堂练习高度相似的题目，能够较好地调用已学方法作答。对于老师明确讲过"要举一反三"的知识点，有迁移的意识。',weakness:'迁移运用的主动性和灵活性还不够——"见过的题会做，没见过的题发蒙"。在学习中更倾向于关注"这道题的答案"而非"这类题的解题方法"，因此换了一道新题就不会了。',warning:'"学什么会什么"在小学阶段基本够用，但到了初中，"教什么考什么"的比例逐渐下降，"教方法考运用"的比例逐渐上升。如果学生习惯的是"题库式学习"，到了初中面对大量课外文本和创新题型时会吃力。',advice_teacher:'帮助学生从"答案思维"转向"方法思维"：①每讲完一类题让学生用自己的话总结一条"解题步骤"；②定期做"变式训练"——同一个考点换不同题型、不同问法来考；③引导学生做完新题后做"反向归类"。',advice_student:'学完每一类题之后，用一句话总结：这类题的核心方法是什么？把这句话写下来，下次遇到同类题但问法不一样时，记起这句话你就知道该怎么下手了。'},
+low:{strength:'对于反复操练过的题目能够基本掌握，对于和例题几乎一样的题目能做出正确回答。',weakness:'迁移运用能力明显偏弱。核心表现是"学什么才会什么"——做过的题能做对，但题目稍微变一下问法、换一下文本类型就不会了。学习方式偏向"背答案"而非"学方法"——更关注"标准答案是什么"而非"为什么是这个答案"。',warning:'初中的语文考试中"原题重现"的概率几乎为零。如果学生不具备知识迁移和方法迁移的能力，每次考试都相当于"从零开始"。刷再多的题效果也有限——因为没有形成"方法库"，每一道新题都是一座孤岛。',advice_teacher:'扭转"背答案式学习"是核心：①"方法先行"教学法——每讲一类新题型先给方法步骤再讲例题；②"一题多变"练习——同一篇文章出三种不同问法；③引导学生建立"方法本"——记的不是"答案"而是"这类题怎么做"的步骤。',advice_student:'不要背答案。背答案就像背地图——你背得了一个地方的路线，但换了一个地方你就不认识了。学会"看指南针"才是关键：每学一类题，问老师"这类题的核心方法是什么？第一步做什么？第二步做什么？"然后把这三步记下来。'}
+}};
+
+// ====== MBTI 分类系统 ======
+const TYPES = {
+  T1:{name:'慧眼识珠型',tag:'敏锐洞察',desc:'你有一双「火眼金睛」——能快速看穿题目背后的考点，对文字有敏锐的分析力。这在语文学习中是非常珍贵的直觉。',strong:[0,3],weak:[2,7]},
+  T2:{name:'心有灵犀型',tag:'感性共鸣',desc:'你的内心有一根柔软的弦，文字中的情感很容易在你心中激起回响。你的表达有温度、有感染力，能打动人心。',strong:[4,2],weak:[5,6]},
+  T3:{name:'条分缕析型',tag:'逻辑架构',desc:'你的思维像一座井然有序的建筑——层次分明、结构清晰。无论答题还是写作，你总能让人一眼看清你的思路。',strong:[5,0],weak:[4,2]},
+  T4:{name:'厚积薄发型',tag:'博闻强识',desc:'你有一个充实的「知识粮仓」——字词诗句信手拈来。积累是语文学习最扎实的底气，你在这方面走在了前面。',strong:[6,1],weak:[7,3]},
+  T5:{name:'举一反三型',tag:'灵动应变',desc:'你有一种可贵的「方法迁移」能力——学过的知识能在新情境中灵活运用。遇到陌生题目不慌乱，这是高手才有的特质。',strong:[7,4],weak:[6,1]},
+  T6:{name:'脚踏实地型',tag:'扎实稳健',desc:'你的每一步都走得很稳。基础知识扎实、逻辑清晰有条理，这种「稳扎稳打」的学习风格会让你在语文学习中越来越有后劲。',strong:[6,5],weak:[4,3]},
+  T7:{name:'文思泉涌型',tag:'直觉表达',desc:'你有很好的语感——文字在你笔下流淌自然，表达流畅有灵性。这种天赋让你的作文有一种天然的吸引力。',strong:[2,4],weak:[0,5]},
+  T8:{name:'均衡发展型',tag:'全面均衡',desc:'你的各项语文能力发展比较均衡，没有明显的短板。这是一个很好的基础——就像一块平整的画布，未来你可以在任何方向画出精彩的图案。',strong:[],weak:[]}
+};
+
+function classifyStudent(ns){
+  const ranked=ns.map((v,i)=>({v,i})).sort((a,b)=>b.v-a.v);
+  const top2=[ranked[0].i,ranked[1].i].sort().join(',');
+  const bot2=[ranked[6].i,ranked[7].i].sort().join(',');
+  let bestType='T8',bestScore=-1;
+  for(const [key,type] of Object.entries(TYPES)){
+    if(key==='T8')continue;
+    let score=0;
+    if(type.strong.length===2){
+      score+=(ns[type.strong[0]]+ns[type.strong[1]])/2;
+      score-=(ns[type.weak[0]]+ns[type.weak[1]])/2;
+    }
+    if(score>bestScore){bestScore=score;bestType=key}
+  }
+  if(bestScore<5)bestType='T8';
+  return {type:TYPES[bestType],typeKey:bestType}
+}
+
+// ====== 学生报告生成 ======
+function showResult(){
+  document.getElementById('screen-quiz').classList.add('hidden');
+  document.getElementById('screen-result').classList.remove('hidden');
+  const ns=scores.map(mapScore);
+  const {type,typeKey}=classifyStudent(ns);
+  const name=document.getElementById('student-name').value.trim();
+  const strong=ns.map((v,i)=>({v,i})).sort((a,b)=>b.v-a.v).slice(0,3);
+  const weak=ns.map((v,i)=>({v,i})).sort((a,b)=>a.v-b.v).slice(0,3);
+
+  // 1. 总评
+  let overview='<div class="report-section"><h4>💌 '+name+'，你好</h4><p>';
+  overview+=type.desc+'</p><p>';
+  if(strong.length>0){
+    overview+='在这次诊断中，我们发现你在<strong>'+DIMS[strong[0].i].name+'</strong>和<strong>'+DIMS[strong[1].i].name+'</strong>方面表现很棒——';
+    overview+=BEHAVIORS[strong[0].i][getLv(ns[strong[0].i])].strength.substring(0,80)+'…… ';
+  }
+  if(weak.length>0){
+    overview+='当然，每个语文学习者都有正在成长中的部分。你在<strong>'+DIMS[weak[0].i].name+'</strong>方面还有更大的潜力等待释放——这很正常，也很值得期待。';
+  }
+  overview+='</p></div>';
+  document.getElementById('card-overview').innerHTML=overview;
+
+  // 2. 类型
+  document.getElementById('type-badge').textContent=type.name;
+  document.getElementById('type-desc').textContent=type.tag;
+
+  // 3. 雷达图
+  setTimeout(()=>drawRadar('radar-student',ns),100);
+
+  // 4. 优势
+  let strHtml='<h4>✅ '+name+'，这些是你的优势</h4>';
+  strong.slice(0,2).forEach(s=>{
+    strHtml+='<p><strong>'+DIMS[s.i].icon+' '+DIMS[s.i].name+'：</strong>'+BEHAVIORS[s.i][getLv(ns[s.i])].strength+'</p>';
+  });
+  document.getElementById('section-strengths').innerHTML=strHtml;
+
+  // 5. 正在成长中
+  let growHtml='<h4>🌱 正在成长中的能力</h4>';
+  growHtml+='<p>以下不是「缺陷」，而是你语文能力版图上正在发育的部分——就像一棵树的不同枝丫，有的先开花，有的后结果。多给它们一点时间和关注，它们会给你惊喜。</p>';
+  weak.slice(0,2).forEach(w=>{
+    growHtml+='<p style="margin-top:8px;"><strong>'+DIMS[w.i].icon+' '+DIMS[w.i].name+'：</strong>'+BEHAVIORS[w.i][getLv(ns[w.i])].weakness+'</p>';
+  });
+  document.getElementById('section-growing').innerHTML=growHtml;
+
+  // 6. 学习建议
+  let advHtml='<h4>💡 给你的专属成长计划</h4>';
+  advHtml+='<p style="margin-bottom:10px;">以下建议是根据你的诊断结果量身定制的，每一条都可以从今天开始做：</p>';
+  weak.slice(0,2).forEach((w,i)=>{
+    const b=BEHAVIORS[w.i][getLv(ns[w.i])];
+    advHtml+='<div class="advice-item"><span class="advice-num">'+(i+1)+'</span><strong>针对'+DIMS[w.i].sname+'：</strong>'+b.advice_student+'</div>';
+  });
+  if(strong.length>0){
+    const b=BEHAVIORS[strong[0].i].high;
+    advHtml+='<div class="advice-item"><span class="advice-num">'+(weak.length+1)+'</span><strong>保持优势：</strong>'+b.advice_student+'</div>';
+  }
+  document.getElementById('section-advice').innerHTML=advHtml;
+
+  // 7. 保存数据（localStorage + 服务器 API）
+  window._lastReport={name,ns,typeKey,typeName:type.name,typeTag:type.tag};
+  const reportData={id:Date.now()+Math.random().toString(36),name,ns,typeKey,typeName:type.name,typeTag:type.tag,ts:new Date().toISOString()};
+  // 本地存储（同设备备用）
+  try{
+    const existing=JSON.parse(localStorage.getItem('yuwen_diagnosis_students')||'[]');
+    const idx=existing.findIndex(s=>s.name===name);
+    if(idx>=0)existing[idx]=reportData;else existing.push(reportData);
+    localStorage.setItem('yuwen_diagnosis_students',JSON.stringify(existing));
+  }catch(e){}
+  // 生成诊断码（供学生复制发送给老师）
+  const codeData={name,ns,ts:new Date().toISOString()};
+  const code=btoa(unescape(encodeURIComponent(JSON.stringify(codeData))));
+  document.getElementById('diagnosis-code').textContent=code;
+  document.getElementById('btn-copy-code').textContent='📋 一键复制诊断码';
+  document.getElementById('btn-copy-code').disabled=false;
+}
+
+function copyDiagnosisCode(){
+  const code=document.getElementById('diagnosis-code').textContent;
+  if(!code)return;
+  if(navigator.clipboard&&navigator.clipboard.writeText){
+    navigator.clipboard.writeText(code).then(function(){
+      var btn=document.getElementById('btn-copy-code');
+      btn.textContent='✅ 已复制！请发送给老师';
+      btn.style.background='#5B8C5A';
+      setTimeout(function(){btn.textContent='📋 一键复制诊断码';btn.style.background='';},3000);
+    }).catch(function(){
+      fallbackCopy(code);
+    });
+  }else{
+    fallbackCopy(code);
+  }
+}
+
+function fallbackCopy(text){
+  var ta=document.createElement('textarea');
+  ta.value=text;ta.style.position='fixed';ta.style.left='-9999px';
+  document.body.appendChild(ta);ta.select();
+  try{document.execCommand('copy');
+    var btn=document.getElementById('btn-copy-code');
+    btn.textContent='✅ 已复制！请发送给老师';
+    btn.style.background='#5B8C5A';
+    setTimeout(function(){btn.textContent='📋 一键复制诊断码';btn.style.background='';},3000);
+  }catch(e){alert('请长按选中上方诊断码后手动复制')}
+  document.body.removeChild(ta);
+}
+
+function submitToServer(data){
+  // 仅在通过 http:// 访问时发送（file:// 跳过）
+  if(window.location.protocol==='file:')return;
+  try{
+    fetch('/api/submit',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(data)})
+    .catch(function(){})
+  }catch(e){}
+}
+
+function printReport(){
+  window.print();
+}
+
+// ====== 雷达图（动态加载 Chart.js）=====
+let chartLoaded=false,chartLoading=false,chartCbs=[];
+function loadChart(cb){if(chartLoaded){cb();return}chartCbs.push(cb);if(chartLoading)return;chartLoading=true;
+  const urls=['https://registry.npmmirror.com/chart.js/4.4.0/files/dist/chart.umd.min.js','https://unpkg.com/chart.js@4.4.0/dist/chart.umd.min.js','https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js'];
+  function tryLoad(i){if(i>=urls.length){chartLoaded=true;chartLoading=false;chartCbs.forEach(c=>c());chartCbs=[];return}
+    const s=document.createElement('script');s.src=urls[i];s.onload=()=>{chartLoaded=true;chartLoading=false;chartCbs.forEach(c=>c());chartCbs=[]};s.onerror=()=>tryLoad(i+1);document.head.appendChild(s)}tryLoad(0)}
+function drawRadar(id,ns){const el=document.getElementById(id);if(!el)return;
+  loadChart(()=>{const ctx=el.getContext('2d');if(ctx._chart)ctx._chart.destroy();
+    ctx._chart=new Chart(ctx,{type:'radar',data:{labels:DIMS.map(d=>d.icon+' '+d.sname),datasets:[{data:ns,backgroundColor:'rgba(184,58,42,0.10)',borderColor:'#B83A2A',borderWidth:2,pointBackgroundColor:'#B83A2A',pointBorderColor:'#fff',pointBorderWidth:2,pointRadius:5}]},options:{responsive:true,maintainAspectRatio:true,plugins:{legend:{display:false}},scales:{r:{min:0,max:100,ticks:{stepSize:20,backdropColor:'transparent',font:{size:10}},pointLabels:{font:{size:12}},grid:{color:'#E0D5C9'},angleLines:{color:'#E0D5C9'}}}}})})}
+function restart(){const el=document.getElementById('radar-student');if(el){const ctx=el.getContext('2d');if(ctx._chart)ctx._chart.destroy()};document.getElementById('screen-result').classList.add('hidden');document.getElementById('screen-start').classList.remove('hidden')}
+</script>
+</body>
+</html>
+
