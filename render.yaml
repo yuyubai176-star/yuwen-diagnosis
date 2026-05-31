@@ -1,0 +1,10 @@
+services:
+  - type: web
+    name: yuwen-diagnosis-api
+    runtime: python
+    buildCommand: ""
+    startCommand: python server.py
+    plan: free
+    envVars:
+      - key: PORT
+        value: 8080
