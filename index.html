@@ -150,13 +150,17 @@ body{font-family:"Microsoft YaHei","PingFang SC",sans-serif;background:var(--cre
   <!-- 学习建议 -->
   <div class="card"><div class="report-section" id="section-advice"></div></div>
 
-  <!-- 诊断码 -->
-  <div class="card" id="card-code" style="text-align:center;">
-    <h4 style="margin-bottom:8px;">请将诊断码发送给老师</h4>
-    <div class="copy-box">
-      <div class="code" id="diagnosis-code" style="font-size:11px;word-break:break-all;margin-bottom:8px;max-height:80px;overflow-y:auto;text-align:left;"></div>
-      <button class="btn btn-primary btn-small" onclick="copyDiagnosisCode()" id="btn-copy-code">一键复制诊断码</button>
-      <p style="font-size:11px;color:var(--ink-light);margin-top:8px;">复制后发送给老师（微信 / 钉钉 / 班级群均可），老师即可在后台查看你的诊断报告</p>
+  <!-- 同步状态 -->
+  <div class="card" id="card-sync" style="text-align:center;">
+    <div id="sync-status" style="font-size:14px;padding:12px;">
+      <span id="sync-icon">⏳</span> <span id="sync-text">正在同步数据给老师...</span>
+    </div>
+    <div id="sync-fallback" style="display:none;">
+      <p style="font-size:13px;color:var(--ink-light);margin-bottom:8px;">自动同步失败，请复制诊断码发送给老师：</p>
+      <div class="copy-box">
+        <div class="code" id="diagnosis-code" style="font-size:11px;word-break:break-all;margin-bottom:8px;max-height:80px;overflow-y:auto;text-align:left;"></div>
+        <button class="btn btn-primary btn-small" onclick="copyDiagnosisCode()" id="btn-copy-code">一键复制诊断码</button>
+      </div>
     </div>
   </div>
 
@@ -360,23 +364,59 @@ function showResult(){
     if(idx>=0)existing[idx]=reportData;else existing.push(reportData);
     localStorage.setItem('yuwen_diagnosis_students',JSON.stringify(existing));
   }catch(e){}
-  // 生成诊断码（供学生复制发送给老师）
-  const codeData={name,ns,ts:new Date().toISOString()};
-  const code=btoa(unescape(encodeURIComponent(JSON.stringify(codeData))));
-  document.getElementById('diagnosis-code').textContent=code;
-  document.getElementById('btn-copy-code').textContent='📋 一键复制诊断码';
-  document.getElementById('btn-copy-code').disabled=false;
+  // 自动同步给老师
+  syncToTeacher({name,ns,ts:new Date().toISOString()});
+}
+
+// ====== 数据同步 ======
+// 后端 API 地址（部署后替换为实际地址）
+var API_BASE = 'https://yuwen-diagnosis-api.onrender.com';
+
+function syncToTeacher(data){
+  var codeData = {name: data.name, ns: data.ns, ts: data.ts};
+  var code = btoa(unescape(encodeURIComponent(JSON.stringify(codeData))));
+
+  document.getElementById('sync-icon').textContent = '⏳';
+  document.getElementById('sync-text').textContent = '正在同步数据给老师...';
+  document.getElementById('sync-text').style.color = '';
+
+  fetch(API_BASE + '/api/submit', {
+    method: 'POST',
+    headers: {'Content-Type': 'application/json'},
+    body: JSON.stringify(data)
+  })
+  .then(function(r){ return r.json(); })
+  .then(function(resp){
+    if(resp && resp.ok){
+      document.getElementById('sync-icon').textContent = '✅';
+      document.getElementById('sync-text').textContent = '数据已自动同步给老师';
+      document.getElementById('sync-text').style.color = '#5B8C5A';
+    } else {
+      showSyncFallback(code);
+    }
+  })
+  .catch(function(){
+    showSyncFallback(code);
+  });
+}
+
+function showSyncFallback(code){
+  document.getElementById('sync-icon').textContent = '⚠️';
+  document.getElementById('sync-text').textContent = '自动同步未成功，请复制诊断码发送给老师';
+  document.getElementById('sync-text').style.color = '#C77826';
+  document.getElementById('sync-fallback').style.display = 'block';
+  document.getElementById('diagnosis-code').textContent = code;
 }
 
 function copyDiagnosisCode(){
-  const code=document.getElementById('diagnosis-code').textContent;
+  var code = document.getElementById('diagnosis-code').textContent;
   if(!code)return;
-  if(navigator.clipboard&&navigator.clipboard.writeText){
+  if(navigator.clipboard && navigator.clipboard.writeText){
     navigator.clipboard.writeText(code).then(function(){
-      var btn=document.getElementById('btn-copy-code');
-      btn.textContent='✅ 已复制！请发送给老师';
-      btn.style.background='#5B8C5A';
-      setTimeout(function(){btn.textContent='📋 一键复制诊断码';btn.style.background='';},3000);
+      var btn = document.getElementById('btn-copy-code');
+      btn.textContent = '✅ 已复制！请发送给老师';
+      btn.style.background = '#5B8C5A';
+      setTimeout(function(){btn.textContent = '📋 一键复制诊断码';btn.style.background = '';},3000);
     }).catch(function(){
       fallbackCopy(code);
     });
@@ -386,25 +426,16 @@ function copyDiagnosisCode(){
 }
 
 function fallbackCopy(text){
-  var ta=document.createElement('textarea');
-  ta.value=text;ta.style.position='fixed';ta.style.left='-9999px';
+  var ta = document.createElement('textarea');
+  ta.value = text;ta.style.position = 'fixed';ta.style.left = '-9999px';
   document.body.appendChild(ta);ta.select();
   try{document.execCommand('copy');
-    var btn=document.getElementById('btn-copy-code');
-    btn.textContent='✅ 已复制！请发送给老师';
-    btn.style.background='#5B8C5A';
-    setTimeout(function(){btn.textContent='📋 一键复制诊断码';btn.style.background='';},3000);
+    var btn = document.getElementById('btn-copy-code');
+    btn.textContent = '✅ 已复制！请发送给老师';
+    btn.style.background = '#5B8C5A';
+    setTimeout(function(){btn.textContent = '📋 一键复制诊断码';btn.style.background = '';},3000);
   }catch(e){alert('请长按选中上方诊断码后手动复制')}
   document.body.removeChild(ta);
-}
-
-function submitToServer(data){
-  // 仅在通过 http:// 访问时发送（file:// 跳过）
-  if(window.location.protocol==='file:')return;
-  try{
-    fetch('/api/submit',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(data)})
-    .catch(function(){})
-  }catch(e){}
 }
 
 function printReport(){
