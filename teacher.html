@@ -1,0 +1,994 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>语文学情诊断 · 教师后台</title>
+<style>
+:root {
+  --red:#B83A2A; --gold:#B8860B; --cream:#FBF7F2; --ink:#2C1810;
+  --ink-light:#5E5046; --white:#FFF; --border:#E0D5C9; --bg-card:#FFFBF7;
+  --green:#5B8C5A; --blue:#4A7B9D; --orange:#C77826;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:"Microsoft YaHei","PingFang SC",sans-serif;background:var(--cream);color:var(--ink);min-height:100vh}
+.container{max-width:960px;margin:0 auto;padding:24px 20px}
+
+.header{text-align:center;padding:32px 0 20px}
+.header .icon{font-size:40px;margin-bottom:6px}
+.header h1{font-size:26px;color:var(--red);font-weight:700;letter-spacing:3px;margin-bottom:4px}
+.header .sub{font-size:13px;color:var(--ink-light);letter-spacing:1px}
+
+.card{background:var(--bg-card);border-radius:14px;padding:20px;margin-bottom:12px;box-shadow:0 2px 8px rgba(44,24,16,0.04);border:1px solid var(--border)}
+.card h3{font-size:15px;color:var(--ink);margin-bottom:10px}
+.card h4{font-size:14px;color:var(--ink);margin-bottom:8px;padding-left:10px;border-left:3px solid var(--red)}
+
+.tabs{display:flex;gap:4px;margin-bottom:16px;background:var(--white);border-radius:12px;padding:4px;border:1px solid var(--border)}
+.tab{flex:1;text-align:center;padding:10px;border-radius:10px;cursor:pointer;font-size:14px;font-weight:600;color:var(--ink-light);transition:all .2s}
+.tab:hover{color:var(--ink)}
+.tab.active{background:var(--red);color:#fff}
+
+.btn{display:inline-block;padding:10px 20px;border:none;border-radius:10px;font-size:14px;font-weight:600;cursor:pointer;transition:all .2s;letter-spacing:1px}
+.btn-primary{background:var(--red);color:#fff}
+.btn-primary:hover{opacity:.9}
+.btn-outline{background:var(--white);color:var(--red);border:2px solid var(--red)}
+.btn-outline:hover{background:#FFF5F3}
+.btn-small{padding:6px 14px;font-size:12px}
+.btn-danger{background:var(--white);color:#C0392B;border:2px solid #C0392B}
+.btn-danger:hover{background:#FDEDEC}
+
+textarea{width:100%;min-height:100px;padding:12px;border:1.5px solid var(--border);border-radius:10px;font-size:13px;font-family:monospace;resize:vertical;outline:none;background:var(--white);line-height:1.6}
+textarea:focus{border-color:var(--gold)}
+input[type=text],input[type=number],select{padding:8px 12px;border:1.5px solid var(--border);border-radius:8px;font-size:13px;outline:none;background:var(--white)}
+input:focus,select:focus{border-color:var(--gold)}
+
+.stats-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:10px;margin-bottom:12px}
+.stat-card{background:var(--white);border-radius:12px;padding:16px;text-align:center;border:1px solid var(--border)}
+.stat-card .num{font-size:32px;font-weight:700;color:var(--red)}
+.stat-card .lbl{font-size:12px;color:var(--ink-light);margin-top:4px}
+
+.chart-row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.chart-wrap{max-width:100%}
+.chart-wrap canvas{width:100%!important;height:auto!important}
+
+table{width:100%;border-collapse:collapse;font-size:13px}
+th{text-align:left;padding:10px 8px;border-bottom:2px solid var(--border);color:var(--ink-light);font-weight:600;font-size:11px;letter-spacing:1px}
+td{padding:10px 8px;border-bottom:1px solid var(--border);color:var(--ink)}
+tr:hover td{background:var(--cream)}
+.clickable{cursor:pointer;color:var(--red);font-weight:600}
+.clickable:hover{text-decoration:underline}
+
+.tag{display:inline-block;padding:3px 10px;border-radius:10px;font-size:11px;font-weight:600;letter-spacing:1px}
+.tag-t1{background:#FFF0EE;color:var(--red)}
+.tag-t2{background:#FFF5F0;color:#C77826}
+.tag-t3{background:#F0F0F8;color:var(--blue)}
+.tag-t4{background:#F3F0EB;color:#8B7355}
+.tag-t5{background:#EEF4F0;color:var(--green)}
+.tag-t6{background:#FFFBF0;color:var(--gold)}
+.tag-t7{background:#FDF0F8;color:#9B4D7A}
+.tag-t8{background:#F0F4F8;color:#5B7A9D}
+
+.bar-wrap{margin:6px 0;display:flex;align-items:center;gap:8px}
+.bar-lbl{width:120px;font-size:12px;color:var(--ink);text-align:right;flex-shrink:0}
+.bar-track{flex:1;height:18px;background:var(--cream);border-radius:9px;overflow:hidden}
+.bar-fill{height:100%;border-radius:9px;transition:width .4s}
+.bar-val{width:36px;font-size:12px;color:var(--ink-light);flex-shrink:0}
+
+.domain-card{border-left:4px solid var(--gold);padding:8px 14px;margin-bottom:8px;background:var(--white);border-radius:0 10px 10px 0}
+.domain-card strong{color:var(--ink)}
+.domain-card .domain-score{float:right;font-weight:700;color:var(--red)}
+
+.modal-overlay{display:none;position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(44,24,16,0.4);z-index:100;justify-content:center;align-items:flex-start;padding-top:40px;overflow-y:auto}
+.modal-overlay.show{display:flex}
+.modal{background:var(--bg-card);border-radius:16px;padding:28px 24px;max-width:700px;width:95%;margin-bottom:40px;position:relative;box-shadow:0 8px 30px rgba(44,24,16,0.15)}
+.modal-close{position:absolute;top:12px;right:16px;font-size:22px;cursor:pointer;color:var(--ink-light);background:none;border:none}
+.modal-close:hover{color:var(--red)}
+
+.section-title{font-size:13px;font-weight:700;color:var(--ink);margin:16px 0 8px;padding-bottom:4px;border-bottom:1px solid var(--border);letter-spacing:1px}
+
+.filter-bar{display:flex;gap:8px;align-items:center;margin-bottom:10px;flex-wrap:wrap}
+.filter-bar select{min-width:120px}
+
+.footer-note{text-align:center;padding:16px 0;font-size:11px;color:var(--ink-light)}
+.empty-state{text-align:center;padding:40px 20px;color:var(--ink-light);font-size:14px;line-height:2}
+
+.advice-item{padding:11px 13px;margin-bottom:6px;background:var(--white);border-radius:9px;border:1px solid var(--border);font-size:13px;line-height:1.75;color:var(--ink-light)}
+.advice-num{display:inline-block;width:22px;height:22px;border-radius:50%;background:var(--red);color:#fff;text-align:center;line-height:22px;font-size:11px;font-weight:700;margin-right:7px;flex-shrink:0}
+
+.hidden{display:none!important}
+
+@media print{
+  body{background:#fff;color:#000;font-size:12px}
+  .tabs,.btn,.footer-note,.filter-bar,#tab-import,.modal-close{display:none!important}
+  .card{box-shadow:none;border:1px solid #ccc;break-inside:avoid;margin-bottom:8px;padding:12px 14px}
+  .header{padding:12px 0 6px}
+  .header h1{color:#000;font-size:20px}
+  .header .sub{font-size:11px}
+  .stat-card .num{font-size:24px;color:#000}
+  .tag{border:1px solid #000;color:#000}
+  .chart-row{grid-template-columns:1fr}
+  .chart-wrap{max-width:280px!important;margin:0 auto}
+  .bar-fill{background:#000!important}
+  .domain-card{border-left-color:#000}
+  .section-title{border-bottom-color:#ccc}
+  .modal-overlay{position:static;display:block!important;background:none;padding:0}
+  .modal{box-shadow:none;max-width:100%;padding:12px}
+  table{font-size:10px}
+  th,td{padding:6px 4px}
+}
+</style>
+</head>
+<body>
+<div class="container" id="app">
+
+<div class="header">
+  <div class="icon">🏫</div>
+  <h1>语文学情诊断 · 教师后台</h1>
+  <div class="sub">班级学情总览 · 个体深度分析 · 教学培养建议</div>
+</div>
+
+<div class="tabs">
+  <div class="tab active" data-tab="import" onclick="switchTab('import')">📥 数据导入</div>
+  <div class="tab" data-tab="overview" onclick="switchTab('overview')">📊 班级总览</div>
+  <div class="tab" data-tab="students" onclick="switchTab('students')">👥 学生列表</div>
+</div>
+
+<!-- ====== 导入页 ====== -->
+<div id="tab-import">
+  <div class="card">
+    <h3>📋 批量导入诊断码</h3>
+    <p style="font-size:13px;color:var(--ink-light);margin-bottom:10px;">让学生将诊断报告中的诊断码发给你，每行粘贴一个学生的诊断码，系统会自动解析。</p>
+    <textarea id="import-codes" placeholder="每行粘贴一个学生的诊断码（Base64编码）&#10;例如：&#10;eyJuYW1lIjoi5...&#10;eyJuYW1lIjoi5..."></textarea>
+    <div style="margin-top:10px;display:flex;gap:8px;">
+      <button class="btn btn-primary" onclick="batchImport()">📥 批量导入</button>
+      <button class="btn btn-outline btn-small" onclick="document.getElementById('import-codes').value=''">清空输入</button>
+    </div>
+    <div id="import-msg" style="margin-top:8px;font-size:13px;"></div>
+  </div>
+
+  <div class="card">
+    <h3>✍️ 手动录入学生数据</h3>
+    <p style="font-size:13px;color:var(--ink-light);margin-bottom:10px;">如果学生没有诊断码，可以在此手动录入八维得分（0-100）。</p>
+    <div id="manual-form">
+      <div style="margin-bottom:8px;">
+        <label style="font-size:13px;font-weight:600;">学生姓名</label>
+        <input id="mf-name" type="text" placeholder="输入姓名" style="width:100%;margin-top:4px;">
+      </div>
+      <div style="margin-bottom:8px;">
+        <label style="font-size:13px;font-weight:600;">八维得分（0-100）</label>
+        <div id="mf-dims" style="display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-top:4px;"></div>
+      </div>
+      <button class="btn btn-primary" onclick="manualAdd()">➕ 添加到班级</button>
+      <span id="mf-msg" style="margin-left:10px;font-size:13px;"></span>
+    </div>
+  </div>
+
+  <div class="card" style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;">
+    <span style="font-size:13px;color:var(--ink-light);">数据管理：</span>
+    <input type="file" id="import-file" accept=".json" style="display:none" onchange="importJSONFile(event)">
+    <button class="btn btn-outline btn-small" onclick="document.getElementById('import-file').click()">📂 导入JSON文件</button>
+    <button class="btn btn-outline btn-small" onclick="exportData()">📤 导出全部数据</button>
+    <button class="btn btn-outline btn-small" onclick="refreshFromStorage()">🔄 刷新数据</button>
+    <button class="btn btn-danger btn-small" onclick="clearAll()">🗑 清空全部数据</button>
+    <span style="font-size:12px;color:var(--ink-light);margin-left:auto;">当前学生数：<b id="total-count">0</b></span>
+    <span id="refresh-hint" style="font-size:11px;color:var(--green);display:none;width:100%;"></span>
+  </div>
+</div>
+
+<!-- ====== 总览页 ====== -->
+<div id="tab-overview" class="hidden">
+  <div class="stats-row" id="stats-row"></div>
+  <div class="chart-row">
+    <div class="card"><h4>📊 学员类型分布</h4><div class="chart-wrap" style="max-width:100%;"><canvas id="chart-type"></canvas></div></div>
+    <div class="card"><h4>🎯 班级整体八维雷达</h4><div class="chart-wrap" style="max-width:320px;margin:0 auto;"><canvas id="chart-radar"></canvas></div></div>
+  </div>
+  <div class="card">
+    <h4>⚠️ 班级共性薄弱维度排行</h4>
+    <div id="weakness-ranking"></div>
+  </div>
+  <div style="text-align:center;margin-top:8px;">
+    <button class="btn btn-outline btn-small" onclick="window.print()">🖨️ 打印班级总览 / 导出PDF</button>
+  </div>
+</div>
+
+<!-- ====== 学生列表页 ====== -->
+<div id="tab-students" class="hidden">
+  <div class="filter-bar">
+    <span style="font-size:13px;color:var(--ink-light);">按类型筛选：</span>
+    <select id="filter-type" onchange="renderStudentList()">
+      <option value="all">全部类型</option>
+    </select>
+    <span style="font-size:13px;color:var(--ink-light);margin-left:8px;">排序：</span>
+    <select id="sort-dim" onchange="renderStudentList()">
+      <option value="avg">综合均分</option>
+      <option value="语基">语基</option>
+      <option value="名著">名著</option>
+      <option value="古诗文">古诗文</option>
+      <option value="阅读">阅读</option>
+      <option value="作文">作文</option>
+    </select>
+  </div>
+  <div class="card" style="overflow-x:auto;">
+    <table>
+      <thead><tr>
+        <th>姓名</th><th>诊断类型</th><th>语基</th><th>名著</th><th>古诗文</th><th>阅读</th><th>作文</th><th>完成时间</th><th>操作</th>
+      </tr></thead>
+      <tbody id="student-table-body"><tr><td colspan="9" class="empty-state">暂无学生数据，请先导入诊断码</td></tr></tbody>
+    </table>
+  </div>
+</div>
+
+<!-- ====== 个体详情弹窗 ====== -->
+<div class="modal-overlay" id="modal-overlay" onclick="if(event.target===this)closeModal()">
+  <div class="modal" id="modal-content"></div>
+</div>
+
+<div class="footer-note">数据存储在云端服务器，学生完成诊断后自动同步</div>
+</div>
+
+<script>
+// ====== 核心常量（与学生版共用） ======
+const DIMS = [
+  {id:0,name:'审题与题意理解',icon:'🔍',sname:'审题能力'},
+  {id:1,name:'信息提取与概括',icon:'📋',sname:'信息提取'},
+  {id:2,name:'语言组织与表达',icon:'✍️',sname:'语言表达'},
+  {id:3,name:'文本分析与鉴赏',icon:'📖',sname:'文本鉴赏'},
+  {id:4,name:'情感体悟与共情',icon:'💛',sname:'情感共情'},
+  {id:5,name:'逻辑思维与结构',icon:'🧩',sname:'逻辑思维'},
+  {id:6,name:'知识识记与积累',icon:'📚',sname:'知识积累'},
+  {id:7,name:'迁移运用与应变',icon:'🔄',sname:'迁移运用'}
+];
+
+const TYPES = {
+  T1:{name:'慧眼识珠型',tag:'敏锐洞察',desc:'能快速看穿题目背后的考点，对文字有敏锐的分析力。',strong:[0,3],weak:[2,7],tagClass:'tag-t1'},
+  T2:{name:'心有灵犀型',tag:'感性共鸣',desc:'文字中的情感很容易在心中激起回响，表达有温度、有感染力。',strong:[4,2],weak:[5,6],tagClass:'tag-t2'},
+  T3:{name:'条分缕析型',tag:'逻辑架构',desc:'思维层次分明、结构清晰，答题和写作都有清晰的思路。',strong:[5,0],weak:[4,2],tagClass:'tag-t3'},
+  T4:{name:'厚积薄发型',tag:'博闻强识',desc:'知识储备扎实，字词诗句信手拈来，积累是语文学习的底气。',strong:[6,1],weak:[7,3],tagClass:'tag-t4'},
+  T5:{name:'举一反三型',tag:'灵动应变',desc:'学过的知识能在新情境中灵活运用，遇到陌生题目不慌乱。',strong:[7,4],weak:[6,1],tagClass:'tag-t5'},
+  T6:{name:'脚踏实地型',tag:'扎实稳健',desc:'基础知识扎实、逻辑清晰有条理，稳扎稳打的学习风格。',strong:[6,5],weak:[4,3],tagClass:'tag-t6'},
+  T7:{name:'文思泉涌型',tag:'直觉表达',desc:'语感好、表达流畅有灵性，文字有一种天然的吸引力。',strong:[2,4],weak:[0,5],tagClass:'tag-t7'},
+  T8:{name:'均衡发展型',tag:'全面均衡',desc:'各项语文能力发展均衡，没有明显短板，基础全面。',strong:[],weak:[],tagClass:'tag-t8'}
+};
+
+function getLv(s){return s>=68?'high':(s<42?'low':'medium')}
+
+// ====== 行为描述库（与学生版共用，教师视角） ======
+const BEHAVIORS={
+0:{high:{strength:'审题习惯良好。能准确圈画关键词，快速判断题型并能区分概括题、含义题、赏析题和作用题。',weakness:'',advice_teacher:'可让该生担任课堂"审题小老师"，向同学展示审题思路。',desc:'该生审题能力突出，面对不同题型能快速准确判断考点方向。'},
+ medium:{strength:'基本能理解题目要求。',weakness:'对题干关键词敏感度不够稳定，题目问法变化时判断题型会犹豫。',advice_teacher:'每周选2-3道题干较长的题，让学生只做"审题"这一步——圈关键词、说题型、说答题方向。',desc:'该生审题基本准确，但对变式题型的识别能力还需加强。'},
+ low:{strength:'对于问法直接的题目能理解意图。',weakness:'审题习惯薄弱，容易忽略关键词和限定条件，常将作用题当作赏析题来答。',advice_teacher:'建立"题型识别卡"，做"只审不答"练习——每周3次，每次3道题，只写题型判断和答题方向。',desc:'该生审题能力是当前首要提升点，需从题型识别基础开始训练。'}},
+1:{high:{strength:'信息提取效率高，能快速定位关键信息，概括简洁准确。',weakness:'',advice_teacher:'挑战更高阶概括训练：把1000字文章压缩到100字、50字、20字三个版本。',desc:'该生信息提取高效精准，概括能力强。'},
+ medium:{strength:'基本能找到关键信息。',weakness:'信息定位速度和精准度有提升空间，概括时容易把次要细节也写进去。',advice_teacher:'推荐"三级压缩训练法"：选500字短文分三步概括——150字、50字、15字以内，三周练3篇。',desc:'该生能找到关键信息但概括时偶有冗余，需提升精准度。'},
+ low:{strength:'对于结构简单的文本能把握大意。',weakness:'信息提取效率偏低，概括时倾向照抄原文，概括语偏长且抓不住核心。',advice_teacher:'两个维度训练：①"定位训练"——给短文出5道信息提取题只练定位；②"框架概括法"——用固定句式"谁+在什么情况下+做了什么+结果怎样"来概括。',desc:'该生信息提取能力较弱，是阅读理解的瓶颈环节。'}},
+2:{high:{strength:'语言表达清晰有条理，答案结构完整，写作中文从字顺。',weakness:'',advice_teacher:'提供更多展示机会——课堂口头汇报、作文范文分享，引导挑战更高阶表达任务。',desc:'该生语言表达能力强，书面和口头表达都有条理。'},
+ medium:{strength:'基本能把意思说清楚。',weakness:'表达条理性不够稳定，口头表达和书面表达之间存在落差。',advice_teacher:'采用"先说后写"训练法：先口头回答并录音，再听录音整理成书面答案。提供"表达脚手架"——常用答题句式模板。',desc:'该生说比写强，需要桥接口头和书面表达能力。'},
+ low:{strength:'有表达意愿，简单问题能说出理解。',weakness:'语言组织能力偏弱，答题内容零散缺乏层次，经常"心里明白但说不出来"。',advice_teacher:'三步走：①降低门槛——先口头说，老师帮整理成文字；②提供拐杖——给最简化的答题句式模板；③逐步放手——逐步替换模板中的部分为自主表达。',desc:'该生表达困难是当前核心障碍，需从低门槛开始逐步建立信心。'}},
+3:{high:{strength:'文本分析能力强，能系统地从手法、语言特色和表达效果三个层面分析。',weakness:'',advice_teacher:'引导挑战更复杂的比较鉴赏任务（两篇同类文章写法对比分析），或尝试写简短文学短评。',desc:'该生赏析能力强，能进行有深度有层次的文本分析。'},
+ medium:{strength:'能识别基本手法并说出写了什么。',weakness:'赏析深度和系统性不够，往往缺少对"产生什么效果"的深入分析，有时混淆赏析题和作用题。',advice_teacher:'推荐"三问赏析法"：面对句子必须回答——①用了什么手法？②写出了什么？③产生了什么效果？每周选2句训练。另需专门做"赏析题vs作用题"区分教学。',desc:'该生能感知句子好坏但理性分析能力还需系统训练。'},
+ low:{strength:'对好句子有一定感知力。',weakness:'文本分析能力明显不足，停留在感性"好/不好"层面，无法从手法角度理性分析。',advice_teacher:'按顺序推进：①建立"手法识别"基础——制作常见写作手法一览表；②引入"三问赏析法"；③框架熟悉后引入规范术语和句式。文本分析是一篇一篇练出来的。',desc:'该生文本分析是最大短板，需从手法识别基础开始系统训练。'}},
+4:{high:{strength:'情感体悟敏锐，能从环境描写、细节描写中间接感受情感，写作有温度。',weakness:'',advice_teacher:'推荐阅读情感细腻的名家散文（朱自清、冰心、汪曾祺），引导关注"作者如何用文字传递情感"。',desc:'该生情感体悟能力强，对文字中的情感有敏锐的直觉。'},
+ medium:{strength:'对明显情感倾向的文章能感受大致方向。',weakness:'对隐含在文字背后的情感敏感度不够高，阅读时更多关注"事"而非"情"。',advice_teacher:'推荐"情感地图"训练：选情感线索清晰的记叙文，让学生用曲线画出文中情感变化，标注触发事件。课堂上做"细节中的情感"小练习。',desc:'该生能识别显性情感，对隐性情感的体悟还需加强。'},
+ low:{strength:'能理解文章基本情节和明确情绪。',weakness:'情感体悟较薄弱，主要关注"讲了什么"而非"表达了什么感受"，写作缺乏打动人心的力量。',advice_teacher:'情感体悟需"浸泡"和"引导"：①选"情感浓度高"的短篇范文深入讨论；②做"情感换位"训练——让学生代入角色；③写作引导选材向"有感触"而非"有事件"倾斜。',desc:'该生情感体悟能力是语文学习的深层短板，影响阅读理解和写作质量。'}},
+5:{high:{strength:'逻辑思维清晰，能快速梳理答题层次和顺序，写作前列提纲是习惯。',weakness:'',advice_teacher:'引导尝试更具思辨性的读写任务——给文章写"结构评析"、围绕话题写正反观点议论文。',desc:'该生逻辑思维能力强，答案和文章结构清晰有序。'},
+ medium:{strength:'经过提醒能按逻辑顺序组织答案。',weakness:'答题时逻辑自觉性不够，写作提纲习惯偏弱，处理多角度问题时有时漏角度。',advice_teacher:'两个抓手：①"强制提纲训练"——连续四周每次写作前花5-8分钟列提纲；②"金字塔表达法"——教用"观点句+支撑句+例子"组织段落。',desc:'该生有逻辑意识但不够自觉，需通过强制提纲训练固化习惯。'},
+ low:{strength:'对简单直接的任务能做出基本判断。',weakness:'逻辑思维能力偏弱，答题缺乏组织意识，写作基本不列提纲，文章结构随意。',advice_teacher:'从基础开始：①"读结构"训练——每篇课文带学生画出全文结构图；②"搭架子"训练——写作前老师帮搭框架；③"段落逻辑"训练——每周精练一个段落。',desc:'该生逻辑思维是核心短板，需从最基础的结构训练开始。'}},
+6:{high:{strength:'知识积累扎实，字音字形、成语、古诗文默写等方面储备充足，能在写作中自然调用。',weakness:'',advice_teacher:'引导从"积累者"变成"输出者"——整理知识点分享给同学、给全班出题、做课前知识小讲座。',desc:'该生知识积累扎实，是班级的知识资源型学生。'},
+ medium:{strength:'课内必背内容基本掌握，有基本积累意识。',weakness:'积累的主动性和系统性不够，缺乏主动整理和扩展的意识，存在"忘了再背"循环。',advice_teacher:'帮学生从"被动积累"转向"主动积累"：①教"分类积累法"；②教"间隔复习法"——新知识当天、三天后、一周后、考前四次复习；③减少机械抄写增加"运用式巩固"。',desc:'该生积累靠老师推动，需培养自主积累习惯和方法。'},
+ low:{strength:'反复强调的知识点在督促下能完成。',weakness:'知识积累薄弱，字音字形辨析不足、成语量少，缺乏有效的积累方法和习惯，以临时突击为主。',advice_teacher:'从"零存整取"微习惯开始：①每天只积累3个知识点——一个易错字+一个成语+一句诗；②引入"间隔复习轮"——每天花5分钟翻知识卡片；③将积累量可视化——画"积累进度表"。',desc:'该生知识积累严重不足，需从微习惯开始建立积累系统。'}},
+7:{high:{strength:'迁移运用能力强，学了的知识和方法能在新情境中灵活运用，面对没见过的题型不慌乱。',weakness:'',advice_teacher:'引导挑战更高难度迁移任务——用学过的赏析方法独立分析课外散文、用学过的论证方法写短小议论文。鼓励做"方法总结"。',desc:'该生活学活用能力强，是班级中方法迁移的榜样。'},
+ medium:{strength:'与课堂练习高度相似的题目能较好调用已学方法。',weakness:'迁移运用主动性和灵活性不够——"见过的题会做，没见过的题发蒙"，更关注"这道题的答案"而非"这类题的方法"。',advice_teacher:'帮学生从"答案思维"转向"方法思维"：①每讲完一类题让学生用自己话总结"解题步骤"；②定期做"变式训练"——同一考点换不同题型考；③引导做完新题后做"反向归类"。',desc:'该生能应对熟悉题型但变通不足，需从"学答案"转向"学方法"。'},
+ low:{strength:'反复操练过的题目能基本掌握。',weakness:'迁移运用能力明显偏弱——"学什么才会什么"，题目稍微变一下就不会了，学习方式偏向"背答案"而非"学方法"。',advice_teacher:'扭转"背答案式学习"是核心：①"方法先行"教学法——每讲新题型先给方法步骤再讲例题；②"一题多变"练习——同一篇文章出三种不同问法；③引导学生建立"方法本"——记"这类题怎么做"的步骤。',desc:'该生学习方法存在根本性问题，需从"背答案"彻底转向"学方法"。'}}
+};
+
+// ====== 五大板块映射 ======
+const DOMAINS = {
+  '语基':{name:'语言基础与运用',dims:[{i:6,w:0.4},{i:5,w:0.3},{i:1,w:0.3}],desc:'字音字形、成语、病句、标点、仿写等基础知识掌握与运用能力。'},
+  '名著':{name:'名著阅读',dims:[{i:6,w:0.4},{i:4,w:0.3},{i:3,w:0.3}],desc:'对名著内容的熟悉度、人物情节理解与文学鉴赏能力。'},
+  '古诗文':{name:'古诗文阅读',dims:[{i:6,w:0.3},{i:4,w:0.3},{i:7,w:0.4}],desc:'古诗词背诵、文言实词积累、诗歌鉴赏与情感体悟能力。'},
+  '阅读':{name:'现代文阅读',dims:[{i:0,w:0.2},{i:1,w:0.25},{i:3,w:0.3},{i:4,w:0.25}],desc:'审题、信息提取、文本分析与情感体悟综合运用的能力。'},
+  '作文':{name:'写作',dims:[{i:2,w:0.3},{i:5,w:0.25},{i:4,w:0.25},{i:0,w:0.2}],desc:'语言表达、逻辑结构、情感表达与审题立意综合能力。'}
+};
+
+function calcDomainScores(ns){
+  const result={};
+  for(const [key,dom] of Object.entries(DOMAINS)){
+    let score=0;dom.dims.forEach(d=>{score+=ns[d.i]*d.w});result[key]=Math.round(score)
+  }
+  return result;
+}
+
+// ====== 学习风格画像生成 ======
+function generateProfile(student){
+  const ns=student.ns,type=student.typeObj;
+  const ranked=ns.map((v,i)=>({v,i})).sort((a,b)=>b.v-a.v);
+  const strong=ranked.slice(0,2),weak=ranked.slice(6);
+  let profile='';
+
+  // 类型特征
+  if(type.name==='慧眼识珠型'){
+    profile+='该生属于「审题分析型」学习者。面对语文题目时，TA的思维习惯是"先定位再深入"——会首先判断题目类型和考点方向，再调取对应的答题策略。';
+  }else if(type.name==='心有灵犀型'){
+    profile+='该生属于「情感驱动型」学习者。TA对文字有天然的敏感度和共情能力，阅读时容易被文中的情感打动，写作时倾向于选择有真情实感的素材。';
+  }else if(type.name==='条分缕析型'){
+    profile+='该生属于「逻辑建构型」学习者。TA在学习中偏好清晰的结构和明确的步骤，喜欢"有章可循"——答题时有分层意识，写作前列提纲是TA的最佳状态。';
+  }else if(type.name==='厚积薄发型'){
+    profile+='该生属于「知识积累型」学习者。TA相信"腹有诗书气自华"，学习方式以扎实的记忆和积累为主，字词诗文是TA的舒适区。';
+  }else if(type.name==='举一反三型'){
+    profile+='该生属于「灵活迁移型」学习者。TA不满足于"会做这道题"，而是追问"这类题怎么做"——善于从例题中提炼方法并迁移到新情境。';
+  }else if(type.name==='脚踏实地型'){
+    profile+='该生属于「稳步推进型」学习者。TA不追求捷径，而是靠扎实的基础和清晰的逻辑一步步推进。学习风格稳健，后劲充足。';
+  }else if(type.name==='文思泉涌型'){
+    profile+='该生属于「直觉表达型」学习者。TA的语感好、表达自然流畅，写作时往往"跟着感觉走"，文字有灵气但不一定遵循严谨的结构。';
+  }else{
+    profile+='该生属于「全面均衡型」学习者。各项语文能力发展比较平衡，没有特别突出的单项优势，也暂时没有明显的薄弱环节。';
+  }
+
+  // 学习偏好
+  profile+='在课堂学习中，TA在';
+  const dimNames=[];
+  strong.forEach(s=>dimNames.push(DIMS[s.i].sname));
+  profile+=dimNames.join('和')+'相关的任务中表现最为积极和自信。';
+
+  // 需关注
+  if(weak.length>0){
+    profile+='需要关注的是，在';
+    const weakNames=[];
+    weak.forEach(w=>weakNames.push(DIMS[w.i].sname));
+    profile+=weakNames.join('和')+'方面，TA可能会表现出回避或信心不足的倾向。';
+  }
+
+  // 教学响应
+  profile+='教学响应建议：给TA的反馈应';
+  if(type.name==='心有灵犀型'||type.name==='文思泉涌型'){
+    profile+='先肯定感受和创意，再引导梳理逻辑和结构；避免"先挑毛病"式的点评。';
+  }else if(type.name==='条分缕析型'||type.name==='脚踏实地型'){
+    profile+='清晰具体、有可操作性，TA更接受"你可以这样做"而非"你应该这样感觉"。';
+  }else if(type.name==='慧眼识珠型'){
+    profile+='有挑战性、让TA看到"自己还没意识到的层面"，TA会被"更精准的分析"所吸引。';
+  }else{
+    profile+='温和而具体，肯定努力过程而非仅关注结果，帮助TA建立对薄弱领域的信心。';
+  }
+
+  return profile;
+}
+
+// ====== 家校共育建议生成 ======
+function generateHomeSchoolAdvice(student){
+  const ns=student.ns,type=student.typeObj;
+  const ranked=ns.map((v,i)=>({v,i})).sort((a,b)=>a.v-a.v);
+  const weakest=ranked[ranked.length-1],strongest=ranked[0];
+  const weakB=BEHAVIORS[weakest.i][getLv(ns[weakest.i])];
+  const strongB=BEHAVIORS[strongest.i][getLv(ns[strongest.i])];
+
+  // 给家长的关键告知
+  let tell='';
+  if(type.name==='慧眼识珠型'){
+    tell='您的孩子有一双语文学习的"火眼金睛"——TA非常擅长快速判断题目要考什么，这是很多孩子不具备的能力。同时，TA在把想法写清楚方面还有成长空间。请多肯定TA的敏锐，也鼓励TA在表达上多尝试。';
+  }else if(type.name==='心有灵犀型'){
+    tell='您的孩子内心细腻、感受力强——阅读时容易被文字打动，作文有真情实感。TA的逻辑条理和知识积累还需要加强。请保护TA的感性优势，同时帮TA建立一些学习上的"条理感"。';
+  }else if(type.name==='条分缕析型'){
+    tell='您的孩子思维清晰有条理，答题和写作都能让人一眼看清思路——这是非常可贵的学习品质。TA在情感体悟和文字感染力上还需要更多滋养。请多和TA聊聊读完文章后的"感受"而非只关注"对错"。';
+  }else if(type.name==='厚积薄发型'){
+    tell='您的孩子知识储备扎实——字词诗文积累充足，这是语文学习最坚实的基础。TA在灵活运用和方法迁移上还有成长空间。请鼓励TA不只是"记住"，更要"用出来"。';
+  }else if(type.name==='举一反三型'){
+    tell='您的孩子有一种可贵的"活学活用"能力——学了一个方法能用到别的地方。TA的积累量还需扩充。请帮TA建立日常积累的小习惯，让"粮食"跟上"厨艺"。';
+  }else if(type.name==='脚踏实地型'){
+    tell='您的孩子学习风格扎实稳健——基础牢固、逻辑清晰，是"厚积薄发"的类型。TA在文本分析和情感体悟上还有提升空间。请多和TA一起读一些有温度的文字，聊聊感受。';
+  }else if(type.name==='文思泉涌型'){
+    tell='您的孩子语感好、表达有灵性——作文有一种天然的吸引力。TA在审题和逻辑结构上还需要加强。请保护TA的表达热情，同时温和地提醒TA"写之前先想清楚要说什么"。';
+  }else{
+    tell='您的孩子各项语文能力发展比较均衡，没有明显的短板。这是一个非常好的基础。请继续鼓励TA在感兴趣的语文领域深入探索，均衡发展的孩子往往后劲最足。';
+  }
+
+  // 在家可以这样做
+  const homeActions=[];
+  if(type.name==='慧眼识珠型'){
+    homeActions.push('每周选一篇短文，让孩子只用2分钟"审题"——说出这道题在问什么、属于哪类题型，不需要写出完整答案。');
+    homeActions.push('鼓励孩子用"口头表达"的方式先说出想法，录下来再整理成文字。说比写门槛低，但能帮TA建立表达的流畅感。');
+  }else if(type.name==='心有灵犀型'){
+    homeActions.push('每周陪孩子读一篇短文后聊聊感受——"你觉得作者写这段的时候是什么心情？"不要检查对错，只问"你觉得呢"。');
+    homeActions.push('帮孩子准备一个"灵感小本"——随时记下有感触的句子或瞬间，积累属于TA自己的写作素材库。');
+  }else if(type.name==='条分缕析型'){
+    homeActions.push('和孩子一起读一些感性的文字（散文、诗歌），读完后互相分享"哪句话最打动你"，不分析为什么，只说感受。');
+    homeActions.push('鼓励孩子在写作中加入"我当时的感受是……"这样的句子——帮TA在结构中注入温度。');
+  }else if(type.name==='厚积薄发型'){
+    homeActions.push('和孩子玩"知识迁移"游戏——学了一个成语，一起想想它还能用在哪些不同的场景里。');
+    homeActions.push('鼓励孩子在生活中运用学过的知识——比如看到夕阳时尝试引用一句诗来描述。');
+  }else if(type.name==='举一反三型'){
+    homeActions.push('帮孩子建立一个"方法本"——每学一类题用一句话总结核心方法，按题型分类整理。');
+    homeActions.push('每天只积累3个知识点——一个易错字+一个成语+一句诗，不求多只求坚持。');
+  }else if(type.name==='脚踏实地型'){
+    homeActions.push('每周选一篇短文，和孩子一起画"情感变化图"——用曲线画出文中人物或作者的情感变化。');
+    homeActions.push('鼓励孩子在写作中选"有感触"的素材而非"最安全"的素材，哪怕写得不完美。');
+  }else if(type.name==='文思泉涌型'){
+    homeActions.push('写作前和孩子一起花5分钟列一个简短提纲——开头、中间分几层、结尾怎么收。把提纲贴在书桌前，写的过程中随时对照。');
+    homeActions.push('做"审题小练"——每天一道题目，只圈关键词和说题型，30秒完成。让审题成为一种条件反射。');
+  }else{
+    homeActions.push('每周和孩子一起读一篇好文章，各选一个最喜欢的句子分享理由。');
+    homeActions.push('鼓励孩子尝试不同方向的语文挑战——今天赏析句子，明天积累知识，后天练习审题，保持探索。');
+  }
+
+  // 建议沟通时机
+  let commTiming='';
+  if(getLv(ns[weakest.i])==='low'){
+    commTiming='建议每两周与语文老师沟通一次，了解孩子在该薄弱维度的进展。如果孩子在做相关作业时表现出明显的沮丧或逃避，请及时与老师联系。';
+  }else if(getLv(ns[weakest.i])==='medium'){
+    commTiming='建议每月与语文老师沟通一次。关注孩子在薄弱维度的课堂表现是否有改善迹象。';
+  }else{
+    commTiming='建议每学期与语文老师进行1-2次沟通，重点了解孩子在优势维度上是否有进一步的突破空间。';
+  }
+
+  return {tell,homeActions,commTiming};
+}
+
+// ====== 数据管理（API优先 + localStorage备用） ======
+const STORAGE_KEY='yuwen_diagnosis_students';
+const USE_API=true;
+const API_BASE='https://yuwen-diagnosis-api.onrender.com';
+let _studentsCache=[];
+
+function loadStudents(){
+  // API模式从缓存读（由fetchFromServer刷新），file模式从localStorage读
+  if(USE_API)return _studentsCache;
+  try{return JSON.parse(localStorage.getItem(STORAGE_KEY))||[]}catch(e){return[]}
+}
+function getStudents(){return loadStudents().map(s=>({...s,typeObj:TYPES[s.typeKey]||TYPES['T8']}))}
+function getRawStudents(){return loadStudents()}
+
+function apiFetch(url,opts){
+  return fetch(url,opts).then(r=>r.json()).catch(()=>({ok:false}));
+}
+
+function fetchFromServer(){
+  if(!USE_API)return;
+  apiFetch(API_BASE+'/api/students').then(data=>{
+    if(Array.isArray(data)){
+      const before=_studentsCache.length;
+      _studentsCache=data;
+      updateCount();
+      if(data.length>before&&before>0){
+        const diff=data.length-before;
+        const hint=document.getElementById('refresh-hint');
+        hint.textContent='检测到 '+diff+' 名新学生完成诊断，数据已自动更新';
+        hint.style.display='block';hint.style.color='#5B8C5A';
+        setTimeout(()=>{hint.style.display='none'},5000);
+      }
+      _lastKnownCount=data.length;
+      const activeTab=document.querySelector('.tab.active');
+      if(activeTab){
+        const tn=activeTab.dataset.tab;
+        if(tn==='overview')renderOverview();
+        if(tn==='students')renderStudentList();
+      }
+    }
+  });
+}
+
+function addStudent(raw){
+  if(USE_API){
+    // API模式：数据由学生端POST，教师端不直接添加
+    // 仅在手动录入时使用
+    apiFetch(API_BASE+'/api/submit',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(raw)}).then(()=>fetchFromServer());
+  }else{
+    const students=loadStudents();
+    const idx=students.findIndex(s=>s.name===raw.name);
+    if(idx>=0)students[idx]=raw;else students.push(raw);
+    localStorage.setItem(STORAGE_KEY,JSON.stringify(students));
+  }
+  updateCount();
+}
+
+function removeStudent(id){
+  if(USE_API){
+    apiFetch(API_BASE+'/api/student?id='+encodeURIComponent(id),{method:'DELETE'}).then(()=>fetchFromServer());
+  }else{
+    let students=loadStudents();
+    students=students.filter(s=>s.id!==id);
+    localStorage.setItem(STORAGE_KEY,JSON.stringify(students));
+    updateCount();
+  }
+}
+
+function classifyStudent(ns){
+  const ranked=ns.map((v,i)=>({v,i})).sort((a,b)=>b.v-a.v);
+  let bestType='T8',bestScore=-1;
+  for(const [key,type] of Object.entries(TYPES)){
+    if(key==='T8')continue;
+    let score=0;
+    if(type.strong.length===2){
+      score+=(ns[type.strong[0]]+ns[type.strong[1]])/2;
+      score-=(ns[type.weak[0]]+ns[type.weak[1]])/2;
+    }
+    if(score>bestScore){bestScore=score;bestType=key}
+  }
+  if(bestScore<5)bestType='T8';
+  return {typeKey:bestType,typeObj:TYPES[bestType]};
+}
+
+function mapScore(r){return Math.max(1,Math.min(99,Math.round((r-20)/60*98+1)))}
+
+// ====== 事件绑定 ======
+function updateCount(){
+  document.getElementById('total-count').textContent=loadStudents().length;
+}
+
+// ====== Tab 切换 ======
+function switchTab(name){
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+  document.querySelector('.tab[data-tab="'+name+'"]').classList.add('active');
+  document.querySelectorAll('[id^="tab-"]').forEach(el=>el.classList.add('hidden'));
+  document.getElementById('tab-'+name).classList.remove('hidden');
+  if(name==='overview')renderOverview();
+  if(name==='students')renderStudentList();
+}
+
+// ====== 导入 ======
+function batchImport(){
+  const raw=document.getElementById('import-codes').value.trim();
+  if(!raw){showImportMsg('请先粘贴诊断码','#C0392B');return}
+  const lines=raw.split(/[\n\r]+/).filter(l=>l.trim());
+  let success=0,fail=0;
+  lines.forEach(line=>{
+    try{
+      const data=JSON.parse(decodeURIComponent(escape(atob(line.trim()))));
+      if(!data.name||!data.ns||!Array.isArray(data.ns)||data.ns.length!==8){
+        fail++;return;
+      }
+      // 重新分类（以防学生版分类与当前数据不一致）
+      const cls=classifyStudent(data.ns);
+      addStudent({
+        id:Date.now()+Math.random().toString(36),
+        name:data.name,
+        ns:data.ns,
+        typeKey:cls.typeKey,
+        typeName:cls.typeObj.name,
+        typeTag:cls.typeObj.tag,
+        ts:data.ts||new Date().toISOString()
+      });
+      success++;
+    }catch(e){fail++}
+  });
+  showImportMsg('成功导入 '+success+' 名学生'+(fail>0?'，'+fail+' 条解析失败':''),fail>0?'#C77826':'#5B8C5A');
+  document.getElementById('import-codes').value='';
+  updateCount();
+}
+
+function showImportMsg(msg,color){
+  const el=document.getElementById('import-msg');
+  el.textContent=msg;el.style.color=color;
+  setTimeout(()=>{el.textContent=''},4000);
+}
+
+// ====== 手动录入 ======
+function initManualForm(){
+  let html='';
+  DIMS.forEach(d=>{
+    html+='<div style="display:flex;align-items:center;gap:6px;"><span style="font-size:11px;width:70px;text-align:right;flex-shrink:0;">'+d.icon+' '+d.sname+'</span><input type="number" id="mf-dim-'+d.id+'" value="50" min="0" max="100" style="flex:1;width:60px;"></div>';
+  });
+  document.getElementById('mf-dims').innerHTML=html;
+}
+
+function manualAdd(){
+  const name=document.getElementById('mf-name').value.trim();
+  if(!name){document.getElementById('mf-msg').textContent='请填写姓名';return}
+  const ns=[];
+  for(let i=0;i<8;i++){
+    const v=parseInt(document.getElementById('mf-dim-'+i).value)||50;
+    ns.push(Math.max(1,Math.min(99,v)));
+  }
+  const cls=classifyStudent(ns);
+  addStudent({
+    id:Date.now()+Math.random().toString(36),
+    name,ns,
+    typeKey:cls.typeKey,
+    typeName:cls.typeObj.name,
+    typeTag:cls.typeObj.tag,
+    ts:new Date().toISOString()
+  });
+  document.getElementById('mf-msg').style.color='#5B8C5A';
+  document.getElementById('mf-msg').textContent='已添加 '+name;
+  document.getElementById('mf-name').value='';
+  updateCount();
+  setTimeout(()=>{document.getElementById('mf-msg').textContent=''},3000);
+}
+
+// ====== 导出/清空 ======
+function exportData(){
+  const students=loadStudents();
+  if(students.length===0){alert('没有数据可导出');return}
+  const json=JSON.stringify(students,null,2);
+  const blob=new Blob([json],{type:'application/json'});
+  const a=document.createElement('a');a.href=URL.createObjectURL(blob);
+  a.download='语文学情诊断_学生数据_'+new Date().toISOString().slice(0,10)+'.json';
+  a.click();URL.revokeObjectURL(a.href);
+}
+
+function clearAll(){
+  if(!confirm('确定要清空全部学生数据吗？此操作不可恢复。\n\n建议先导出数据备份。'))return;
+  if(USE_API){
+    apiFetch(API_BASE+'/api/clear',{method:'DELETE'}).then(()=>{fetchFromServer();switchTab('import');});
+  }else{
+    localStorage.removeItem(STORAGE_KEY);
+    updateCount();
+    switchTab('import');
+    alert('数据已清空');
+  }
+}
+
+function importJSONFile(event){
+  const file=event.target.files[0];if(!file)return;
+  const reader=new FileReader();
+  reader.onload=function(e){
+    try{
+      const data=JSON.parse(e.target.result);
+      const arr=Array.isArray(data)?data:[data];
+      let success=0,fail=0;
+      const toSubmit=[];
+      arr.forEach(item=>{
+        if(!item.name||!item.ns||!Array.isArray(item.ns)||item.ns.length!==8){fail++;return;}
+        const cls=classifyStudent(item.ns);
+        toSubmit.push({
+          id:item.id||(Date.now()+Math.random().toString(36)),
+          name:item.name,ns:item.ns,
+          typeKey:cls.typeKey,typeName:cls.typeObj.name,typeTag:cls.typeObj.tag,
+          ts:item.ts||new Date().toISOString()
+        });
+        success++;
+      });
+      const showHint=()=>{
+        const hint=document.getElementById('refresh-hint');
+        hint.textContent='已导入 '+success+' 名学生'+(fail>0?'，'+fail+' 条失败':'');
+        hint.style.display='block';hint.style.color=fail>0?'#C77826':'#5B8C5A';
+        setTimeout(()=>{hint.style.display='none'},4000);
+      };
+      if(USE_API){
+        Promise.all(toSubmit.map(s=>apiFetch(API_BASE+'/api/submit',{
+          method:'POST',headers:{'Content-Type':'application/json'},
+          body:JSON.stringify(s)
+        }))).then(()=>{fetchFromServer();showHint();});
+      }else{
+        toSubmit.forEach(s=>addStudent(s));
+        showHint();updateCount();
+      }
+    }catch(ex){alert('文件解析失败：'+ex.message)}
+  };
+  reader.readAsText(file);
+  event.target.value='';
+}
+
+function refreshFromStorage(){
+  if(USE_API){fetchFromServer();return;}
+  const before=loadStudents().length;
+  updateCount();
+  const after=loadStudents().length;
+  _lastKnownCount=after;
+  const hint=document.getElementById('refresh-hint');
+  if(after>before){
+    hint.textContent='发现 '+(after-before)+' 名新学生数据！';
+    hint.style.display='block';hint.style.color='#5B8C5A';
+    setTimeout(()=>{hint.style.display='none'},4000);
+  }else{
+    hint.textContent='数据已是最新（共 '+after+' 名学生）';
+    hint.style.display='block';hint.style.color='var(--ink-light)';
+    setTimeout(()=>{hint.style.display='none'},3000);
+  }
+  // refresh current tab view
+  const activeTab=document.querySelector('.tab.active');
+  if(activeTab){
+    const tabName=activeTab.dataset.tab;
+    if(tabName==='overview')renderOverview();
+    if(tabName==='students')renderStudentList();
+  }
+}
+
+// 监听其他标签页的 localStorage 变更（同设备自动同步）
+window.addEventListener('storage',function(e){
+  if(e.key===STORAGE_KEY){
+    updateCount();
+    const hint=document.getElementById('refresh-hint');
+    hint.textContent='检测到新数据同步，已自动更新';
+    hint.style.display='block';hint.style.color='#5B8C5A';
+    setTimeout(()=>{hint.style.display='none'},4000);
+    const activeTab=document.querySelector('.tab.active');
+    if(activeTab){
+      const tabName=activeTab.dataset.tab;
+      if(tabName==='overview')renderOverview();
+      if(tabName==='students')renderStudentList();
+    }
+  }
+});
+
+// ====== 班级总览 ======
+function renderOverview(){
+  const students=getStudents();
+  if(students.length===0){
+    document.getElementById('stats-row').innerHTML='<div class="empty-state">暂无学生数据，请先导入诊断码</div>';
+    document.getElementById('weakness-ranking').innerHTML='';
+    return;
+  }
+
+  // 统计卡片
+  const typeCount={};
+  students.forEach(s=>{const k=s.typeKey;typeCount[k]=(typeCount[k]||0)+1});
+  const topType=Object.entries(typeCount).sort((a,b)=>b[1]-a[1])[0];
+  const avgNs=DIMS.map((_,i)=>{
+    const sum=students.reduce((acc,s)=>acc+s.ns[i],0);
+    return Math.round(sum/students.length);
+  });
+  const avgWeakest=avgNs.map((v,i)=>({v,i})).sort((a,b)=>a.v-b.v)[0];
+
+  let statsHTML='';
+  statsHTML+='<div class="stat-card"><div class="num">'+students.length+'</div><div class="lbl">班级总人数</div></div>';
+  statsHTML+='<div class="stat-card"><div class="num">'+Object.keys(typeCount).length+'</div><div class="lbl">涵盖类型数</div></div>';
+  statsHTML+='<div class="stat-card"><div class="num">'+(topType?TYPES[topType[0]].name:'—')+'</div><div class="lbl">最多类型</div></div>';
+  statsHTML+='<div class="stat-card"><div class="num">'+DIMS[avgWeakest.i].sname+'</div><div class="lbl">共性薄弱维度</div></div>';
+  document.getElementById('stats-row').innerHTML=statsHTML;
+
+  // 类型分布图
+  setTimeout(()=>drawTypeChart(typeCount),200);
+
+  // 雷达图
+  setTimeout(()=>drawOverviewRadar(avgNs),400);
+
+  // 薄弱维度排行
+  const ranked=avgNs.map((v,i)=>({v,i})).sort((a,b)=>a.v-b.v);
+  let weakHTML='';
+  ranked.forEach((item,idx)=>{
+    const pct=item.v;
+    const color=pct>=68?'var(--green)':(pct>=42?'var(--gold)':'var(--red)');
+    weakHTML+='<div class="bar-wrap"><div class="bar-lbl">'+(idx+1)+'. '+DIMS[item.i].sname+'</div><div class="bar-track"><div class="bar-fill" style="width:'+pct+'%;background:'+color+'"></div></div><div class="bar-val">'+pct+'</div></div>';
+  });
+  document.getElementById('weakness-ranking').innerHTML=weakHTML;
+}
+
+// ====== 学生列表 ======
+function renderStudentList(){
+  const students=getStudents();
+  const filterType=document.getElementById('filter-type').value;
+  const sortKey=document.getElementById('sort-dim').value;
+
+  // 更新筛选下拉
+  const typeKeys=[...new Set(students.map(s=>s.typeKey))];
+  let filterHTML='<option value="all">全部类型</option>';
+  typeKeys.forEach(k=>{filterHTML+='<option value="'+k+'">'+TYPES[k].name+'</option>'});
+  document.getElementById('filter-type').innerHTML=filterHTML;
+  document.getElementById('filter-type').value=filterType;
+
+  let filtered=students;
+  if(filterType!=='all')filtered=filtered.filter(s=>s.typeKey===filterType);
+  if(sortKey==='avg'){
+    filtered.sort((a,b)=>(b.ns.reduce((s,v)=>s+v,0)/8)-(a.ns.reduce((s,v)=>s+v,0)/8));
+  }else{
+    filtered.sort((a,b)=>calcDomainScores(b.ns)[sortKey]-calcDomainScores(a.ns)[sortKey]);
+  }
+
+  if(filtered.length===0){
+    document.getElementById('student-table-body').innerHTML='<tr><td colspan="9" class="empty-state">暂无匹配的学生数据</td></tr>';
+    return;
+  }
+
+  let html='';
+  filtered.forEach(s=>{
+    const type=TYPES[s.typeKey];
+    const ds=calcDomainScores(s.ns);
+    const date=s.ts?new Date(s.ts).toLocaleDateString('zh-CN'):'—';
+    const time=s.ts?new Date(s.ts).toLocaleTimeString('zh-CN',{hour:'2-digit',minute:'2-digit'}):'';
+    const domainOrder=['语基','名著','古诗文','阅读','作文'];
+    html+='<tr>';
+    html+='<td class="clickable" onclick="openStudentDetail(\''+s.id+'\')">'+escHtml(s.name)+'</td>';
+    html+='<td><span class="tag '+type.tagClass+'">'+type.name+'</span></td>';
+    domainOrder.forEach(dk=>{
+      const score=ds[dk];
+      const color=score>=68?'var(--green)':(score>=42?'var(--gold)':'var(--red)');
+      html+='<td style="font-weight:700;color:'+color+'">'+score+'</td>';
+    });
+    html+='<td style="font-size:12px;white-space:nowrap;">'+date+'<br>'+time+'</td>';
+    html+='<td style="white-space:nowrap;"><button class="btn btn-outline btn-small" onclick="event.stopPropagation();openStudentDetail(\''+s.id+'\')">详情</button> <button class="btn btn-danger btn-small" onclick="event.stopPropagation();removeStudent(\''+s.id+'\');renderStudentList();updateCount()">删除</button></td>';
+    html+='</tr>';
+  });
+  document.getElementById('student-table-body').innerHTML=html;
+}
+
+function escHtml(s){const d=document.createElement('div');d.textContent=s;return d.innerHTML}
+
+// ====== 个体详情弹窗 ======
+function openStudentDetail(id){
+  const raw=loadStudents().find(s=>s.id===id);
+  if(!raw)return;
+  const student={...raw,typeObj:TYPES[raw.typeKey]||TYPES['T8']};
+  const ns=student.ns,type=student.typeObj;
+  const ranked=ns.map((v,i)=>({v,i})).sort((a,b)=>b.v-a.v);
+  const domainScores=calcDomainScores(ns);
+  const profile=generateProfile(student);
+  const hsAdvice=generateHomeSchoolAdvice(student);
+
+  let html='';
+  html+='<button class="modal-close" onclick="closeModal()">✕</button>';
+
+  // 头部
+  html+='<div style="text-align:center;margin-bottom:16px;">';
+  html+='<h2 style="color:var(--red);margin-bottom:4px;">'+escHtml(student.name)+'</h2>';
+  html+='<span class="tag '+type.tagClass+'" style="font-size:14px;padding:6px 16px;">'+type.name+' · '+type.tag+'</span>';
+  html+='<p style="font-size:13px;color:var(--ink-light);margin-top:8px;">'+type.desc+'</p>';
+  if(student.ts)html+='<p style="font-size:11px;color:var(--ink-light);">诊断日期：'+new Date(student.ts).toLocaleDateString('zh-CN')+'</p>';
+  html+='</div>';
+
+  // 八维雷达
+  html+='<div class="card"><h4>🎯 八维能力雷达</h4><div class="chart-wrap" style="max-width:320px;margin:0 auto;"><canvas id="chart-indiv-radar"></canvas></div></div>';
+
+  // 八维维度解读
+  html+='<div class="card"><h4>📋 八维维度解读</h4>';
+  DIMS.forEach(d=>{
+    const lv=getLv(ns[d.id]),b=BEHAVIORS[d.id][lv];
+    const color=lv==='high'?'var(--green)':(lv==='medium'?'var(--gold)':'var(--red)');
+    const label=lv==='high'?'优势':(lv==='medium'?'适中':'待提升');
+    html+='<div style="margin-bottom:10px;padding:8px 12px;background:var(--white);border-radius:8px;border-left:3px solid '+color+';">';
+    html+='<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px;">';
+    html+='<strong>'+d.icon+' '+d.name+'</strong>';
+    html+='<span style="font-size:12px;color:'+color+';font-weight:600;">'+ns[d.id]+'分 · '+label+'</span></div>';
+    html+='<p style="font-size:12px;color:var(--ink-light);line-height:1.7;margin:0;">'+b.desc+'</p>';
+    html+='</div>';
+  });
+  html+='</div>';
+
+  // 五大板块能力
+  html+='<div class="card"><h4>📊 语文五大板块能力阐述</h4>';
+  const domainColors={};
+  for(const [key,score] of Object.entries(domainScores)){
+    domainColors[key]=score>=68?'var(--green)':(score>=42?'var(--gold)':'var(--red)');
+  }
+  for(const [key,dom] of Object.entries(DOMAINS)){
+    const score=domainScores[key],color=domainColors[key];
+    html+='<div class="domain-card">';
+    html+='<strong>'+dom.name+'</strong><span class="domain-score" style="color:'+color+'">'+score+' 分</span>';
+    html+='<p style="font-size:12px;color:var(--ink-light);margin:4px 0 0;">'+dom.desc+'</p>';
+    html+='</div>';
+  }
+  html+='</div>';
+
+  // 学习方式画像
+  html+='<div class="card"><h4>🧑‍🎓 学员学习方式画像</h4>';
+  html+='<p style="font-size:13px;line-height:1.9;color:var(--ink-light);">'+profile+'</p></div>';
+
+  // 教学培养案
+  html+='<div class="card"><h4>📝 教学培养案</h4>';
+  html+='<p style="font-size:12px;color:var(--ink-light);margin-bottom:10px;">以下策略按优先级排列，建议在教学中有计划地实施：</p>';
+  const weakDims=ranked.slice(6).reverse(); // 从最弱开始
+  weakDims.forEach((w,idx)=>{
+    const b=BEHAVIORS[w.i][getLv(ns[w.i])];
+    html+='<div class="advice-item" style="margin-bottom:8px;"><span class="advice-num">'+(idx+1)+'</span><strong>针对'+DIMS[w.i].sname+'：</strong>'+b.advice_teacher+'</div>';
+  });
+  // 最强维度的保持建议
+  const topDim=ranked[0];
+  html+='<div class="advice-item"><span class="advice-num">●</span><strong>保持优势（'+DIMS[topDim.i].sname+'）：</strong>'+BEHAVIORS[topDim.i].high.advice_teacher+'</div>';
+  html+='</div>';
+
+  // 家校共育建议
+  html+='<div class="card"><h4>🏠 家校共育建议</h4>';
+  html+='<div class="section-title">📌 给家长的关键告知</div>';
+  html+='<p style="font-size:13px;line-height:1.85;color:var(--ink-light);">'+hsAdvice.tell+'</p>';
+  html+='<div class="section-title">🏡 在家可以这样做</div>';
+  hsAdvice.homeActions.forEach((a,i)=>{
+    html+='<div style="margin-bottom:6px;font-size:13px;line-height:1.7;color:var(--ink-light);"><strong>'+(i+1)+'.</strong> '+a+'</div>';
+  });
+  html+='<div class="section-title">📞 建议沟通时机</div>';
+  html+='<p style="font-size:13px;line-height:1.85;color:var(--ink-light);">'+hsAdvice.commTiming+'</p>';
+  html+='</div>';
+
+  document.getElementById('modal-content').innerHTML=html;
+  document.getElementById('modal-overlay').classList.add('show');
+
+  // 渲染个体雷达图
+  setTimeout(()=>drawIndivRadar('chart-indiv-radar',ns),300);
+}
+
+function closeModal(){
+  document.getElementById('modal-overlay').classList.remove('show');
+  // 销毁雷达图避免内存泄漏
+  const canvas=document.getElementById('chart-indiv-radar');
+  if(canvas){
+    const ctx=canvas.getContext('2d');
+    if(ctx._chart)ctx._chart.destroy();
+  }
+}
+
+// ====== Chart.js 动态加载 ======
+let chartLoaded=false,chartLoading=false,chartCbs=[];
+function loadChart(cb){
+  if(chartLoaded){cb();return}
+  chartCbs.push(cb);if(chartLoading)return;chartLoading=true;
+  const urls=['https://registry.npmmirror.com/chart.js/4.4.0/files/dist/chart.umd.min.js','https://unpkg.com/chart.js@4.4.0/dist/chart.umd.min.js','https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js'];
+  function tryLoad(i){
+    if(i>=urls.length){chartLoaded=true;chartLoading=false;chartCbs.forEach(c=>c());chartCbs=[];return}
+    const s=document.createElement('script');s.src=urls[i];
+    s.onload=()=>{chartLoaded=true;chartLoading=false;chartCbs.forEach(c=>c());chartCbs=[]};
+    s.onerror=()=>tryLoad(i+1);document.head.appendChild(s)
+  }
+  tryLoad(0)
+}
+
+const CHART_COLORS=['#B83A2A','#C77826','#4A7B9D','#8B7355','#5B8C5A','#B8860B','#9B4D7A','#5B7A9D'];
+
+function drawTypeChart(typeCount){
+  const canvas=document.getElementById('chart-type');
+  if(!canvas)return;
+  loadChart(()=>{
+    const labels=[],data=[],colors=[];
+    let i=0;
+    for(const [k,v] of Object.entries(typeCount)){
+      labels.push(TYPES[k].name);data.push(v);colors.push(CHART_COLORS[i%CHART_COLORS.length]);i++;
+    }
+    const ctx=canvas.getContext('2d');
+    if(ctx._chart)ctx._chart.destroy();
+    ctx._chart=new Chart(ctx,{type:'bar',data:{labels,datasets:[{data,backgroundColor:colors,borderRadius:6}]},options:{responsive:true,maintainAspectRatio:true,plugins:{legend:{display:false}},scales:{y:{beginAtZero:true,ticks:{stepSize:1}}}}});
+  });
+}
+
+function drawOverviewRadar(ns){
+  const canvas=document.getElementById('chart-radar');
+  if(!canvas)return;
+  loadChart(()=>{
+    const ctx=canvas.getContext('2d');
+    if(ctx._chart)ctx._chart.destroy();
+    ctx._chart=new Chart(ctx,{type:'radar',data:{labels:DIMS.map(d=>d.icon+' '+d.sname),datasets:[{data:ns,backgroundColor:'rgba(184,58,42,0.10)',borderColor:'#B83A2A',borderWidth:2,pointBackgroundColor:'#B83A2A',pointBorderColor:'#fff',pointBorderWidth:2,pointRadius:5}]},options:{responsive:true,maintainAspectRatio:true,plugins:{legend:{display:false}},scales:{r:{min:0,max:100,ticks:{stepSize:20,backdropColor:'transparent',font:{size:10}},pointLabels:{font:{size:11}},grid:{color:'#E0D5C9'},angleLines:{color:'#E0D5C9'}}}}});
+  });
+}
+
+function drawIndivRadar(id,ns){
+  const canvas=document.getElementById(id);
+  if(!canvas)return;
+  loadChart(()=>{
+    const ctx=canvas.getContext('2d');
+    if(ctx._chart)ctx._chart.destroy();
+    ctx._chart=new Chart(ctx,{type:'radar',data:{labels:DIMS.map(d=>d.icon+' '+d.sname),datasets:[{data:ns,backgroundColor:'rgba(184,58,42,0.10)',borderColor:'#B83A2A',borderWidth:2,pointBackgroundColor:'#B83A2A',pointBorderColor:'#fff',pointBorderWidth:2,pointRadius:5}]},options:{responsive:true,maintainAspectRatio:true,plugins:{legend:{display:false}},scales:{r:{min:0,max:100,ticks:{stepSize:20,backdropColor:'transparent',font:{size:10}},pointLabels:{font:{size:11}},grid:{color:'#E0D5C9'},angleLines:{color:'#E0D5C9'}}}}});
+  });
+}
+
+// ====== 初始化 ======
+let _lastKnownCount=0;
+function init(){
+  initManualForm();
+  if(USE_API){
+    // 服务器模式：先拉取数据再显示
+    fetchFromServer();
+    _lastKnownCount=0;
+    // 每4秒从服务器拉取最新数据（跨设备自动同步）
+    setInterval(fetchFromServer,4000);
+  }else{
+    _lastKnownCount=loadStudents().length;
+    // localStorage模式：每5秒检测（同设备同步）
+    setInterval(()=>{
+      const current=loadStudents().length;
+      if(current>_lastKnownCount){
+        const diff=current-_lastKnownCount;
+        _lastKnownCount=current;
+        updateCount();
+        const hint=document.getElementById('refresh-hint');
+        hint.textContent='检测到 '+diff+' 名新学生完成诊断，数据已自动更新';
+        hint.style.display='block';hint.style.color='#5B8C5A';
+        setTimeout(()=>{hint.style.display='none'},5000);
+        const activeTab=document.querySelector('.tab.active');
+        if(activeTab){
+          const tn=activeTab.dataset.tab;
+          if(tn==='overview')renderOverview();
+          if(tn==='students')renderStudentList();
+        }
+      }
+    },5000);
+  }
+  updateCount();
+  switchTab('import');
+  // 显示当前模式
+  if(USE_API){
+    setTimeout(()=>{
+      const hint=document.getElementById('refresh-hint');
+      hint.textContent='服务器模式：学生完成诊断后自动同步到此处';
+      hint.style.display='block';hint.style.color='var(--blue)';
+      setTimeout(()=>{hint.style.display='none'},4000);
+    },500);
+  }
+}
+init();
+</script>
+</body>
+</html>
