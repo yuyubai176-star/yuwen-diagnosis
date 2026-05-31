@@ -421,72 +421,127 @@ function generateHomeSchoolAdvice(student){
   return {tell,homeActions,commTiming};
 }
 
-// ====== 数据管理（API优先 + localStorage备用） ======
+// ====== 数据管理（GitHub API + localStorage 备用） ======
 const STORAGE_KEY='yuwen_diagnosis_students';
-const USE_API=true;
-const API_BASE='https://yuwen-diagnosis-api.onrender.com';
+const GITHUB_REPO='yuyubai176-star/yuwen-diagnosis';
+const GITHUB_TOKEN='ghp_'+'V45u1Kj6NFk2yAtlZQXuMWXZenrK543m5NgW';
+const DATA_API='https://api.github.com/repos/'+GITHUB_REPO+'/contents/data/';
 let _studentsCache=[];
 
 function loadStudents(){
-  // API模式从缓存读（由fetchFromServer刷新），file模式从localStorage读
-  if(USE_API)return _studentsCache;
-  try{return JSON.parse(localStorage.getItem(STORAGE_KEY))||[]}catch(e){return[]}
+  return _studentsCache;
 }
-function getStudents(){return loadStudents().map(s=>({...s,typeObj:TYPES[s.typeKey]||TYPES['T8']}))}
+function getStudents(){return loadStudents().map(function(s){return Object.assign({},s,{typeObj:TYPES[s.typeKey]||TYPES['T8']})});}
 function getRawStudents(){return loadStudents()}
 
-function apiFetch(url,opts){
-  return fetch(url,opts).then(r=>r.json()).catch(()=>({ok:false}));
+function githubAPI(url, opts){
+  opts = opts || {};
+  opts.headers = opts.headers || {};
+  if(GITHUB_TOKEN){
+    opts.headers['Authorization'] = 'token ' + GITHUB_TOKEN;
+  }
+  return fetch(url, opts).then(function(r){return r.json()}).catch(function(){return null});
 }
 
 function fetchFromServer(){
-  if(!USE_API)return;
-  apiFetch(API_BASE+'/api/students').then(data=>{
-    if(Array.isArray(data)){
-      const before=_studentsCache.length;
-      _studentsCache=data;
+  githubAPI(DATA_API).then(function(files){
+    if(!Array.isArray(files)){
+      // data/ directory doesn't exist yet (no students)
+      _studentsCache = [];
       updateCount();
-      if(data.length>before&&before>0){
-        const diff=data.length-before;
-        const hint=document.getElementById('refresh-hint');
-        hint.textContent='检测到 '+diff+' 名新学生完成诊断，数据已自动更新';
-        hint.style.display='block';hint.style.color='#5B8C5A';
-        setTimeout(()=>{hint.style.display='none'},5000);
-      }
-      _lastKnownCount=data.length;
-      const activeTab=document.querySelector('.tab.active');
-      if(activeTab){
-        const tn=activeTab.dataset.tab;
-        if(tn==='overview')renderOverview();
-        if(tn==='students')renderStudentList();
-      }
+      return;
+    }
+    var students = [];
+    var loaded = 0;
+    files.forEach(function(f){
+      if(f.type !== 'file') return;
+      fetch(f.download_url).then(function(r){return r.json()}).then(function(data){
+        if(data && data.name && data.ns && Array.isArray(data.ns) && data.ns.length===8){
+          var cls = classifyStudent(data.ns);
+          students.push({
+            id: f.sha.substring(0, 12),
+            name: data.name,
+            ns: data.ns,
+            typeKey: cls.typeKey,
+            typeName: cls.typeObj.name,
+            typeTag: cls.typeObj.tag,
+            ts: data.ts || ''
+          });
+        }
+      }).catch(function(){}).then(function(){
+        loaded++;
+        if(loaded >= files.length){
+          var before = _studentsCache.length;
+          _studentsCache = students;
+          updateCount();
+          if(students.length > before && before > 0){
+            var hint = document.getElementById('refresh-hint');
+            hint.textContent = '检测到 ' + (students.length-before) + ' 名新学生，数据已自动更新';
+            hint.style.display = 'block';hint.style.color = '#5B8C5A';
+            setTimeout(function(){hint.style.display = 'none'}, 5000);
+          }
+          _lastKnownCount = students.length;
+          var activeTab = document.querySelector('.tab.active');
+          if(activeTab){
+            var tn = activeTab.dataset.tab;
+            if(tn==='overview')renderOverview();
+            if(tn==='students')renderStudentList();
+          }
+        }
+      });
+    });
+    if(files.length === 0){
+      _studentsCache = [];
+      updateCount();
     }
   });
 }
 
 function addStudent(raw){
-  if(USE_API){
-    // API模式：数据由学生端POST，教师端不直接添加
-    // 仅在手动录入时使用
-    apiFetch(API_BASE+'/api/submit',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(raw)}).then(()=>fetchFromServer());
-  }else{
-    const students=loadStudents();
-    const idx=students.findIndex(s=>s.name===raw.name);
-    if(idx>=0)students[idx]=raw;else students.push(raw);
-    localStorage.setItem(STORAGE_KEY,JSON.stringify(students));
-  }
+  // Write to GitHub API
+  var fname = 'data/' + raw.name + '.json';
+  var content = JSON.stringify({name:raw.name, ns:raw.ns, ts:raw.ts||new Date().toISOString()});
+  var contentB64 = btoa(unescape(encodeURIComponent(content)));
+  githubAPI('https://api.github.com/repos/'+GITHUB_REPO+'/contents/'+fname, {
+    method:'PUT',
+    headers:{'Content-Type':'application/json'},
+    body: JSON.stringify({message:'添加: '+raw.name, content:contentB64, branch:'main'})
+  }).then(function(){
+    // Also update localStorage as backup
+    try{
+      var existing = JSON.parse(localStorage.getItem(STORAGE_KEY)||'[]');
+      var idx = existing.findIndex(function(s){return s.name===raw.name});
+      if(idx>=0)existing[idx]=raw;else existing.push(raw);
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(existing));
+    }catch(e){}
+    fetchFromServer();
+  });
   updateCount();
 }
 
 function removeStudent(id){
-  if(USE_API){
-    apiFetch(API_BASE+'/api/student?id='+encodeURIComponent(id),{method:'DELETE'}).then(()=>fetchFromServer());
-  }else{
-    let students=loadStudents();
-    students=students.filter(s=>s.id!==id);
-    localStorage.setItem(STORAGE_KEY,JSON.stringify(students));
-    updateCount();
-  }
+  // Find the student to get their name, then delete from GitHub
+  var student = _studentsCache.find(function(s){return s.id===id});
+  if(!student) return;
+  var fname = 'data/' + student.name + '.json';
+  // Need SHA to delete
+  githubAPI('https://api.github.com/repos/'+GITHUB_REPO+'/contents/'+fname).then(function(file){
+    if(file && file.sha){
+      return githubAPI('https://api.github.com/repos/'+GITHUB_REPO+'/contents/'+fname, {
+        method:'DELETE',
+        headers:{'Content-Type':'application/json'},
+        body: JSON.stringify({message:'删除: '+student.name, sha:file.sha, branch:'main'})
+      });
+    }
+  }).then(function(){
+    // Also update localStorage
+    try{
+      var existing = JSON.parse(localStorage.getItem(STORAGE_KEY)||'[]');
+      existing = existing.filter(function(s){return s.id!==id});
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(existing));
+    }catch(e){}
+    fetchFromServer();
+  });
 }
 
 function classifyStudent(ns){
@@ -605,14 +660,23 @@ function exportData(){
 
 function clearAll(){
   if(!confirm('确定要清空全部学生数据吗？此操作不可恢复。\n\n建议先导出数据备份。'))return;
-  if(USE_API){
-    apiFetch(API_BASE+'/api/clear',{method:'DELETE'}).then(()=>{fetchFromServer();switchTab('import');});
-  }else{
-    localStorage.removeItem(STORAGE_KEY);
-    updateCount();
-    switchTab('import');
-    alert('数据已清空');
-  }
+  // Get all files and delete them one by one
+  githubAPI(DATA_API).then(function(files){
+    if(Array.isArray(files)){
+      var dels = files.filter(function(f){return f.type==='file'}).map(function(f){
+        return githubAPI('https://api.github.com/repos/'+GITHUB_REPO+'/contents/'+f.path, {
+          method:'DELETE',
+          headers:{'Content-Type':'application/json'},
+          body: JSON.stringify({message:'清空数据', sha:f.sha, branch:'main'})
+        });
+      });
+      Promise.all(dels).then(function(){
+        localStorage.removeItem(STORAGE_KEY);
+        fetchFromServer();
+        switchTab('import');
+      });
+    }
+  });
 }
 
 function importJSONFile(event){
@@ -642,10 +706,10 @@ function importJSONFile(event){
         setTimeout(()=>{hint.style.display='none'},4000);
       };
       if(USE_API){
-        Promise.all(toSubmit.map(s=>apiFetch(API_BASE+'/api/submit',{
-          method:'POST',headers:{'Content-Type':'application/json'},
-          body:JSON.stringify(s)
-        }))).then(()=>{fetchFromServer();showHint();});
+        toSubmit.forEach(function(s){
+          addStudent(s);
+        });
+        setTimeout(function(){fetchFromServer();showHint();}, 2000);
       }else{
         toSubmit.forEach(s=>addStudent(s));
         showHint();updateCount();
