@@ -152,15 +152,8 @@ body{font-family:"Microsoft YaHei","PingFang SC",sans-serif;background:var(--cre
 
   <!-- 同步状态 -->
   <div class="card" id="card-sync" style="text-align:center;">
-    <div id="sync-status" style="font-size:14px;padding:12px;">
+    <div style="font-size:14px;padding:12px;">
       <span id="sync-icon">⏳</span> <span id="sync-text">正在同步数据给老师...</span>
-    </div>
-    <div id="sync-fallback" style="display:none;">
-      <p style="font-size:13px;color:var(--ink-light);margin-bottom:8px;">自动同步失败，请复制诊断码发送给老师：</p>
-      <div class="copy-box">
-        <div class="code" id="diagnosis-code" style="font-size:11px;word-break:break-all;margin-bottom:8px;max-height:80px;overflow-y:auto;text-align:left;"></div>
-        <button class="btn btn-primary btn-small" onclick="copyDiagnosisCode()" id="btn-copy-code">一键复制诊断码</button>
-      </div>
     </div>
   </div>
 
@@ -373,9 +366,6 @@ function showResult(){
 var API_BASE = 'https://yuwen-diagnosis-api.onrender.com';
 
 function syncToTeacher(data){
-  var codeData = {name: data.name, ns: data.ns, ts: data.ts};
-  var code = btoa(unescape(encodeURIComponent(JSON.stringify(codeData))));
-
   document.getElementById('sync-icon').textContent = '⏳';
   document.getElementById('sync-text').textContent = '正在同步数据给老师...';
   document.getElementById('sync-text').style.color = '';
@@ -389,53 +379,19 @@ function syncToTeacher(data){
   .then(function(resp){
     if(resp && resp.ok){
       document.getElementById('sync-icon').textContent = '✅';
-      document.getElementById('sync-text').textContent = '数据已自动同步给老师';
+      document.getElementById('sync-text').textContent = '数据已同步给老师';
       document.getElementById('sync-text').style.color = '#5B8C5A';
     } else {
-      showSyncFallback(code);
+      document.getElementById('sync-icon').textContent = '⚠️';
+      document.getElementById('sync-text').textContent = '同步失败，请稍后重试';
+      document.getElementById('sync-text').style.color = '#C77826';
     }
   })
   .catch(function(){
-    showSyncFallback(code);
+    document.getElementById('sync-icon').textContent = '⚠️';
+    document.getElementById('sync-text').textContent = '同步失败，请稍后重试';
+    document.getElementById('sync-text').style.color = '#C77826';
   });
-}
-
-function showSyncFallback(code){
-  document.getElementById('sync-icon').textContent = '⚠️';
-  document.getElementById('sync-text').textContent = '自动同步未成功，请复制诊断码发送给老师';
-  document.getElementById('sync-text').style.color = '#C77826';
-  document.getElementById('sync-fallback').style.display = 'block';
-  document.getElementById('diagnosis-code').textContent = code;
-}
-
-function copyDiagnosisCode(){
-  var code = document.getElementById('diagnosis-code').textContent;
-  if(!code)return;
-  if(navigator.clipboard && navigator.clipboard.writeText){
-    navigator.clipboard.writeText(code).then(function(){
-      var btn = document.getElementById('btn-copy-code');
-      btn.textContent = '✅ 已复制！请发送给老师';
-      btn.style.background = '#5B8C5A';
-      setTimeout(function(){btn.textContent = '📋 一键复制诊断码';btn.style.background = '';},3000);
-    }).catch(function(){
-      fallbackCopy(code);
-    });
-  }else{
-    fallbackCopy(code);
-  }
-}
-
-function fallbackCopy(text){
-  var ta = document.createElement('textarea');
-  ta.value = text;ta.style.position = 'fixed';ta.style.left = '-9999px';
-  document.body.appendChild(ta);ta.select();
-  try{document.execCommand('copy');
-    var btn = document.getElementById('btn-copy-code');
-    btn.textContent = '✅ 已复制！请发送给老师';
-    btn.style.background = '#5B8C5A';
-    setTimeout(function(){btn.textContent = '📋 一键复制诊断码';btn.style.background = '';},3000);
-  }catch(e){alert('请长按选中上方诊断码后手动复制')}
-  document.body.removeChild(ta);
 }
 
 function printReport(){
