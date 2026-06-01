@@ -121,7 +121,10 @@ body{font-family:"Microsoft YaHei","PingFang SC",sans-serif;background:var(--cre
     <div class="progress-text"><span id="section-label"></span><span id="progress-num">1 / 20</span></div>
   </div>
   <div class="card" id="question-card"></div>
-  <button class="btn btn-primary" id="btn-next" disabled onclick="nextQuestion()">下一题</button>
+  <div style="display:flex;gap:10px;">
+    <button class="btn btn-outline btn-small" id="btn-prev" style="flex:1;display:none;" onclick="prevQuestion()">上一题</button>
+    <button class="btn btn-primary" id="btn-next" disabled style="flex:1;" onclick="nextQuestion()">下一题</button>
+  </div>
   <div class="footer-note" style="padding-top:12px;">没有标准答案，选最像你的就好 😊</div>
 </div>
 
@@ -206,7 +209,9 @@ function renderQuestion(){
   document.getElementById('progress-num').textContent=(currentQ+1)+' / '+QUESTIONS.length;
   document.getElementById('section-label').innerHTML='<span class="section-badge '+sec.cls+'">'+sec.name+'</span>';
   const btnNext=document.getElementById('btn-next');
+  const btnPrev=document.getElementById('btn-prev');
   btnNext.disabled=true;btnNext.textContent=currentQ<QUESTIONS.length-1?'下一题':'查看诊断结果';
+  btnPrev.style.display=currentQ===0?'none':'';
   const labels=['A','B','C','D'];
   let html='<span class="q-num">'+(currentQ+1)+'</span> ';
   html+='<h3 style="display:inline;">'+q.q+'</h3><div class="options">';
@@ -222,8 +227,10 @@ function selectOption(i){
   answers[currentQ]=i;document.querySelectorAll('.option').forEach(e=>e.classList.remove('selected'));
   document.getElementById('opt-'+i).classList.add('selected');document.getElementById('btn-next').disabled=false
 }
+function prevQuestion(){
+  if(currentQ>0){currentQ--;renderQuestion()}
+}
 function nextQuestion(){
-  const q=QUESTIONS[currentQ];q.opts[answers[currentQ]].scores.forEach(([d,v])=>{scores[d]+=v});
   if(currentQ<QUESTIONS.length-1){currentQ++;renderQuestion()}else{showResult()}
 }
 
@@ -293,6 +300,13 @@ function classifyStudent(ns){
 function showResult(){
   document.getElementById('screen-quiz').classList.add('hidden');
   document.getElementById('screen-result').classList.remove('hidden');
+  // Compute scores from all answers at once
+  scores=[50,50,50,50,50,50,50,50];
+  answers.forEach(function(a,i){
+    if(a!==undefined){
+      QUESTIONS[i].opts[a].scores.forEach(function(dv){scores[dv[0]]+=dv[1];});
+    }
+  });
   const ns=scores.map(mapScore);
   const {type,typeKey}=classifyStudent(ns);
   const name=document.getElementById('student-name').value.trim();
