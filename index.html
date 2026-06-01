@@ -371,7 +371,7 @@ function syncToTeacher(data){
   document.getElementById('sync-text').textContent = '正在同步数据给老师...';
   document.getElementById('sync-text').style.color = '';
 
-  var fname = 'data/' + data.name + '.json';
+  var fname = 'data/' + encodeURIComponent(data.name) + '.json';
   var content = JSON.stringify(data, null, 0);
   var contentB64 = btoa(unescape(encodeURIComponent(content)));
 
