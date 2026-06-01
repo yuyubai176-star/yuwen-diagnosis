@@ -499,7 +499,7 @@ function fetchFromServer(){
 
 function addStudent(raw){
   // Write to GitHub API
-  var fname = 'data/' + raw.name + '.json';
+  var fname = 'data/' + encodeURIComponent(raw.name) + '.json';
   var content = JSON.stringify({name:raw.name, ns:raw.ns, ts:raw.ts||new Date().toISOString()});
   var contentB64 = btoa(unescape(encodeURIComponent(content)));
   githubAPI('https://api.github.com/repos/'+GITHUB_REPO+'/contents/'+fname, {
@@ -523,7 +523,7 @@ function removeStudent(id){
   // Find the student to get their name, then delete from GitHub
   var student = _studentsCache.find(function(s){return s.id===id});
   if(!student) return;
-  var fname = 'data/' + student.name + '.json';
+  var fname = 'data/' + encodeURIComponent(student.name) + '.json';
   // Need SHA to delete
   githubAPI('https://api.github.com/repos/'+GITHUB_REPO+'/contents/'+fname).then(function(file){
     if(file && file.sha){
