@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="zh-CN">
 <head>
 <meta charset="UTF-8">
@@ -97,6 +97,18 @@ tr:hover td{background:var(--cream)}
 
 .hidden{display:none!important}
 
+/* 对比面板 */
+.compare-radar-row{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px}
+.compare-table{width:100%;border-collapse:collapse;font-size:12px}
+.compare-table th,.compare-table td{padding:8px 6px;border-bottom:1px solid var(--border);text-align:center}
+.compare-table th{font-weight:600;color:var(--ink-light);font-size:11px}
+.compare-table .dim-name{text-align:left;font-weight:600}
+.compare-table .diff-pos{color:var(--green)}
+.compare-table .diff-neg{color:var(--red)}
+.compare-bar-wrap{display:flex;align-items:center;gap:4px}
+.compare-bar-a{height:6px;background:var(--red);border-radius:3px}
+.compare-bar-b{height:6px;background:var(--blue);border-radius:3px}
+
 @media print{
   body{background:#fff;color:#000;font-size:12px}
   .tabs,.btn,.footer-note,.filter-bar,#tab-import,.modal-close{display:none!important}
@@ -135,18 +147,7 @@ tr:hover td{background:var(--cream)}
 
 <!-- ====== 导入页 ====== -->
 <div id="tab-import">
-  <div class="card">
-    <h3>📋 批量导入诊断码</h3>
-    <p style="font-size:13px;color:var(--ink-light);margin-bottom:10px;">让学生将诊断报告中的诊断码发给你，每行粘贴一个学生的诊断码，系统会自动解析。</p>
-    <textarea id="import-codes" placeholder="每行粘贴一个学生的诊断码（Base64编码）&#10;例如：&#10;eyJuYW1lIjoi5...&#10;eyJuYW1lIjoi5..."></textarea>
-    <div style="margin-top:10px;display:flex;gap:8px;">
-      <button class="btn btn-primary" onclick="batchImport()">📥 批量导入</button>
-      <button class="btn btn-outline btn-small" onclick="document.getElementById('import-codes').value=''">清空输入</button>
-    </div>
-    <div id="import-msg" style="margin-top:8px;font-size:13px;"></div>
-  </div>
-
-  <div class="card">
+<div class="card">
     <h3>✍️ 手动录入学生数据</h3>
     <p style="font-size:13px;color:var(--ink-light);margin-bottom:10px;">如果学生没有诊断码，可以在此手动录入八维得分（0-100）。</p>
     <div id="manual-form">
@@ -215,6 +216,22 @@ tr:hover td{background:var(--cream)}
       </tr></thead>
       <tbody id="student-table-body"><tr><td colspan="9" class="empty-state">暂无学生数据，请先导入诊断码</td></tr></tbody>
     </table>
+  </div>
+
+  <!-- 学生对比 -->
+  <div class="card" id="compare-card">
+    <h3>🔍 学生对比</h3>
+    <p style="font-size:12px;color:var(--ink-light);margin-bottom:10px;">选择两名学生进行八维能力、五大板块和诊断类型的全面对比。</p>
+    <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-bottom:12px;">
+      <select id="compare-a" onchange="renderCompare()" style="flex:1;min-width:140px;">
+        <option value="">— 选择学生 A —</option>
+      </select>
+      <span style="color:var(--gold);font-weight:700;font-size:18px;">VS</span>
+      <select id="compare-b" onchange="renderCompare()" style="flex:1;min-width:140px;">
+        <option value="">— 选择学生 B —</option>
+      </select>
+    </div>
+    <div id="compare-result" class="hidden"></div>
   </div>
 </div>
 
@@ -466,7 +483,8 @@ function fetchFromServer(){
             typeKey: cls.typeKey,
             typeName: cls.typeObj.name,
             typeTag: cls.typeObj.tag,
-            ts: data.ts || ''
+            ts: data.ts || '',
+            notes: data.notes || ''
           });
         }
       }).catch(function(){}).then(function(){
@@ -499,14 +517,24 @@ function fetchFromServer(){
 }
 
 function addStudent(raw){
-  // Write to GitHub API
+  // Write to GitHub API (GET first to check for existing SHA)
   var fname = 'data/' + encodeURIComponent(raw.name) + '.json';
   var content = JSON.stringify({name:raw.name, ns:raw.ns, ts:raw.ts||new Date().toISOString()});
   var contentB64 = btoa(unescape(encodeURIComponent(content)));
-  githubAPI('https://api.github.com/repos/'+GITHUB_REPO+'/contents/'+fname, {
-    method:'PUT',
-    headers:{'Content-Type':'application/json'},
-    body: JSON.stringify({message:'添加: '+raw.name, content:contentB64, branch:'main'})
+
+  function doPut(sha){
+    var body = {message:'添加/更新: '+raw.name, content:contentB64, branch:'main'};
+    if(sha) body.sha = sha;
+    return githubAPI('https://api.github.com/repos/'+GITHUB_REPO+'/contents/'+fname, {
+      method:'PUT',
+      headers:{'Content-Type':'application/json'},
+      body: JSON.stringify(body)
+    });
+  }
+
+  // First check if file exists
+  githubAPI('https://api.github.com/repos/'+GITHUB_REPO+'/contents/'+fname).then(function(fileInfo){
+    return doPut(fileInfo && fileInfo.sha ? fileInfo.sha : null);
   }).then(function(){
     // Also update localStorage as backup
     try{
@@ -566,6 +594,87 @@ function mapScore(r){return Math.max(1,Math.min(99,Math.round((r-20)/60*98+1)))}
 // ====== 事件绑定 ======
 function updateCount(){
   document.getElementById('total-count').textContent=loadStudents().length;
+  // 同时更新对比下拉框
+  updateCompareSelects();
+}
+
+// ====== 学生对比 ======
+function updateCompareSelects(){
+  var selA=document.getElementById('compare-a');
+  var selB=document.getElementById('compare-b');
+  if(!selA||!selB)return;
+  var students=getStudents();
+  var curA=selA.value,curB=selB.value;
+  var opts='<option value="">— 选择学生 —</option>';
+  students.forEach(function(s){
+    opts+='<option value="'+s.id+'">'+escHtml(s.name)+'</option>';
+  });
+  selA.innerHTML=opts;selA.value=curA;
+  selB.innerHTML=opts;selB.value=curB;
+}
+
+function renderCompare(){
+  var idA=document.getElementById('compare-a').value;
+  var idB=document.getElementById('compare-b').value;
+  var container=document.getElementById('compare-result');
+  if(!idA||!idB){container.classList.add('hidden');return}
+  var students=getStudents();
+  var sA=students.find(function(s){return s.id===idA});
+  var sB=students.find(function(s){return s.id===idB});
+  if(!sA||!sB){container.classList.add('hidden');return}
+  container.classList.remove('hidden');
+  var dsA=calcDomainScores(sA.ns),dsB=calcDomainScores(sB.ns);
+  var typeA=TYPES[sA.typeKey],typeB=TYPES[sB.typeKey];
+
+  var html='';
+
+  // 双雷达图占位
+  html+='<div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px;">';
+  html+='<div><h4 style="color:var(--red);text-align:center;margin-bottom:4px;">'+escHtml(sA.name)+'</h4><div class="chart-wrap" style="max-width:220px;margin:0 auto;"><canvas id="chart-compare-a"></canvas></div></div>';
+  html+='<div><h4 style="color:var(--blue);text-align:center;margin-bottom:4px;">'+escHtml(sB.name)+'</h4><div class="chart-wrap" style="max-width:220px;margin:0 auto;"><canvas id="chart-compare-b"></canvas></div></div>';
+  html+='</div>';
+
+  // 八维对比表
+  html+='<table class="compare-table"><thead><tr><th>维度</th><th>'+escHtml(sA.name)+'</th><th>'+escHtml(sB.name)+'</th><th>差值</th><th>对比</th></tr></thead><tbody>';
+  DIMS.forEach(function(d,i){
+    var vA=sA.ns[i],vB=sB.ns[i],diff=vA-vB;
+    var diffCls=diff>0?'diff-pos':(diff<0?'diff-neg':'');
+    var diffStr=diff>0?'+'+diff:(diff===0?'0':''+diff);
+    var maxV=Math.max(vA,vB,1);
+    html+='<tr>';
+    html+='<td class="dim-name">'+d.icon+' '+d.sname+'</td>';
+    html+='<td style="font-weight:700;color:var(--red);">'+vA+'</td>';
+    html+='<td style="font-weight:700;color:var(--blue);">'+vB+'</td>';
+    html+='<td class="'+diffCls+'" style="font-weight:700;">'+diffStr+'</td>';
+    html+='<td><div class="compare-bar-wrap"><div class="compare-bar-a" style="width:'+Math.round(vA/maxV*60)+'px;"></div><div class="compare-bar-b" style="width:'+Math.round(vB/maxV*60)+'px;"></div></div></td>';
+    html+='</tr>';
+  });
+  html+='</tbody></table>';
+
+  // 五大板块对比
+  html+='<div class="section-title" style="margin-top:16px;">📊 五大板块对比</div>';
+  html+='<table class="compare-table"><thead><tr><th>板块</th><th>'+escHtml(sA.name)+'</th><th>'+escHtml(sB.name)+'</th><th>差值</th></tr></thead><tbody>';
+  for(var dk in DOMAINS){
+    var dAv=dsA[dk],dBv=dsB[dk],diff=dAv-dBv;
+    var diffStr2=diff>0?'+'+diff:(diff===0?'0':''+diff);
+    html+='<tr><td class="dim-name">'+DOMAINS[dk].name+'</td><td style="font-weight:700;color:var(--red);">'+dAv+'</td><td style="font-weight:700;color:var(--blue);">'+dBv+'</td><td class="'+(diff>0?'diff-pos':'diff-neg')+'" style="font-weight:700;">'+diffStr2+'</td></tr>';
+  }
+  html+='</tbody></table>';
+
+  // 类型对比
+  html+='<div class="section-title" style="margin-top:16px;">🧑 学习风格对比</div>';
+  html+='<div style="display:flex;gap:12px;">';
+  html+='<div style="flex:1;text-align:center;padding:10px;background:var(--white);border-radius:10px;border:2px solid var(--red);"><span class="tag '+typeA.tagClass+'" style="font-size:14px;padding:4px 12px;">'+typeA.name+'</span><p style="font-size:12px;color:var(--ink-light);margin-top:6px;">'+typeA.desc+'</p></div>';
+  html+='<div style="flex:1;text-align:center;padding:10px;background:var(--white);border-radius:10px;border:2px solid var(--blue);"><span class="tag '+typeB.tagClass+'" style="font-size:14px;padding:4px 12px;">'+typeB.name+'</span><p style="font-size:12px;color:var(--ink-light);margin-top:6px;">'+typeB.desc+'</p></div>';
+  html+='</div>';
+
+  container.innerHTML=html;
+
+  // Draw radars
+  setTimeout(function(){
+    drawIndivRadar('chart-compare-a',sA.ns,null);
+    drawIndivRadar('chart-compare-b',sB.ns,null);
+  },200);
 }
 
 // ====== Tab 切换 ======
@@ -579,42 +688,6 @@ function switchTab(name){
 }
 
 // ====== 导入 ======
-function batchImport(){
-  const raw=document.getElementById('import-codes').value.trim();
-  if(!raw){showImportMsg('请先粘贴诊断码','#C0392B');return}
-  const lines=raw.split(/[\n\r]+/).filter(l=>l.trim());
-  let success=0,fail=0;
-  lines.forEach(line=>{
-    try{
-      const data=JSON.parse(decodeURIComponent(escape(atob(line.trim()))));
-      if(!data.name||!data.ns||!Array.isArray(data.ns)||data.ns.length!==8){
-        fail++;return;
-      }
-      // 重新分类（以防学生版分类与当前数据不一致）
-      const cls=classifyStudent(data.ns);
-      addStudent({
-        id:Date.now()+Math.random().toString(36),
-        name:data.name,
-        ns:data.ns,
-        typeKey:cls.typeKey,
-        typeName:cls.typeObj.name,
-        typeTag:cls.typeObj.tag,
-        ts:data.ts||new Date().toISOString()
-      });
-      success++;
-    }catch(e){fail++}
-  });
-  showImportMsg('成功导入 '+success+' 名学生'+(fail>0?'，'+fail+' 条解析失败':''),fail>0?'#C77826':'#5B8C5A');
-  document.getElementById('import-codes').value='';
-  updateCount();
-}
-
-function showImportMsg(msg,color){
-  const el=document.getElementById('import-msg');
-  el.textContent=msg;el.style.color=color;
-  setTimeout(()=>{el.textContent=''},4000);
-}
-
 // ====== 手动录入 ======
 function initManualForm(){
   let html='';
@@ -840,7 +913,7 @@ function renderStudentList(){
     const time=s.ts?new Date(s.ts).toLocaleTimeString('zh-CN',{hour:'2-digit',minute:'2-digit'}):'';
     const domainOrder=['语基','名著','古诗文','阅读','作文'];
     html+='<tr>';
-    html+='<td class="clickable" onclick="openStudentDetail(\''+s.id+'\')">'+escHtml(s.name)+'</td>';
+    html+='<td class="clickable" onclick="openStudentDetail(\''+s.id+'\')">'+escHtml(s.name)+(s.notes?' <span style="font-size:10px;" title="有教师批注">📝</span>':'')+'</td>';
     html+='<td><span class="tag '+type.tagClass+'">'+type.name+'</span></td>';
     domainOrder.forEach(dk=>{
       const score=ds[dk];
@@ -866,6 +939,21 @@ function openStudentDetail(id){
   const domainScores=calcDomainScores(ns);
   const profile=generateProfile(student);
   const hsAdvice=generateHomeSchoolAdvice(student);
+  // 计算班级均值（排除自己）
+  var allStudents=loadStudents();
+  var avgNs=null;
+  if(allStudents.length>=2){
+    avgNs=[0,0,0,0,0,0,0,0];
+    var count=0;
+    allStudents.forEach(function(s){
+      if(s.id!==id && s.ns && s.ns.length===8){
+        for(var i=0;i<8;i++)avgNs[i]+=s.ns[i];
+        count++;
+      }
+    });
+    if(count>0)for(var i=0;i<8;i++)avgNs[i]=Math.round(avgNs[i]/count);
+    else avgNs=null;
+  }
 
   let html='';
   html+='<button class="modal-close" onclick="closeModal()">✕</button>';
@@ -876,10 +964,11 @@ function openStudentDetail(id){
   html+='<span class="tag '+type.tagClass+'" style="font-size:14px;padding:6px 16px;">'+type.name+' · '+type.tag+'</span>';
   html+='<p style="font-size:13px;color:var(--ink-light);margin-top:8px;">'+type.desc+'</p>';
   if(student.ts)html+='<p style="font-size:11px;color:var(--ink-light);">诊断日期：'+new Date(student.ts).toLocaleDateString('zh-CN')+'</p>';
+  html+='<button class="btn btn-outline btn-small" onclick="event.stopPropagation();printStudentReport()" style="margin-top:8px;">🖨️ 打印此报告</button>';
   html+='</div>';
 
   // 八维雷达
-  html+='<div class="card"><h4>🎯 八维能力雷达</h4><div class="chart-wrap" style="max-width:320px;margin:0 auto;"><canvas id="chart-indiv-radar"></canvas></div></div>';
+  html+='<div class="card"><h4>🎯 八维能力雷达'+(avgNs?'<span style="font-size:11px;color:var(--blue);font-weight:400;">（虚线 = 班级均值）</span>':'')+'</h4><div class="chart-wrap" style="max-width:320px;margin:0 auto;"><canvas id="chart-indiv-radar"></canvas></div></div>';
 
   // 八维维度解读
   html+='<div class="card"><h4>📋 八维维度解读</h4>';
@@ -928,6 +1017,13 @@ function openStudentDetail(id){
   html+='<div class="advice-item"><span class="advice-num">●</span><strong>保持优势（'+DIMS[topDim.i].sname+'）：</strong>'+BEHAVIORS[topDim.i].high.advice_teacher+'</div>';
   html+='</div>';
 
+  // 教师批注
+  html+='<div class="card"><h4>✏️ 教师批注</h4>';
+  html+='<textarea id="note-'+student.id+'" placeholder="在此添加对 '+escHtml(student.name)+' 的教学观察和批注..." style="min-height:80px;">'+(student.notes||'')+'</textarea>';
+  html+='<div style="margin-top:6px;display:flex;gap:8px;align-items:center;">';
+  html+='<button class="btn btn-primary btn-small" onclick="saveTeacherNote(\''+student.id+'\')">💾 保存批注</button>';
+  html+='<span id="note-msg-'+student.id+'" style="font-size:12px;"></span></div></div>';
+
   // 家校共育建议
   html+='<div class="card"><h4>🏠 家校共育建议</h4>';
   html+='<div class="section-title">📌 给家长的关键告知</div>';
@@ -944,7 +1040,16 @@ function openStudentDetail(id){
   document.getElementById('modal-overlay').classList.add('show');
 
   // 渲染个体雷达图
-  setTimeout(()=>drawIndivRadar('chart-indiv-radar',ns),300);
+  setTimeout(()=>drawIndivRadar('chart-indiv-radar',ns,avgNs),300);
+}
+
+function printStudentReport(){
+  // 为打印优化：隐藏编辑元素
+  var modal=document.querySelector('.modal');
+  var btns=modal.querySelectorAll('.btn,.modal-close,textarea');
+  btns.forEach(function(b){b.style.display='none'});
+  window.print();
+  btns.forEach(function(b){b.style.display=''});
 }
 
 function closeModal(){
@@ -999,17 +1104,45 @@ function drawOverviewRadar(ns){
   });
 }
 
-function drawIndivRadar(id,ns){
+function drawIndivRadar(id,ns,avgNs){
   const canvas=document.getElementById(id);
   if(!canvas)return;
   loadChart(()=>{
     const ctx=canvas.getContext('2d');
     if(ctx._chart)ctx._chart.destroy();
-    ctx._chart=new Chart(ctx,{type:'radar',data:{labels:DIMS.map(d=>d.icon+' '+d.sname),datasets:[{data:ns,backgroundColor:'rgba(184,58,42,0.10)',borderColor:'#B83A2A',borderWidth:2,pointBackgroundColor:'#B83A2A',pointBorderColor:'#fff',pointBorderWidth:2,pointRadius:5}]},options:{responsive:true,maintainAspectRatio:true,plugins:{legend:{display:false}},scales:{r:{min:0,max:100,ticks:{stepSize:20,backdropColor:'transparent',font:{size:10}},pointLabels:{font:{size:11}},grid:{color:'#E0D5C9'},angleLines:{color:'#E0D5C9'}}}}});
+    var datasets=[{data:ns,label:'该生',backgroundColor:'rgba(184,58,42,0.10)',borderColor:'#B83A2A',borderWidth:2,pointBackgroundColor:'#B83A2A',pointBorderColor:'#fff',pointBorderWidth:2,pointRadius:5}];
+    // 叠加班级均值
+    if(avgNs && Array.isArray(avgNs) && avgNs.length===8){
+      datasets.push({data:avgNs,label:'班级均值',backgroundColor:'rgba(74,123,157,0.05)',borderColor:'#4A7B9D',borderWidth:1.5,borderDash:[6,3],pointBackgroundColor:'#4A7B9D',pointBorderColor:'#fff',pointBorderWidth:1,pointRadius:3});
+    }
+    ctx._chart=new Chart(ctx,{type:'radar',data:{labels:DIMS.map(d=>d.icon+' '+d.sname),datasets:datasets},options:{responsive:true,maintainAspectRatio:true,plugins:{legend:{display:!!avgNs,position:'bottom',labels:{font:{size:10},padding:12}}},scales:{r:{min:0,max:100,ticks:{stepSize:20,backdropColor:'transparent',font:{size:10}},pointLabels:{font:{size:11}},grid:{color:'#E0D5C9'},angleLines:{color:'#E0D5C9'}}}}});
   });
 }
 
 // ====== 初始化 ======
+// ====== 教师批注保存 ======
+function saveTeacherNote(id){
+  var student=loadStudents().find(function(s){return s.id===id});
+  if(!student)return;
+  var ta=document.getElementById('note-'+id);
+  var notes=ta?ta.value.trim():'';
+  student.notes=notes;
+  // Save to GitHub
+  var fname='data/'+encodeURIComponent(student.name)+'.json';
+  var content=JSON.stringify({name:student.name,ns:student.ns,ts:student.ts||'',notes:notes});
+  githubAPI('https://api.github.com/repos/'+GITHUB_REPO+'/contents/'+fname).then(function(fileInfo){
+    var body={message:'批注: '+student.name,content:btoa(unescape(encodeURIComponent(content))),branch:'main'};
+    if(fileInfo&&fileInfo.sha)body.sha=fileInfo.sha;
+    return githubAPI('https://api.github.com/repos/'+GITHUB_REPO+'/contents/'+fname,{method:'PUT',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)});
+  }).then(function(){
+    var msgEl=document.getElementById('note-msg-'+id);
+    if(msgEl){msgEl.textContent='已保存';msgEl.style.color='#5B8C5A';setTimeout(function(){msgEl.textContent=''},2000);}
+  }).catch(function(){
+    var msgEl=document.getElementById('note-msg-'+id);
+    if(msgEl){msgEl.textContent='保存失败';msgEl.style.color='var(--red)';}
+  });
+}
+
 let _lastKnownCount=0;
 function init(){
   initManualForm();
