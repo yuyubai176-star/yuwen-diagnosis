@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="zh-CN">
 <head>
 <meta charset="UTF-8">
@@ -61,6 +61,22 @@ body{font-family:"Microsoft YaHei","PingFang SC",sans-serif;background:var(--cre
 .report-section h4{font-size:15px;margin-bottom:8px;padding-left:10px;border-left:3px solid var(--red);color:var(--ink)}
 .report-section p{font-size:14px;line-height:1.85;color:var(--ink-light);margin-bottom:8px}
 
+/* 维度柱状图 */
+.bar-wrap-student{margin:8px 0;display:flex;align-items:center;gap:8px}
+.bar-lbl-student{width:80px;font-size:12px;color:var(--ink);text-align:right;flex-shrink:0}
+.bar-track-student{flex:1;height:20px;background:var(--cream);border-radius:10px;overflow:hidden}
+.bar-fill-student{height:100%;border-radius:10px;transition:width .5s}
+.bar-val-student{width:32px;font-size:12px;font-weight:600;color:var(--ink-light);flex-shrink:0}
+
+/* 五大板块卡 */
+.domain-card-student{border-left:4px solid var(--gold);padding:8px 14px;margin-bottom:8px;background:var(--white);border-radius:0 10px 10px 0}
+.domain-card-student strong{color:var(--ink)}
+.domain-card-student .domain-score-student{float:right;font-weight:700;color:var(--red)}
+
+/* 家长寄语 */
+.parent-msg{padding:16px 20px;background:#FFFBF2;border:1px solid var(--gold);border-radius:12px;font-size:14px;line-height:1.9;color:var(--ink-light);margin-top:12px}
+.parent-msg .icon{font-size:24px;margin-right:6px}
+
 .advice-item{padding:11px 13px;margin-bottom:6px;background:var(--white);border-radius:9px;border:1px solid var(--border);font-size:13.5px;line-height:1.75;color:var(--ink-light)}
 .advice-item .advice-num{display:inline-block;width:22px;height:22px;border-radius:50%;background:var(--red);color:#fff;text-align:center;line-height:22px;font-size:11px;font-weight:700;margin-right:7px;flex-shrink:0}
 .advice-item strong{color:var(--ink)}
@@ -71,14 +87,21 @@ body{font-family:"Microsoft YaHei","PingFang SC",sans-serif;background:var(--cre
 .footer-note{text-align:center;padding:24px 0 12px;font-size:11px;color:var(--ink-light)}
 
 @media print{
-  body{background:#fff;color:#000}
-  .btn,.footer-note,.progress-wrap{display:none!important}
-  .card{box-shadow:none;border:1px solid #ccc;break-inside:avoid;margin-bottom:8px;padding:14px 16px}
-  .header{padding:16px 0 8px}
-  .header h1{color:#000;font-size:22px}
-  .type-badge{border-color:#000;color:#000}
-  .radar-wrap{max-width:280px}
+  body{background:#fff;color:#000;font-size:12px}
+  .btn,.footer-note,.progress-wrap,#card-sync{display:none!important}
+  .card{box-shadow:none;border:1px solid #ccc;break-inside:avoid;margin-bottom:6px;padding:10px 14px}
+  .header{padding:12px 0 4px}
+  .header h1{color:#000;font-size:20px}
+  .header .sub{font-size:11px}
+  .type-badge{border-color:#000;color:#000;font-size:16px;padding:6px 18px}
+  .radar-wrap{max-width:260px}
   .report-section h4{border-left-color:#000}
+  .bar-fill-student{background:#000!important}
+  .bar-val-student,.bar-lbl-student{color:#000!important;font-size:10px}
+  .domain-card-student{border-left-color:#000}
+  .domain-score-student{color:#000!important}
+  .parent-msg{border-color:#ccc;background:#fff;font-size:12px}
+  .advice-item{font-size:11px;padding:8px 10px}
 }
 
 .step-indicator{display:flex;align-items:center;justify-content:center;gap:8px;margin-bottom:16px}
@@ -86,6 +109,11 @@ body{font-family:"Microsoft YaHei","PingFang SC",sans-serif;background:var(--cre
 .step-dot.active{background:var(--red)}
 .step-dot.done{background:var(--green)}
 .step-line{width:30px;height:1px;background:var(--border)}
+
+.print-header{display:none!important}
+@media print{
+  .print-header{display:block!important}
+}
 </style>
 </head>
 <body>
@@ -116,6 +144,7 @@ body{font-family:"Microsoft YaHei","PingFang SC",sans-serif;background:var(--cre
 
 <!-- ====== 答题页 ====== -->
 <div id="screen-quiz" class="hidden">
+  <div class="step-indicator" id="step-dots"></div>
   <div class="progress-wrap">
     <div class="progress-bar"><div class="progress-fill" id="progress-fill" style="width:0%"></div></div>
     <div class="progress-text"><span id="section-label"></span><span id="progress-num">1 / 20</span></div>
@@ -132,6 +161,12 @@ body{font-family:"Microsoft YaHei","PingFang SC",sans-serif;background:var(--cre
 <div id="screen-result" class="hidden">
   <div class="header"><div class="icon">🎉</div><h1>你的诊断报告</h1></div>
 
+  <!-- 报告头（仅打印可见） -->
+  <div style="display:none;" class="print-header">
+    <p style="font-size:13px;margin-bottom:6px;">学生：<span id="print-name"></span>  日期：<span id="print-date"></span></p>
+    <hr style="border:0.5px solid #ccc;margin-bottom:10px;">
+  </div>
+
   <!-- 总评 -->
   <div class="card" id="card-overview"></div>
 
@@ -144,6 +179,12 @@ body{font-family:"Microsoft YaHei","PingFang SC",sans-serif;background:var(--cre
   <!-- 雷达图 -->
   <div class="card"><div class="radar-wrap"><canvas id="radar-student"></canvas></div></div>
 
+  <!-- 维度柱状图 -->
+  <div class="card"><h4 style="margin-bottom:12px;">📊 八维能力得分</h4><div id="section-bars"></div></div>
+
+  <!-- 五大板块 -->
+  <div class="card"><h4 style="margin-bottom:12px;">📋 语文五大板块能力</h4><div id="section-domains"></div></div>
+
   <!-- 优势 -->
   <div class="card"><div class="report-section" id="section-strengths"></div></div>
 
@@ -152,6 +193,9 @@ body{font-family:"Microsoft YaHei","PingFang SC",sans-serif;background:var(--cre
 
   <!-- 学习建议 -->
   <div class="card"><div class="report-section" id="section-advice"></div></div>
+
+  <!-- 家长寄语 -->
+  <div class="card" id="card-parent" style="text-align:center;"></div>
 
   <!-- 同步状态 -->
   <div class="card" id="card-sync" style="text-align:center;">
@@ -187,7 +231,7 @@ const SECTIONS=[
   {name:'写作',cls:'badge-writing',start:10,end:14},
   {name:'语言基础与运用',cls:'badge-language',start:15,end:19}
 ];
-const QUESTIONS=[{"q":"做阅读理解题时，你通常采用什么阅读顺序？","opts":[{"text":"先快速浏览题目，带着问题有针对性地读文章","scores":[[0,3],[1,2],[4,-1]]},{"text":"先仔细通读全文，把握大意后再逐题回原文找答案","scores":[[4,2],[1,3],[0,-1]]},{"text":"边读边圈画关键词和关键句，读完后凭批注印象做题","scores":[[0,2],[3,3],[1,-2]]},{"text":"直接看题目，在原文中找和题干关键词相同的句子来匹配作答","scores":[[1,-2],[0,-3],[3,-1]]}]},{"q":"面对「请用简洁的语言概括本文主要内容」这类概括题时，你通常怎么做？","opts":[{"text":"先找文中中心句或总起句，围绕它来概括核心事件","scores":[[1,3],[5,2],[2,-1]]},{"text":"用自己的话把事情的起因、经过、结果重新讲一遍","scores":[[2,3],[1,1],[5,-1]]},{"text":"把文中每个段落的大意串起来，但概括得比较长，容易写成复述","scores":[[1,-2],[2,-1],[5,1]]},{"text":"先圈出文中关键人物和事件要素，再串联成一句话","scores":[[0,3],[1,3],[2,-2]]}]},{"q":"面对「联系上下文，解释加点词语在文中的含义」这类含义题时，你通常？","opts":[{"text":"结合词语所在句子的前后文语境，用自己的话解释它在「这里」的意思","scores":[[1,3],[7,2],[6,-1]]},{"text":"先回忆这个词的字典义（本义），再根据上下文做适当调整","scores":[[6,2],[7,1],[1,-1]]},{"text":"直接把字典义写上去，不太会结合具体语境做变通","scores":[[6,2],[7,-3],[1,-2]]},{"text":"反复读这个词所在的句子，从上下文找线索推断它的临时含义","scores":[[1,3],[3,2],[6,-1]]}]},{"q":"面对「画线句子运用了什么描写方法？有什么表达效果？」这类赏析题时，你的答题思路是？","opts":[{"text":"先判断手法，再分析它写出了什么特点，最后说表达了什么情感","scores":[[3,3],[5,1],[4,-1]]},{"text":"能感觉到这句话写得好，写出自己的感受，但不太用专业术语分析","scores":[[4,3],[2,2],[3,-2]]},{"text":"回忆老师讲过的答题模板和常用术语，按照「手法+内容+效果」的套路写","scores":[[7,2],[3,2],[4,-2]]},{"text":"不太确定怎么分析，通常会把自己对这句话的理解写上去，但缺乏层次","scores":[[2,-2],[3,-3],[7,-1]]}]},{"q":"面对「文章最后一段在全文中有何作用？」这类作用题时，你的答题思路是？","opts":[{"text":"从「内容」和「结构」两个维度分别思考","scores":[[5,3],[0,2],[3,-1]]},{"text":"能想到结构上的作用，但内容上的作用分析不够深入","scores":[[5,1],[0,-1],[3,-2]]},{"text":"容易把作用题和赏析题混淆，把「手法+效果」当成「作用」来答","scores":[[0,-3],[3,-1],[5,-1]]},{"text":"先判断结尾类型，再根据类型确定具体作用","scores":[[0,3],[5,2],[3,-2]]}]},{"q":"背诵古诗词时，你更倾向于哪种方式？","opts":[{"text":"先理解诗歌的创作背景、字词含义和思想感情，在理解的基础上背诵","scores":[[4,3],[7,2],[6,-1]]},{"text":"反复大声朗读，利用节奏和韵律帮助记忆，不太关注诗意","scores":[[6,3],[4,-2],[7,-1]]},{"text":"边抄写边默记，通过动笔来加强记忆","scores":[[6,2],[2,1],[4,-1]]},{"text":"在脑中构想诗歌的画面和意境，用图像联想来辅助记忆","scores":[[4,3],[7,3],[6,-2]]}]},{"q":"做课外文言文阅读，遇到不认识的文言实词时，你最常用的策略是？","opts":[{"text":"联系课内学过的同一字词的释义，尝试迁移到新语境中理解","scores":[[7,3],[6,2],[1,-1]]},{"text":"结合上下文语境和现代汉语中该字的含义来推断","scores":[[1,3],[7,2],[6,-1]]},{"text":"遇到陌生字词容易卡住，反复纠结导致整篇理解受影响","scores":[[7,-3],[1,-2],[0,-2]]},{"text":"先通读全文注释，把已知的注释串起来推理剩余部分的大意","scores":[[1,3],[0,2],[7,-1]]}]},{"q":"面对「这首诗表达了诗人怎样的思想感情？」这类情感主旨题时，你通常？","opts":[{"text":"从意象、关键词、注释三方面入手，综合判断情感倾向","scores":[[4,3],[3,2],[1,1]]},{"text":"能整体感受到诗人的情绪，但说不出具体是通过什么感受到的","scores":[[4,2],[3,-2],[1,-1]]},{"text":"主要依赖老师讲过的「常见情感套路」，套用为主","scores":[[7,-2],[4,-2],[3,-2]]},{"text":"重点关注诗中直接表达情感的字眼，不太分析间接抒情","scores":[[1,2],[4,-1],[3,-1]]}]},{"q":"做诗歌鉴赏选择题时，你的做法是？","opts":[{"text":"逐项对照原文，检查每项的意象解读、手法判断和情感分析是否与诗歌一致","scores":[[0,3],[3,3],[4,-1]]},{"text":"凭对诗歌的整体感觉来判断，觉得不对劲的选项就选它","scores":[[4,3],[0,-2],[3,-1]]},{"text":"先排除明显正确的选项，对纠结的选项回到原诗找依据","scores":[[0,2],[5,2],[4,-1]]},{"text":"容易被选项中「高大上」的术语迷惑，看到不熟悉的术语就觉得是错的","scores":[[0,-3],[3,-2],[6,1]]}]},{"q":"面对「请用自己的话描绘诗句所展现的画面」这类意境概括题时，你通常？","opts":[{"text":"抓住诗句中的意象，用生动的语言展开画面描写，还原意境","scores":[[2,3],[4,3],[5,-1]]},{"text":"把诗句逐字翻译成白话文，画面感不强，更像直译而非描绘","scores":[[6,2],[2,-2],[4,-1]]},{"text":"脑中能形成画面，但写成文字时表达干涩，画面描绘不出来","scores":[[4,1],[2,-3],[5,-1]]},{"text":"先分析意象特点，再组织语言分层描绘","scores":[[5,2],[2,2],[4,-2]]}]},{"q":"看到作文题目后，你的第一步通常是什么？","opts":[{"text":"圈出题目中的关键词，明确写作对象、范围和重点","scores":[[0,3],[5,2],[4,-1]]},{"text":"脑子里快速搜索自己写过或看过的类似题目来构思","scores":[[7,2],[6,1],[0,-2]]},{"text":"脑子里冒出什么就写什么，边写边想","scores":[[4,2],[0,-3],[5,-2]]},{"text":"先花几分钟列提纲：开头、中间、结尾怎么安排","scores":[[5,3],[2,2],[4,-2]]}]},{"q":"写作选取素材时，你优先考虑的是什么？","opts":[{"text":"选自己亲身经历、有真情实感的事情","scores":[[4,3],[2,2],[7,-1]]},{"text":"选新颖独特、别人可能想不到的事例","scores":[[7,3],[4,-1],[6,-1]]},{"text":"选自己最熟悉、最有把握写好的素材，宁可平淡也不冒险","scores":[[6,2],[7,-2],[2,-1]]},{"text":"看哪个素材能用上积累的好词好句和修辞手法","scores":[[6,2],[2,2],[4,-2]]}]},{"q":"作文写到一半，隐约发现可能偏离题意了，这时你会？","opts":[{"text":"立刻停下来，重新审题，想办法在剩余部分把主题拉回正轨","scores":[[0,3],[7,3],[2,-1]]},{"text":"继续往下写，在结尾部分巧妙「扣题」来补救前面的偏离","scores":[[2,2],[7,2],[0,-1]]},{"text":"马上划掉重写，时间来得及的话尽量重新来一遍","scores":[[0,1],[7,-1],[5,-1]]},{"text":"心里着急但不知道怎么办，只能硬着头皮写完","scores":[[0,-3],[7,-3],[2,-2]]}]},{"q":"你的作文结尾通常是怎样写的？","opts":[{"text":"呼应开头和题目，在结尾升华主题，让全文形成完整的闭环","scores":[[5,3],[0,2],[2,1]]},{"text":"用一句「金句」或名言收尾，让结尾有亮点和力度","scores":[[6,2],[2,3],[5,-2]]},{"text":"写得比较仓促，通常是「这件事让我明白了……」然后草草收尾","scores":[[5,-3],[2,-1],[0,-1]]},{"text":"尝试留白或含蓄收束，不把话说满，给读者回味空间","scores":[[3,2],[4,3],[5,-1]]}]},{"q":"对于作文的语言表达，你最在意的是什么？","opts":[{"text":"表达准确、流畅、有条理，能把想说的意思清晰地传递给读者","scores":[[2,3],[5,2],[4,-1]]},{"text":"语言优美有文采，多用修辞手法和成语，让文字「好看」","scores":[[6,1],[2,3],[4,-2]]},{"text":"不追求华丽的词藻，但力求每句话都有真情实感、不说套话","scores":[[4,3],[2,2],[6,-1]]},{"text":"比较依赖平时积累的「好词好句」，写作时尽量把它们用进去","scores":[[6,2],[7,-1],[2,-2]]}]},{"q":"做字形辨析题时，你的方法是？","opts":[{"text":"从字义入手——理解每个偏旁/部件的含义，根据意思来判断正确的写法","scores":[[6,2],[7,2],[5,1]]},{"text":"凭视觉记忆和语感，平时见得多、写得多的自然就能判断","scores":[[6,3],[7,-1],[5,-1]]},{"text":"不太有把握，经常在两个形近字之间纠结，容易选错","scores":[[6,-2],[7,-2],[5,-1]]},{"text":"靠死记硬背——把老师总结的易错字列表反复抄写记忆","scores":[[6,1],[7,-2],[5,-1]]}]},{"q":"做「下列句子中加点成语使用不正确的一项是」这类成语正误判断题时，你通常？","opts":[{"text":"逐项分析成语的意思、适用对象、感情色彩，再代入语境判断","scores":[[6,2],[1,2],[7,1]]},{"text":"凭语感读句子，感觉不顺的、成语用得很别扭的就选它","scores":[[2,2],[6,-1],[5,-1]]},{"text":"先排除自己确定会的选项，再用排除法缩小范围","scores":[[0,2],[5,1],[6,-1]]},{"text":"有些成语不认识意思，只能靠猜，正确率看运气","scores":[[6,-3],[7,-2],[1,-1]]}]},{"q":"做病句修改题时，你的诊断方法是？","opts":[{"text":"用六大病句类型逐一排查","scores":[[5,3],[6,1],[2,-1]]},{"text":"凭语感读一遍，觉得哪里读着不对劲就直接改哪里","scores":[[2,3],[5,-2],[6,-1]]},{"text":"把句子拆开，分析主谓宾定状补等句子成分","scores":[[5,3],[0,1],[2,-1]]},{"text":"对各种病句类型的特征分辨不清，经常凭感觉蒙一个","scores":[[5,-3],[6,-2],[2,-1]]}]},{"q":"做仿写句子题时，你从哪些方面入手？","opts":[{"text":"先分析原句的句式结构、修辞手法和语言风格，再替换内容","scores":[[3,3],[7,3],[6,-1]]},{"text":"凭语感模仿原句的「味道」和节奏，写出风格相似但内容不同的句子","scores":[[2,3],[4,2],[3,-2]]},{"text":"从记忆里搜索之前写过的类似句子，在此基础上稍作改动","scores":[[6,1],[7,-1],[3,-2]]},{"text":"不太会仿写，写出来的句子和原句在结构和风格上差距较大","scores":[[2,-3],[3,-3],[7,-2]]}]},{"q":"期末复习语文时，你整体的复习方式是？","opts":[{"text":"按板块系统复习，每个板块有明确的复习目标","scores":[[5,2],[6,1],[7,1]]},{"text":"大量做真题和模拟卷，通过刷题找薄弱点","scores":[[7,3],[0,2],[6,-2]]},{"text":"重点翻看笔记、错题本和老师划的重点","scores":[[0,2],[6,2],[7,-2]]},{"text":"不太有清晰的复习计划，翻到哪本书复习哪本","scores":[[5,-3],[7,-2],[6,-1]]}]}];
+const QUESTIONS=[{"q":"做阅读理解题时，你通常采用什么阅读顺序？","opts":[{"text":"先快速浏览题目，带着问题有针对性地读文章","scores":[[0,3],[1,2],[4,-1]]},{"text":"先仔细通读全文，把握大意后再逐题回原文找答案","scores":[[4,2],[1,3],[0,-1]]},{"text":"边读边圈画关键词和关键句，读完后凭批注印象做题","scores":[[0,2],[3,3],[1,-2]]},{"text":"直接看题目，在原文中找和题干关键词相同的句子来匹配作答","scores":[[1,-2],[0,-3],[3,-1]]}],"dimTags":[0, 1]},{"q":"面对「请用简洁的语言概括本文主要内容」这类概括题时，你通常怎么做？","opts":[{"text":"先找文中中心句或总起句，围绕它来概括核心事件","scores":[[1,3],[5,2],[2,-1]]},{"text":"用自己的话把事情的起因、经过、结果重新讲一遍","scores":[[2,3],[1,1],[5,-1]]},{"text":"把文中每个段落的大意串起来，但概括得比较长，容易写成复述","scores":[[1,-2],[2,-1],[5,1]]},{"text":"先圈出文中关键人物和事件要素，再串联成一句话","scores":[[0,3],[1,3],[2,-2]]}],"dimTags":[1, 2]},{"q":"面对「联系上下文，解释加点词语在文中的含义」这类含义题时，你通常？","opts":[{"text":"结合词语所在句子的前后文语境，用自己的话解释它在「这里」的意思","scores":[[1,3],[7,2],[6,-1]]},{"text":"先回忆这个词的字典义（本义），再根据上下文做适当调整","scores":[[6,2],[7,1],[1,-1]]},{"text":"直接把字典义写上去，不太会结合具体语境做变通","scores":[[6,2],[7,-3],[1,-2]]},{"text":"反复读这个词所在的句子，从上下文找线索推断它的临时含义","scores":[[1,3],[3,2],[6,-1]]}],"dimTags":[1, 7]},{"q":"面对「画线句子运用了什么描写方法？有什么表达效果？」这类赏析题时，你的答题思路是？","opts":[{"text":"先判断手法，再分析它写出了什么特点，最后说表达了什么情感","scores":[[3,3],[5,1],[4,-1]]},{"text":"能感觉到这句话写得好，写出自己的感受，但不太用专业术语分析","scores":[[4,3],[2,2],[3,-2]]},{"text":"回忆老师讲过的答题模板和常用术语，按照「手法+内容+效果」的套路写","scores":[[7,2],[3,2],[4,-2]]},{"text":"不太确定怎么分析，通常会把自己对这句话的理解写上去，但缺乏层次","scores":[[2,-2],[3,-3],[7,-1]]}],"dimTags":[3, 4]},{"q":"面对「文章最后一段在全文中有何作用？」这类作用题时，你的答题思路是？","opts":[{"text":"从「内容」和「结构」两个维度分别思考","scores":[[5,3],[0,2],[3,-1]]},{"text":"能想到结构上的作用，但内容上的作用分析不够深入","scores":[[5,1],[0,-1],[3,-2]]},{"text":"容易把作用题和赏析题混淆，把「手法+效果」当成「作用」来答","scores":[[0,-3],[3,-1],[5,-1]]},{"text":"先判断结尾类型，再根据类型确定具体作用","scores":[[0,3],[5,2],[3,-2]]}],"dimTags":[5, 0]},{"q":"背诵古诗词时，你更倾向于哪种方式？","opts":[{"text":"先理解诗歌的创作背景、字词含义和思想感情，在理解的基础上背诵","scores":[[4,3],[7,2],[6,-1]]},{"text":"反复大声朗读，利用节奏和韵律帮助记忆，不太关注诗意","scores":[[6,3],[4,-2],[7,-1]]},{"text":"边抄写边默记，通过动笔来加强记忆","scores":[[6,2],[2,1],[4,-1]]},{"text":"在脑中构想诗歌的画面和意境，用图像联想来辅助记忆","scores":[[4,3],[7,3],[6,-2]]}],"dimTags":[6, 4]},{"q":"做课外文言文阅读，遇到不认识的文言实词时，你最常用的策略是？","opts":[{"text":"联系课内学过的同一字词的释义，尝试迁移到新语境中理解","scores":[[7,3],[6,2],[1,-1]]},{"text":"结合上下文语境和现代汉语中该字的含义来推断","scores":[[1,3],[7,2],[6,-1]]},{"text":"遇到陌生字词容易卡住，反复纠结导致整篇理解受影响","scores":[[7,-3],[1,-2],[0,-2]]},{"text":"先通读全文注释，把已知的注释串起来推理剩余部分的大意","scores":[[1,3],[0,2],[7,-1]]}],"dimTags":[7, 6]},{"q":"面对「这首诗表达了诗人怎样的思想感情？」这类情感主旨题时，你通常？","opts":[{"text":"从意象、关键词、注释三方面入手，综合判断情感倾向","scores":[[4,3],[3,2],[1,1]]},{"text":"能整体感受到诗人的情绪，但说不出具体是通过什么感受到的","scores":[[4,2],[3,-2],[1,-1]]},{"text":"主要依赖老师讲过的「常见情感套路」，套用为主","scores":[[7,-2],[4,-2],[3,-2]]},{"text":"重点关注诗中直接表达情感的字眼，不太分析间接抒情","scores":[[1,2],[4,-1],[3,-1]]}],"dimTags":[4, 3]},{"q":"做诗歌鉴赏选择题时，你的做法是？","opts":[{"text":"逐项对照原文，检查每项的意象解读、手法判断和情感分析是否与诗歌一致","scores":[[0,3],[3,3],[4,-1]]},{"text":"凭对诗歌的整体感觉来判断，觉得不对劲的选项就选它","scores":[[4,3],[0,-2],[3,-1]]},{"text":"先排除明显正确的选项，对纠结的选项回到原诗找依据","scores":[[0,2],[5,2],[4,-1]]},{"text":"容易被选项中「高大上」的术语迷惑，看到不熟悉的术语就觉得是错的","scores":[[0,-3],[3,-2],[6,1]]}],"dimTags":[3, 0]},{"q":"面对「请用自己的话描绘诗句所展现的画面」这类意境概括题时，你通常？","opts":[{"text":"抓住诗句中的意象，用生动的语言展开画面描写，还原意境","scores":[[2,3],[4,3],[5,-1]]},{"text":"把诗句逐字翻译成白话文，画面感不强，更像直译而非描绘","scores":[[6,2],[2,-2],[4,-1]]},{"text":"脑中能形成画面，但写成文字时表达干涩，画面描绘不出来","scores":[[4,1],[2,-3],[5,-1]]},{"text":"先分析意象特点，再组织语言分层描绘","scores":[[5,2],[2,2],[4,-2]]}],"dimTags":[2, 4]},{"q":"看到作文题目后，你的第一步通常是什么？","opts":[{"text":"圈出题目中的关键词，明确写作对象、范围和重点","scores":[[0,3],[5,2],[4,-1]]},{"text":"脑子里快速搜索自己写过或看过的类似题目来构思","scores":[[7,2],[6,1],[0,-2]]},{"text":"脑子里冒出什么就写什么，边写边想","scores":[[4,2],[0,-3],[5,-2]]},{"text":"先花几分钟列提纲：开头、中间、结尾怎么安排","scores":[[5,3],[2,2],[4,-2]]}],"dimTags":[0, 5]},{"q":"写作选取素材时，你优先考虑的是什么？","opts":[{"text":"选自己亲身经历、有真情实感的事情","scores":[[4,3],[2,2],[7,-1]]},{"text":"选新颖独特、别人可能想不到的事例","scores":[[7,3],[4,-1],[6,-1]]},{"text":"选自己最熟悉、最有把握写好的素材，宁可平淡也不冒险","scores":[[6,2],[7,-2],[2,-1]]},{"text":"看哪个素材能用上积累的好词好句和修辞手法","scores":[[6,2],[2,2],[4,-2]]}],"dimTags":[4, 7]},{"q":"作文写到一半，隐约发现可能偏离题意了，这时你会？","opts":[{"text":"立刻停下来，重新审题，想办法在剩余部分把主题拉回正轨","scores":[[0,3],[7,3],[2,-1]]},{"text":"继续往下写，在结尾部分巧妙「扣题」来补救前面的偏离","scores":[[2,2],[7,2],[0,-1]]},{"text":"马上划掉重写，时间来得及的话尽量重新来一遍","scores":[[0,1],[7,-1],[5,-1]]},{"text":"心里着急但不知道怎么办，只能硬着头皮写完","scores":[[0,-3],[7,-3],[2,-2]]}],"dimTags":[0, 7]},{"q":"你的作文结尾通常是怎样写的？","opts":[{"text":"呼应开头和题目，在结尾升华主题，让全文形成完整的闭环","scores":[[5,3],[0,2],[2,1]]},{"text":"用一句「金句」或名言收尾，让结尾有亮点和力度","scores":[[6,2],[2,3],[5,-2]]},{"text":"写得比较仓促，通常是「这件事让我明白了……」然后草草收尾","scores":[[5,-3],[2,-1],[0,-1]]},{"text":"尝试留白或含蓄收束，不把话说满，给读者回味空间","scores":[[3,2],[4,3],[5,-1]]}],"dimTags":[5, 2]},{"q":"对于作文的语言表达，你最在意的是什么？","opts":[{"text":"表达准确、流畅、有条理，能把想说的意思清晰地传递给读者","scores":[[2,3],[5,2],[4,-1]]},{"text":"语言优美有文采，多用修辞手法和成语，让文字「好看」","scores":[[6,1],[2,3],[4,-2]]},{"text":"不追求华丽的词藻，但力求每句话都有真情实感、不说套话","scores":[[4,3],[2,2],[6,-1]]},{"text":"比较依赖平时积累的「好词好句」，写作时尽量把它们用进去","scores":[[6,2],[7,-1],[2,-2]]}],"dimTags":[2, 6]},{"q":"做字形辨析题时，你的方法是？","opts":[{"text":"从字义入手——理解每个偏旁/部件的含义，根据意思来判断正确的写法","scores":[[6,2],[7,2],[5,1]]},{"text":"凭视觉记忆和语感，平时见得多、写得多的自然就能判断","scores":[[6,3],[7,-1],[5,-1]]},{"text":"不太有把握，经常在两个形近字之间纠结，容易选错","scores":[[6,-2],[7,-2],[5,-1]]},{"text":"靠死记硬背——把老师总结的易错字列表反复抄写记忆","scores":[[6,1],[7,-2],[5,-1]]}],"dimTags":[6, 7]},{"q":"做「下列句子中加点成语使用不正确的一项是」这类成语正误判断题时，你通常？","opts":[{"text":"逐项分析成语的意思、适用对象、感情色彩，再代入语境判断","scores":[[6,2],[1,2],[7,1]]},{"text":"凭语感读句子，感觉不顺的、成语用得很别扭的就选它","scores":[[2,2],[6,-1],[5,-1]]},{"text":"先排除自己确定会的选项，再用排除法缩小范围","scores":[[0,2],[5,1],[6,-1]]},{"text":"有些成语不认识意思，只能靠猜，正确率看运气","scores":[[6,-3],[7,-2],[1,-1]]}],"dimTags":[6, 1]},{"q":"做病句修改题时，你的诊断方法是？","opts":[{"text":"用六大病句类型逐一排查","scores":[[5,3],[6,1],[2,-1]]},{"text":"凭语感读一遍，觉得哪里读着不对劲就直接改哪里","scores":[[2,3],[5,-2],[6,-1]]},{"text":"把句子拆开，分析主谓宾定状补等句子成分","scores":[[5,3],[0,1],[2,-1]]},{"text":"对各种病句类型的特征分辨不清，经常凭感觉蒙一个","scores":[[5,-3],[6,-2],[2,-1]]}],"dimTags":[5, 6]},{"q":"做仿写句子题时，你从哪些方面入手？","opts":[{"text":"先分析原句的句式结构、修辞手法和语言风格，再替换内容","scores":[[3,3],[7,3],[6,-1]]},{"text":"凭语感模仿原句的「味道」和节奏，写出风格相似但内容不同的句子","scores":[[2,3],[4,2],[3,-2]]},{"text":"从记忆里搜索之前写过的类似句子，在此基础上稍作改动","scores":[[6,1],[7,-1],[3,-2]]},{"text":"不太会仿写，写出来的句子和原句在结构和风格上差距较大","scores":[[2,-3],[3,-3],[7,-2]]}],"dimTags":[3, 7]},{"q":"期末复习语文时，你整体的复习方式是？","opts":[{"text":"按板块系统复习，每个板块有明确的复习目标","scores":[[5,2],[6,1],[7,1]]},{"text":"大量做真题和模拟卷，通过刷题找薄弱点","scores":[[7,3],[0,2],[6,-2]]},{"text":"重点翻看笔记、错题本和老师划的重点","scores":[[0,2],[6,2],[7,-2]]},{"text":"不太有清晰的复习计划，翻到哪本书复习哪本","scores":[[5,-3],[7,-2],[6,-1]]}],"dimTags":[6, 5]}];
 
 // ====== 状态 ======
 let currentQ=0, scores=[50,50,50,50,50,50,50,50], answers=[];
@@ -197,6 +241,18 @@ function getSection(i){return SECTIONS.find(s=>i>=s.start&&i<=s.end)}
 function startDiagnosis(){
   const nameEl=document.getElementById('student-name');
   if(!nameEl.value.trim()){alert('请先填写你的姓名哦~');nameEl.focus();return}
+  // 检查是否有未完成的答题进度
+  var saved=null;
+  try{ saved=JSON.parse(localStorage.getItem('yuwen_quiz_progress')); }catch(e){}
+  if(saved && saved.name===nameEl.value.trim() && saved.answers && saved.answers.length>0){
+    if(confirm('检测到你上次未完成的答题记录，是否继续上次的进度？\n（选"取消"将重新开始）')){
+      currentQ=saved.currentQ||0;answers=saved.answers;scores=[50,50,50,50,50,50,50,50];
+      document.getElementById('screen-start').classList.add('hidden');
+      document.getElementById('screen-quiz').classList.remove('hidden');
+      document.getElementById('screen-result').classList.add('hidden');
+      renderQuestion();return;
+    }
+  }
   currentQ=0;scores=[50,50,50,50,50,50,50,50];answers=[];
   document.getElementById('screen-start').classList.add('hidden');
   document.getElementById('screen-quiz').classList.remove('hidden');
@@ -212,8 +268,29 @@ function renderQuestion(){
   const btnPrev=document.getElementById('btn-prev');
   btnNext.disabled=true;btnNext.textContent=currentQ<QUESTIONS.length-1?'下一题':'查看诊断结果';
   btnPrev.style.display=currentQ===0?'none':'';
+
+  // 更新步骤指示器
+  var dotsHTML='';
+  for(var si=0;si<QUESTIONS.length;si++){
+    var cls='';
+    if(si<currentQ)cls=' done';
+    else if(si===currentQ)cls=' active';
+    dotsHTML+='<div class="step-dot'+cls+'"></div>';
+    if(si<QUESTIONS.length-1)dotsHTML+='<div class="step-line"></div>';
+  }
+  document.getElementById('step-dots').innerHTML=dotsHTML;
+
   const labels=['A','B','C','D'];
-  let html='<span class="q-num">'+(currentQ+1)+'</span> ';
+  let html='';
+  // 显示考察维度标签
+  if(q.dimTags && q.dimTags.length>0){
+    html+='<div style="margin-bottom:8px;">';
+    q.dimTags.forEach(function(did){
+      html+='<span style="display:inline-block;padding:2px 8px;border-radius:8px;font-size:10px;background:#F3F0EB;color:#8B7355;margin-right:4px;letter-spacing:1px;">'+DIMS[did].icon+DIMS[did].sname+'</span>';
+    });
+    html+='</div>';
+  }
+  html+='<span class="q-num">'+(currentQ+1)+'</span> ';
   html+='<h3 style="display:inline;">'+q.q+'</h3><div class="options">';
   q.opts.forEach((opt,i)=>{
     const sel=answers[currentQ]===i?' selected':'';
@@ -225,7 +302,9 @@ function renderQuestion(){
 }
 function selectOption(i){
   answers[currentQ]=i;document.querySelectorAll('.option').forEach(e=>e.classList.remove('selected'));
-  document.getElementById('opt-'+i).classList.add('selected');document.getElementById('btn-next').disabled=false
+  document.getElementById('opt-'+i).classList.add('selected');document.getElementById('btn-next').disabled=false;
+  // 自动保存答题进度
+  try{ var p={answers:answers,currentQ:currentQ,name:document.getElementById('student-name').value.trim()}; localStorage.setItem('yuwen_quiz_progress',JSON.stringify(p)); }catch(e){}
 }
 function prevQuestion(){
   if(currentQ>0){currentQ--;renderQuestion()}
@@ -296,6 +375,34 @@ function classifyStudent(ns){
   return {type:TYPES[bestType],typeKey:bestType}
 }
 
+// ====== 五大板块映射（与教师后台共用逻辑） ======
+const DOMAINS = {
+  '语基':{name:'语言基础与运用',dims:[{i:6,w:0.4},{i:5,w:0.3},{i:1,w:0.3}],desc:'字音字形、成语、病句、仿写等基础知识掌握与运用能力。'},
+  '名著':{name:'名著阅读',dims:[{i:6,w:0.4},{i:4,w:0.3},{i:3,w:0.3}],desc:'对名著内容的熟悉度、人物情节理解与文学鉴赏能力。'},
+  '古诗文':{name:'古诗文阅读',dims:[{i:6,w:0.3},{i:4,w:0.3},{i:7,w:0.4}],desc:'古诗词背诵、文言实词积累、诗歌鉴赏与情感体悟能力。'},
+  '阅读':{name:'现代文阅读',dims:[{i:0,w:0.2},{i:1,w:0.25},{i:3,w:0.3},{i:4,w:0.25}],desc:'审题、信息提取、文本分析与情感体悟综合运用的能力。'},
+  '作文':{name:'写作',dims:[{i:2,w:0.3},{i:5,w:0.25},{i:4,w:0.25},{i:0,w:0.2}],desc:'语言表达、逻辑结构、情感表达与审题立意综合能力。'}
+};
+function calcDomainScores(ns){
+  const result={};
+  for(const [key,dom] of Object.entries(DOMAINS)){
+    let score=0;dom.dims.forEach(d=>{score+=ns[d.i]*d.w});result[key]=Math.round(score)
+  }
+  return result;
+}
+
+// ====== 家长寄语 ======
+const HOME_MESSAGES={
+  T1:'您的孩子有一双语文的"火眼金睛"——善于快速看穿题目的考点。请多鼓励TA把想法先说出来再写下来，表达是TA正在成长的翅膀。',
+  T2:'您的孩子内心细腻、感情丰富——文字很容易触动TA的心。请保护这份感性，同时温和地帮TA建立学习上的条理感。',
+  T3:'您的孩子思维清晰、逻辑感强——无论答题还是写作都有让人放心的结构。请多和TA聊聊读后"感受"而不只是"对错"。',
+  T4:'您的孩子知识储备扎实——字词诗句信手拈来，这是语文最坚实的基础。请鼓励TA不只是"记住"，更要大胆"用出来"。',
+  T5:'您的孩子有一种宝贵的"活学活用"能力——学过的知识能在新情境中灵活迁移。请帮TA建立日常积累的小习惯。',
+  T6:'您的孩子学习风格扎实稳健——基础牢固、后劲十足。请多和TA一起读有温度的文字，聊聊文字背后的情感。',
+  T7:'您的孩子语感好、表达有灵性——作文有一种天然的吸引力。请保护TA的表达热情，同时温和地提醒"动笔前先想清楚要说什么"。',
+  T8:'您的孩子各项语文能力发展均衡——这是非常好的基础。在这个阶段，请多鼓励TA在感兴趣的语文领域深入探索。'
+};
+
 // ====== 学生报告生成 ======
 function showResult(){
   document.getElementById('screen-quiz').classList.add('hidden');
@@ -312,6 +419,10 @@ function showResult(){
   const name=document.getElementById('student-name').value.trim();
   const strong=ns.map((v,i)=>({v,i})).sort((a,b)=>b.v-a.v).slice(0,3);
   const weak=ns.map((v,i)=>({v,i})).sort((a,b)=>a.v-b.v).slice(0,3);
+
+  // 0. 打印报告头
+  document.getElementById('print-name').textContent=name;
+  document.getElementById('print-date').textContent=new Date().toLocaleDateString('zh-CN');
 
   // 1. 总评
   let overview='<div class="report-section"><h4>💌 '+name+'，你好</h4><p>';
@@ -332,6 +443,27 @@ function showResult(){
 
   // 3. 雷达图
   setTimeout(()=>drawRadar('radar-student',ns),100);
+
+  // 3a. 维度柱状图
+  var barHTML='';
+  ns.forEach(function(v,i){
+    var lvl=getLv(v);
+    var color=v>=68?'var(--green)':(v>=42?'var(--gold)':'var(--red)');
+    var label=lvl==='high'?'优势':(lvl==='medium'?'适中':'待提升');
+    barHTML+='<div class="bar-wrap-student"><div class="bar-lbl-student">'+DIMS[i].icon+' '+DIMS[i].sname+'</div><div class="bar-track-student"><div class="bar-fill-student" style="width:'+v+'%;background:'+color+'"></div></div><div class="bar-val-student">'+v+'</div><span style="font-size:10px;color:'+color+';width:36px;flex-shrink:0;">'+label+'</span></div>';
+  });
+  document.getElementById('section-bars').innerHTML=barHTML;
+
+  // 3b. 五大板块得分
+  var domainScores=calcDomainScores(ns);
+  var domainHTML='';
+  for(var dk in DOMAINS){
+    var dom=DOMAINS[dk];
+    var ds=domainScores[dk];
+    var dcolor=ds>=68?'var(--green)':(ds>=42?'var(--gold)':'var(--red)');
+    domainHTML+='<div class="domain-card-student"><strong>'+dom.name+'</strong><span class="domain-score-student" style="color:'+dcolor+'">'+ds+' 分</span><p style="font-size:12px;color:var(--ink-light);margin:4px 0 0;">'+dom.desc+'</p></div>';
+  }
+  document.getElementById('section-domains').innerHTML=domainHTML;
 
   // 4. 优势
   let strHtml='<h4>✅ '+name+'，这些是你的优势</h4>';
@@ -361,6 +493,12 @@ function showResult(){
   }
   document.getElementById('section-advice').innerHTML=advHtml;
 
+    // 清除答题进度（已完成诊断）
+  try{ localStorage.removeItem('yuwen_quiz_progress'); }catch(e){}
+  // 6a. 家长寄语
+  var parentMsg=HOME_MESSAGES[typeKey]||HOME_MESSAGES['T8'];
+  document.getElementById('card-parent').innerHTML='<h4 style="margin-bottom:8px;">🏠 给家长的一句话</h4><div class="parent-msg"><span class="icon">💌</span>'+parentMsg+'</div>';
+
   // 7. 保存数据（localStorage + 服务器 API）
   window._lastReport={name,ns,typeKey,typeName:type.name,typeTag:type.tag};
   const reportData={id:Date.now()+Math.random().toString(36),name,ns,typeKey,typeName:type.name,typeTag:type.tag,ts:new Date().toISOString()};
@@ -380,6 +518,38 @@ function showResult(){
 var GITHUB_REPO = 'yuyubai176-star/yuwen-diagnosis';
 var GITHUB_TOKEN = 'ghp_' + 'V45u1Kj6NFk2yAtlZQXuMWXZenrK543m5NgW';
 
+function githubPutFile(fname, content, message, cb){
+  // 先 GET 查询文件是否已存在，若存在则获取 SHA 再更新
+  fetch('https://api.github.com/repos/' + GITHUB_REPO + '/contents/' + fname, {
+    headers: { 'Authorization': 'token ' + GITHUB_TOKEN }
+  })
+  .then(function(r){ return r.json(); })
+  .then(function(fileInfo){
+    var body = {
+      message: message,
+      content: btoa(unescape(encodeURIComponent(content))),
+      branch: 'main'
+    };
+    if(fileInfo && fileInfo.sha){
+      body.sha = fileInfo.sha;
+    }
+    return fetch('https://api.github.com/repos/' + GITHUB_REPO + '/contents/' + fname, {
+      method: 'PUT',
+      headers: {
+        'Authorization': 'token ' + GITHUB_TOKEN,
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(body)
+    });
+  })
+  .then(function(r){ return r.json(); })
+  .then(function(resp){
+    if(resp && resp.content){ cb(true); }
+    else { cb(false); }
+  })
+  .catch(function(){ cb(false); });
+}
+
 function syncToTeacher(data){
   document.getElementById('sync-icon').textContent = '⏳';
   document.getElementById('sync-text').textContent = '正在同步数据给老师...';
@@ -387,43 +557,17 @@ function syncToTeacher(data){
 
   var fname = 'data/' + encodeURIComponent(data.name) + '.json';
   var content = JSON.stringify(data, null, 0);
-  var contentB64 = btoa(unescape(encodeURIComponent(content)));
 
-  fetch('https://api.github.com/repos/' + GITHUB_REPO + '/contents/' + fname, {
-    method: 'PUT',
-    headers: {
-      'Authorization': 'token ' + GITHUB_TOKEN,
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify({
-      message: '诊断数据: ' + data.name,
-      content: contentB64,
-      branch: 'main'
-    })
-  })
-  .then(function(r){ return r.json(); })
-  .then(function(resp){
-    if(resp && resp.content){
+  githubPutFile(fname, content, '诊断数据: ' + data.name, function(ok){
+    if(ok){
       document.getElementById('sync-icon').textContent = '✅';
       document.getElementById('sync-text').textContent = '数据已同步给老师';
       document.getElementById('sync-text').style.color = '#5B8C5A';
     } else {
-      // File might already exist, try updating with SHA
-      if(resp && resp.sha){
-        document.getElementById('sync-icon').textContent = '✅';
-        document.getElementById('sync-text').textContent = '数据已同步给老师';
-        document.getElementById('sync-text').style.color = '#5B8C5A';
-      } else {
-        document.getElementById('sync-icon').textContent = '⚠️';
-        document.getElementById('sync-text').textContent = '同步失败，请稍后重试';
-        document.getElementById('sync-text').style.color = '#C77826';
-      }
+      document.getElementById('sync-icon').textContent = '⚠️';
+      document.getElementById('sync-text').textContent = '同步失败，请稍后重试';
+      document.getElementById('sync-text').style.color = '#C77826';
     }
-  })
-  .catch(function(){
-    document.getElementById('sync-icon').textContent = '⚠️';
-    document.getElementById('sync-text').textContent = '同步失败，请稍后重试';
-    document.getElementById('sync-text').style.color = '#C77826';
   });
 }
 
