@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>语文学情诊断 · 学生版</title>
 <style>
-/* ====== CSS 设计系统 V3 ====== */
+/* ====== CSS 设计系统 ====== */
 :root {
   --red:#B83A2A; --red-light:#D4453A; --gold:#B8860B; --gold-light:#D4A017;
   --cream:#FBF7F2; --ink:#2C1810; --ink-light:#5E5046; --ink-lighter:#8A7E76;
@@ -18,36 +18,26 @@
   --transition:0.2s cubic-bezier(0.4,0,0.2,1);
 }
 *{margin:0;padding:0;box-sizing:border-box}
-body{font-family:"Microsoft YaHei","PingFang SC",sans-serif;background:linear-gradient(180deg, #FBF7F2 0%, #F5EDE3 100%);color:var(--ink);min-height:100vh}
+body{font-family:"Microsoft YaHei","PingFang SC",sans-serif;background:linear-gradient(180deg,#FBF7F2 0%,#F5EDE3 100%);color:var(--ink);min-height:100vh}
 .container{max-width:720px;margin:0 auto;padding:24px 20px}
-
-/* ====== 页头 ====== */
 .header{text-align:center;padding:36px 0 24px}
-.header .icon{font-size:52px;margin-bottom:8px;display:inline-block;animation: float 3s ease-in-out infinite}
+.header .icon{font-size:52px;margin-bottom:8px;display:inline-block;animation:float 3s ease-in-out infinite}
 @keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-6px)}}
 .header h1{font-size:28px;color:var(--red);font-weight:700;letter-spacing:4px;margin-bottom:4px}
 .header .sub{font-size:13px;color:var(--ink-light);letter-spacing:2px}
 .header .ornament{width:60px;height:2px;background:linear-gradient(90deg,transparent,var(--gold),transparent);margin:12px auto 0;border-radius:1px}
-
-/* ====== 卡片 ====== */
 .card{background:var(--bg-card);border-radius:var(--radius-lg);padding:22px 20px;margin-bottom:16px;box-shadow:var(--shadow-sm);border:1px solid var(--border);transition:box-shadow var(--transition)}
 .card:hover{box-shadow:var(--shadow-md)}
 .card h3{font-size:16px;color:var(--ink);margin-bottom:12px;line-height:1.8}
 .card h4{font-size:15px;margin-bottom:12px;padding-left:10px;border-left:3px solid var(--red);color:var(--ink);display:flex;align-items:center;gap:6px}
-
-/* ====== 板块标签 ====== */
 .section-badge{display:inline-block;padding:4px 14px;border-radius:14px;font-size:12px;font-weight:600;letter-spacing:1px;margin-bottom:10px}
 .badge-reading{background:#FFF0EE;color:var(--red)}
 .badge-poetry{background:#F3F0EB;color:#8B7355}
 .badge-writing{background:#EEF4F0;color:var(--green)}
 .badge-language{background:#F0F0F8;color:var(--blue)}
-
-/* ====== 题目 ====== */
 .q-num{display:inline-block;background:var(--red);color:#fff;font-size:11px;padding:3px 10px;border-radius:10px;margin-right:8px;vertical-align:middle;font-weight:700}
 .q-text{font-size:14.5px;line-height:2.1;white-space:pre-wrap;color:var(--ink)}
 .q-passage{background:#FFFBF5;border-left:3px solid var(--gold);padding:10px 14px;border-radius:0 var(--radius-sm) var(--radius-sm) 0;margin:8px 0;font-size:14px;line-height:2.1;white-space:pre-wrap;color:var(--ink)}
-
-/* ====== 选项 ====== */
 .options{display:flex;flex-direction:column;gap:9px;margin-top:12px}
 .option{display:flex;align-items:flex-start;gap:10px;padding:13px 15px;border:1.5px solid var(--border);border-radius:var(--radius-md);cursor:pointer;transition:all var(--transition);background:var(--white);position:relative}
 .option:hover{border-color:var(--gold);background:#FFFBF2;transform:translateX(2px);box-shadow:var(--shadow-sm)}
@@ -55,9 +45,7 @@ body{font-family:"Microsoft YaHei","PingFang SC",sans-serif;background:linear-gr
 .option .label{width:26px;height:26px;border-radius:50%;background:var(--cream);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:var(--ink-light);flex-shrink:0;margin-top:1px;transition:all var(--transition)}
 .option.selected .label{background:var(--red);color:#fff;transform:scale(1.1)}
 .option .text{font-size:14px;line-height:1.65;flex:1}
-
-/* ====== 按钮 ====== */
-.btn{display:block;width:100%;padding:13px;border:none;border-radius:var(--radius-md);font-size:15px;font-weight:600;cursor:pointer;transition:all var(--transition);letter-spacing:1px;position:relative;overflow:hidden}
+.btn{display:block;width:100%;padding:13px;border:none;border-radius:var(--radius-md);font-size:15px;font-weight:600;cursor:pointer;transition:all var(--transition);letter-spacing:1px}
 .btn:active{transform:scale(0.98)}
 .btn-primary{background:linear-gradient(135deg,var(--red),var(--red-light));color:#fff;box-shadow:0 3px 12px rgba(184,58,42,0.25)}
 .btn-primary:hover{box-shadow:0 5px 18px rgba(184,58,42,0.35);transform:translateY(-1px)}
@@ -65,44 +53,28 @@ body{font-family:"Microsoft YaHei","PingFang SC",sans-serif;background:linear-gr
 .btn-outline{background:var(--white);color:var(--red);border:2px solid var(--red)}
 .btn-outline:hover{background:#FFF5F3;transform:translateY(-1px)}
 .btn-small{padding:8px 16px;font-size:13px;width:auto;display:inline-block;border-radius:var(--radius-sm)}
-.btn-ghost{background:transparent;color:var(--ink-light);border:1px solid var(--border);width:auto;display:inline-block;padding:6px 14px;font-size:12px;border-radius:var(--radius-sm)}
-.btn-ghost:hover{background:var(--cream);color:var(--ink)}
-
-/* ====== 进度 ====== */
 .progress-wrap{margin-bottom:16px}
 .progress-bar{height:6px;background:var(--border);border-radius:3px;overflow:hidden}
 .progress-fill{height:100%;background:linear-gradient(90deg,var(--red),var(--red-light));border-radius:3px;transition:width .4s ease}
 .progress-text{display:flex;justify-content:space-between;font-size:11px;color:var(--ink-light);margin-top:5px}
-
-/* ====== 步骤指示器 ====== */
 .step-indicator{display:flex;align-items:center;justify-content:center;gap:6px;margin-bottom:14px;flex-wrap:wrap}
 .step-dot{width:12px;height:12px;border-radius:50%;background:var(--border);transition:all var(--transition);flex-shrink:0}
 .step-dot.active{background:var(--red);box-shadow:0 0 0 4px rgba(184,58,42,0.15);animation:pulse 2s ease-in-out infinite}
 .step-dot.done{background:var(--green)}
 @keyframes pulse{0%,100%{box-shadow:0 0 0 4px rgba(184,58,42,0.15)}50%{box-shadow:0 0 0 8px rgba(184,58,42,0.05)}}
 .step-line{width:24px;height:1px;background:var(--border);flex-shrink:0}
-
-/* ====== 开始页图标列表 ====== */
 .feature-list{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:4px}
 .feature-item{display:flex;align-items:center;gap:8px;padding:8px 10px;background:var(--white);border-radius:var(--radius-sm);font-size:13px;color:var(--ink);border:1px solid var(--border)}
 .feature-item .fi-icon{font-size:18px;flex-shrink:0}
-
-/* ====== 输入框 ====== */
 input[type="text"]{width:100%;padding:12px 16px;border:1.5px solid var(--border);border-radius:var(--radius-md);font-size:15px;outline:none;background:var(--white);transition:all var(--transition)}
 input[type="text"]:focus{border-color:var(--gold);box-shadow:0 0 0 3px rgba(184,134,11,0.08)}
-
-/* ====== 雷达图 ====== */
 .radar-wrap{max-width:380px;margin:0 auto}
 .radar-wrap canvas{width:100%!important;height:auto!important}
-
-/* ====== 诊断画像卡 ====== */
 .profile-card{text-align:center;padding:28px 20px}
 .profile-seal{display:inline-block;padding:14px 32px;border:3px solid var(--red);border-radius:8px;font-size:22px;font-weight:700;color:var(--red);letter-spacing:4px;margin:8px 0;position:relative;background:linear-gradient(180deg,#FFFBF7,#FFF5F0)}
 .profile-seal::before{content:'';position:absolute;top:4px;left:4px;right:4px;bottom:4px;border:1px solid rgba(184,58,42,0.2);border-radius:4px;pointer-events:none}
 .profile-tag{font-size:14px;color:var(--ink-light);margin-top:6px}
 .profile-desc{font-size:14px;line-height:1.9;color:var(--ink-light);margin-top:12px;text-align:left}
-
-/* ====== 根因链可视化 ====== */
 .root-chain{margin:12px 0}
 .chain-item{display:flex;align-items:center;gap:10px;padding:8px 12px;margin-bottom:4px;background:var(--white);border-radius:var(--radius-sm);border:1px solid var(--border);position:relative;transition:all var(--transition)}
 .chain-item.bottleneck{border-color:var(--red);background:#FFF5F3;box-shadow:0 2px 8px rgba(184,58,42,0.1)}
@@ -114,8 +86,6 @@ input[type="text"]:focus{border-color:var(--gold);box-shadow:0 0 0 3px rgba(184,
 .chain-val{font-size:12px;font-weight:700;width:30px;text-align:right;flex-shrink:0}
 .chain-tag{font-size:10px;padding:1px 6px;border-radius:6px;font-weight:600;flex-shrink:0}
 .chain-bottleneck-badge{position:absolute;right:-8px;top:-10px;background:var(--red);color:#fff;font-size:9px;padding:1px 6px;border-radius:6px;white-space:nowrap;font-weight:600}
-
-/* ====== 能力地图（雷达+板块合并） ====== */
 .ability-map{display:grid;grid-template-columns:1fr 1fr;gap:16px;align-items:start}
 .ability-map .radar-wrap{max-width:100%}
 .domain-mini{padding:8px 10px;margin-bottom:6px;background:var(--white);border-radius:var(--radius-sm);border:1px solid var(--border)}
@@ -125,50 +95,37 @@ input[type="text"]:focus{border-color:var(--gold);box-shadow:0 0 0 3px rgba(184,
 .domain-mini .dm-bar{height:4px;background:var(--cream);border-radius:2px;overflow:hidden;margin-bottom:2px}
 .domain-mini .dm-bar-fill{height:100%;border-radius:2px;transition:width .5s ease}
 .domain-mini .dm-hint{font-size:10px;color:var(--ink-lighter);line-height:1.4}
-
-/* ====== Tab 切换（三方报告） ====== */
 .report-tabs{display:flex;gap:0;margin-bottom:0;background:var(--white);border-radius:var(--radius-md) var(--radius-md) 0 0;border:1px solid var(--border);border-bottom:none;overflow:hidden}
 .report-tab{flex:1;text-align:center;padding:12px 8px;cursor:pointer;font-size:13px;font-weight:600;color:var(--ink-light);transition:all var(--transition);border-bottom:2px solid transparent;background:var(--cream)}
 .report-tab:hover{color:var(--ink);background:#FFFBF5}
 .report-tab.active{color:var(--red);background:var(--bg-card);border-bottom-color:var(--red)}
 .report-tab-content{background:var(--bg-card);border:1px solid var(--border);border-top:none;border-radius:0 0 var(--radius-md) var(--radius-md);padding:18px 16px;display:none}
 .report-tab-content.active{display:block}
-
-/* ====== 报告内容组件 ====== */
 .highlight-box{padding:12px 16px;background:linear-gradient(135deg,#FFFBF2,#FFF5E6);border:1px solid var(--gold);border-radius:var(--radius-sm);margin-bottom:10px;font-size:13px;line-height:1.8}
-.highlight-box .hl-icon{font-size:18px;margin-right:4px}
 .week-goal{padding:14px 18px;background:linear-gradient(135deg,#FFF5F3,#FFEBE8);border:1px solid rgba(184,58,42,0.2);border-radius:var(--radius-md);margin:12px 0}
 .week-goal h5{font-size:13px;color:var(--red);margin-bottom:6px}
 .week-goal li{font-size:12.5px;line-height:1.8;color:var(--ink);margin-bottom:4px;list-style:inside decimal}
-
 .action-checklist{padding:10px 14px;background:var(--white);border-radius:var(--radius-sm);margin-bottom:6px;border:1px solid var(--border);font-size:13px;line-height:1.9}
 .action-checklist .check-icon{color:var(--green);margin-right:6px}
-
 .teacher-summary{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px}
 .teacher-point{padding:10px 12px;background:var(--white);border-radius:var(--radius-sm);border:1px solid var(--border);font-size:12px;line-height:1.7}
 .teacher-point .tp-num{display:inline-block;width:20px;height:20px;border-radius:50%;background:var(--red);color:#fff;text-align:center;line-height:20px;font-size:10px;font-weight:700;margin-right:4px}
-
-/* ====== 同步状态条 ====== */
 .sync-bar{display:flex;align-items:center;justify-content:center;gap:8px;padding:10px;font-size:13px;color:var(--ink-light);background:var(--white);border-radius:var(--radius-sm);border:1px solid var(--border);margin-top:8px}
-
-/* ====== 柱状图 ====== */
+/* 错误模式分析卡 */
+.error-pattern-card{padding:14px 16px;margin-bottom:10px;background:var(--white);border-radius:var(--radius-sm);border:1px solid var(--border)}
+.error-tag{display:inline-block;padding:2px 8px;border-radius:6px;font-size:11px;font-weight:600;margin:2px 3px;background:#FDEDEC;color:var(--red)}
+.error-tag .et-count{font-weight:700}
 .bar-wrap-student{margin:8px 0;display:flex;align-items:center;gap:8px}
 .bar-lbl-student{width:85px;font-size:12px;color:var(--ink);text-align:right;flex-shrink:0}
 .bar-track-student{flex:1;height:22px;background:var(--cream);border-radius:11px;overflow:hidden}
 .bar-fill-student{height:100%;border-radius:11px;transition:width .6s cubic-bezier(0.4,0,0.2,1)}
 .bar-val-student{width:32px;font-size:12px;font-weight:600;color:var(--ink-light);flex-shrink:0}
-
-/* ====== 五大板块卡 ====== */
 .domain-card-student{border-left:4px solid var(--gold);padding:10px 14px;margin-bottom:8px;background:var(--white);border-radius:0 var(--radius-sm) var(--radius-sm) 0}
 .domain-card-student strong{color:var(--ink)}
 .domain-card-student .domain-score-student{float:right;font-weight:700}
-
-/* ====== 建议项 ====== */
 .advice-item{padding:12px 14px;margin-bottom:8px;background:var(--white);border-radius:var(--radius-sm);border:1px solid var(--border);font-size:13.5px;line-height:1.85;color:var(--ink-light);transition:all var(--transition)}
 .advice-item:hover{box-shadow:var(--shadow-sm);border-color:#D0C8BD}
 .advice-item .advice-num{display:inline-flex;align-items:center;justify-content:center;width:24px;height:24px;border-radius:50%;background:var(--red);color:#fff;font-size:11px;font-weight:700;margin-right:8px;flex-shrink:0}
-
-/* ====== 通用工具类 ====== */
 .hidden{display:none!important}
 .footer-note{text-align:center;padding:20px 0 12px;font-size:11px;color:var(--ink-lighter)}
 .text-center{text-align:center}
@@ -176,7 +133,6 @@ input[type="text"]:focus{border-color:var(--gold);box-shadow:0 0 0 3px rgba(184,
 .mt-12{margin-top:12px}
 .mb-8{margin-bottom:8px}
 
-/* ====== 打印样式 ====== */
 @media print{
   body{background:#fff;color:#000;font-size:12px}
   .btn,.footer-note,.progress-wrap,#card-sync,.sync-bar,.report-tabs,.step-indicator{display:none!important}
@@ -195,14 +151,11 @@ input[type="text"]:focus{border-color:var(--gold);box-shadow:0 0 0 3px rgba(184,
   .chain-item.bottleneck{border-color:#000;background:#fff}
   .chain-bottleneck-badge{background:#000}
   .bar-fill-student{background:#000!important}
-  .bar-val-student,.bar-lbl-student{color:#000!important;font-size:10px}
   .domain-card-student{border-left-color:#000}
   .domain-score-student{color:#000!important}
   .ability-map{grid-template-columns:1fr}
   .teacher-summary{grid-template-columns:1fr}
   .advice-item{font-size:11px;padding:8px 10px}
-  .highlight-box,.week-goal{border-color:#ccc;background:#fff}
-  .print-only{display:block!important}
 }
 .print-only{display:none!important}
 .print-header{display:none!important}
@@ -215,8 +168,6 @@ input[type="text"]:focus{border-color:var(--gold);box-shadow:0 0 0 3px rgba(184,
 @media print{
   .print-footer{display:block!important;text-align:center;font-size:10px;color:#999;margin-top:16px;border-top:0.5px solid #ccc;padding-top:8px}
 }
-
-/* ====== 响应式 ====== */
 @media (max-width:600px){
   .container{padding:16px 12px}
   .header{padding:24px 0 16px}
@@ -240,647 +191,257 @@ input[type="text"]:focus{border-color:var(--gold);box-shadow:0 0 0 3px rgba(184,
 </head>
 <body>
 <div class="container" id="app">
-
-<!-- ====== 开始页 ====== -->
 <div id="screen-start">
-  <div class="header">
-    <div class="icon">📖</div>
-    <h1>语文学情诊断</h1>
-    <div class="sub">定位失分根因 · 精准提升方向</div>
-    <div class="ornament"></div>
-  </div>
-  <div class="card">
-    <p style="font-size:14px;line-height:1.9;color:var(--ink);margin-bottom:12px;">
-      <strong>欢迎你参加这次语文学习能力诊断！</strong> 共 <b>20 道</b>题目，预计 8-12 分钟完成。
-    </p>
-    <div class="feature-list">
-      <div class="feature-item"><span class="fi-icon">📖</span> 现代文阅读 ×5</div>
-      <div class="feature-item"><span class="fi-icon">📜</span> 古诗文阅读 ×5</div>
-      <div class="feature-item"><span class="fi-icon">✍️</span> 写作 ×5</div>
-      <div class="feature-item"><span class="fi-icon">📝</span> 语言基础 ×5</div>
-    </div>
-    <p style="font-size:12px;color:var(--ink-lighter);margin-top:8px;line-height:1.6;">
-      💡 大部分题目需要你实际阅读和判断，少数题目关于学习习惯——<b>没有对错之分，选最像你的就好</b>。诚实面对自己，是成长的开始 🌱
-    </p>
-  </div>
-  <div class="card">
-    <p style="font-size:13px;color:var(--ink-light);margin-bottom:10px;">📝 作答前，请先填上你的名字：</p>
-    <input id="student-name" type="text" placeholder="输入你的姓名" autocomplete="name">
-  </div>
-  <button class="btn btn-primary" onclick="startDiagnosis()" aria-label="开始诊断">✨ 开始诊断</button>
+  <div class="header"><div class="icon">📖</div><h1>语文学情诊断</h1><div class="sub">定位失分根因 · 精准提升方向</div><div class="ornament"></div></div>
+  <div class="card"><p style="font-size:14px;line-height:1.9;color:var(--ink);margin-bottom:12px;"><strong>欢迎你参加这次语文学习能力诊断！</strong> 共 <b>20 道</b>题目，预计 8-12 分钟完成。</p>
+    <div class="feature-list"><div class="feature-item"><span class="fi-icon">📖</span> 现代文阅读 ×5</div><div class="feature-item"><span class="fi-icon">📜</span> 古诗文阅读 ×5</div><div class="feature-item"><span class="fi-icon">✍️</span> 写作 ×5</div><div class="feature-item"><span class="fi-icon">📝</span> 语言基础 ×5</div></div>
+    <p style="font-size:12px;color:var(--ink-lighter);margin-top:8px;line-height:1.6;">💡 大部分题目需要你实际阅读和判断，少数题目关于学习习惯——<b>没有对错之分，选最像你的就好</b>。诚实面对自己，是成长的开始 🌱</p></div>
+  <div class="card"><p style="font-size:13px;color:var(--ink-light);margin-bottom:10px;">📝 作答前，请先填上你的名字：</p><input id="student-name" type="text" placeholder="输入你的姓名" autocomplete="name"></div>
+  <button class="btn btn-primary" onclick="startDiagnosis()">✨ 开始诊断</button>
   <div class="footer-note">预计用时 8-12 分钟</div>
 </div>
-
-<!-- ====== 答题页 ====== -->
 <div id="screen-quiz" class="hidden">
   <div class="step-indicator" id="step-dots"></div>
-  <div class="progress-wrap">
-    <div class="progress-bar"><div class="progress-fill" id="progress-fill" style="width:0%"></div></div>
-    <div class="progress-text"><span id="section-label"></span><span id="progress-num">1 / 20</span></div>
-  </div>
+  <div class="progress-wrap"><div class="progress-bar"><div class="progress-fill" id="progress-fill" style="width:0%"></div></div><div class="progress-text"><span id="section-label"></span><span id="progress-num">1 / 20</span></div></div>
   <div class="card" id="question-card"></div>
-  <div style="display:flex;gap:10px;">
-    <button class="btn btn-outline btn-small" id="btn-prev" style="flex:1;display:none;" onclick="prevQuestion()" aria-label="上一题">← 上一题</button>
-    <button class="btn btn-primary" id="btn-next" disabled style="flex:1;" onclick="nextQuestion()" aria-label="下一题">下一题 →</button>
-  </div>
+  <div style="display:flex;gap:10px;"><button class="btn btn-outline btn-small" id="btn-prev" style="flex:1;display:none;" onclick="prevQuestion()">← 上一题</button><button class="btn btn-primary" id="btn-next" disabled style="flex:1;" onclick="nextQuestion()">下一题 →</button></div>
   <div class="footer-note">选最像你的就好，诚实比什么都重要 😊</div>
 </div>
-
-<!-- ====== 结果页 ====== -->
 <div id="screen-result" class="hidden">
-  <div class="header">
-    <div class="icon">🎉</div>
-    <h1>你的诊断报告</h1>
-    <div class="ornament"></div>
-  </div>
-
-  <!-- 打印页眉 -->
-  <div class="print-header">
-    <p>学生：<span id="print-name"></span>  日期：<span id="print-date"></span></p>
-    <hr>
-  </div>
-
-  <!-- 1. 诊断画像卡 + 根因链 -->
-  <div class="card profile-card">
-    <div class="profile-seal" id="profile-badge"></div>
-    <div class="profile-tag" id="profile-tag"></div>
-    <p class="profile-desc" id="profile-desc"></p>
-    <div class="root-chain" id="root-chain"></div>
-  </div>
-
-  <!-- 2. 能力地图（雷达+板块合并） -->
-  <div class="card">
-    <h4>🗺️ 语文能力地图</h4>
-    <div class="ability-map">
-      <div class="radar-wrap"><canvas id="radar-student"></canvas></div>
-      <div id="domain-minis"></div>
-    </div>
-  </div>
-
-  <!-- 3. 三方报告 Tab -->
-  <div class="card" style="padding:0;overflow:hidden;">
-    <div class="report-tabs" id="report-tabs">
-      <div class="report-tab active" data-tab="tab-student" onclick="switchReportTab('tab-student')">📖 我的提升计划</div>
-      <div class="report-tab" data-tab="tab-parent" onclick="switchReportTab('tab-parent')">🏠 给家长的话</div>
-      <div class="report-tab" data-tab="tab-teacher" onclick="switchReportTab('tab-teacher')">📝 给老师的参考</div>
-    </div>
-    <div class="report-tab-content active" id="tab-student"></div>
-    <div class="report-tab-content" id="tab-parent"></div>
-    <div class="report-tab-content" id="tab-teacher"></div>
-  </div>
-
-  <!-- 4. 同步状态条 -->
-  <div class="sync-bar" id="card-sync">
-    <span id="sync-icon">⏳</span> <span id="sync-text">正在同步数据给老师...</span>
-  </div>
-
-  <!-- 操作按钮 -->
-  <div style="display:flex;gap:8px;margin-top:8px;">
-    <button class="btn btn-outline btn-small" onclick="printReport()" style="flex:1;">🖨️ 保存 / 打印报告</button>
-    <button class="btn btn-outline btn-small" onclick="restart()" style="flex:1;">🔄 重新诊断</button>
-  </div>
-
-  <!-- 打印页脚 -->
-  <div class="print-footer">语文学情诊断报告 · V2 根因诊断 · 生成于 <span id="print-date-ft"></span></div>
-  <div class="footer-note">诊断帮助你看到自己的学习起点，真正的改变从行动开始 🌱</div>
+  <div class="header"><div class="icon">🎉</div><h1>你的诊断报告</h1><div class="ornament"></div></div>
+  <div class="print-header"><p>学生：<span id="print-name"></span>  日期：<span id="print-date"></span></p><hr></div>
+  <div class="card profile-card"><div class="profile-seal" id="profile-badge"></div><div class="profile-tag" id="profile-tag"></div><p class="profile-desc" id="profile-desc"></p><div class="root-chain" id="root-chain"></div></div>
+  <div class="card"><h4>🗺️ 语文能力地图</h4><div class="ability-map"><div class="radar-wrap"><canvas id="radar-student"></canvas></div><div id="domain-minis"></div></div></div>
+  <div class="card" id="card-error-pattern"><h4>🔬 你的典型错误模式</h4><div id="error-pattern-content"></div></div>
+  <div class="card" style="padding:0;overflow:hidden;"><div class="report-tabs" id="report-tabs">
+    <div class="report-tab active" data-tab="tab-student" onclick="switchReportTab('tab-student')">📖 提升计划</div>
+    <div class="report-tab" data-tab="tab-parent" onclick="switchReportTab('tab-parent')">🏠 家长指南</div>
+    <div class="report-tab" data-tab="tab-teacher" onclick="switchReportTab('tab-teacher')">📝 教学参考</div></div>
+    <div class="report-tab-content active" id="tab-student"></div><div class="report-tab-content" id="tab-parent"></div><div class="report-tab-content" id="tab-teacher"></div></div>
+  <div class="sync-bar" id="card-sync"><span id="sync-icon">⏳</span> <span id="sync-text">正在同步数据给老师...</span></div>
+  <div style="display:flex;gap:8px;margin-top:8px;"><button class="btn btn-outline btn-small" onclick="printReport()" style="flex:1;">🖨️ 保存 / 打印报告</button><button class="btn btn-outline btn-small" onclick="restart()" style="flex:1;">🔄 重新诊断</button></div>
+  <div class="print-footer">语文学情诊断报告 · V4 根因诊断 · 生成于 <span id="print-date-ft"></span></div>
+  <div class="footer-note">这份报告帮你看到自己的学习起点——真正的改变从行动开始 🌱</div>
 </div>
 </div>
-
 <script>
-// ====== 核心常量 ======
-const ROOT_CAUSES=[{id:0,key:'decode',name:'字词解码',icon:'🔤',sname:'解码层',question:'能否准确识别字词、流畅阅读？',lowMsg:'你在识别字词和流畅阅读方面存在一定困难——这是语文学习最基础的一环。字词就像盖房子的砖块，如果砖块认不全，房子就很难盖起来。'},{id:1,key:'comprehend',name:'意义理解',icon:'💭',sname:'理解层',question:'能否读懂句子和段落、进行推理？',lowMsg:'你能读通字词，但在"读出文字背后的意思"这个环节还需要加强。就像能听清楚别人说的每个字，但不太能抓住对方真正想表达什么。'},{id:2,key:'express',name:'语言表达',icon:'✍️',sname:'表达层',question:'能否把想法组织成清晰书面语言？',lowMsg:'你能理解文章在说什么，但把自己的想法写清楚对你来说是一个挑战。这就像心里有一幅很清楚的画面，但画出来别人看不明白。'},{id:3,key:'strategy',name:'学习策略',icon:'🎯',sname:'策略层',question:'审题、应试、自我监控是否有效？',lowMsg:'你的语文能力本身没有大问题，但在"怎么学"和"怎么考"的策略层面还有提升空间。就像你有一辆好车，但还不太熟悉最佳路线怎么走。'},{id:4,key:'knowledge',name:'知识储备',icon:'📚',sname:'积累层',question:'字词诗句和文学知识是否充足？',lowMsg:'你的语言基本功底还需要更多积累——成语、古诗文、文学常识这些"弹药库"还不够满。没有足够的积累，理解和表达都会受到限制。'}];
-
+const ROOT_CAUSES=[{id:0,key:'decode',name:'字词解码',icon:'🔤',sname:'解码层',question:'能否准确识别字词、流畅阅读？',lowMsg:'你在字词识别相关题目上的错误表明，识字量和阅读流畅度是你的首要问题。'},{id:1,key:'comprehend',name:'意义理解',icon:'💭',sname:'理解层',question:'能否读懂句子和段落、进行推理？',lowMsg:'你能读通字词但不能准确把握深层含义——从读字到读意的关键跨越还未完成。'},{id:2,key:'express',name:'语言表达',icon:'✍️',sname:'表达层',question:'能否把想法组织成清晰书面语言？',lowMsg:'你心里明白但写不清楚——口头和书面之间的转化是你的瓶颈。'},{id:3,key:'strategy',name:'学习策略',icon:'🎯',sname:'策略层',question:'审题、应试、自我监控是否有效？',lowMsg:'你的语文能力没问题但怎么学和怎么考的方法还需要建立。'},{id:4,key:'knowledge',name:'知识储备',icon:'📚',sname:'积累层',question:'字词诗句和文学知识是否充足？',lowMsg:'你的语文弹药库还不够满——需要系统积累。'}];
 const QUESTIONS=[{q:'阅读下面这段文字，回答问题：\n\n外婆家的院子里有一棵老槐树。每年五月，槐花开的时候，满院子都是甜丝丝的香气。外婆会搬出那把旧藤椅，坐在树下择菜。阳光从树叶的缝隙里漏下来，在她花白的头发上跳跃。\n\n那一年我考上了城里的初中，临走前去向外婆告别。外婆照旧坐在槐树下，手里剥着毛豆，说："去吧，好好读书。"声音和平时一样，没什么特别的。\n\n车开出去很远，我回头看，外婆还站在院门口。她抬起手，在空中停了一下，又放下了。那棵老槐树的枝叶在风里轻轻摇晃，像是替谁在挥手。\n\n【第1题】这篇短文主要表达了什么？',
- opts:[{text:'外婆对"我"的不舍和克制的情感',scores:[[1,3],[0,1]],correct:true},{text:'外婆平时喜欢在槐树下择菜的生活习惯',scores:[[1,-2],[0,-1]],tag:'表面阅读'},{text:'老槐树在五月开花时院子里很美',scores:[[1,-2],[0,-1]],tag:'表面阅读'},{text:'"我"考上了初中这件事值得高兴',scores:[[1,-2],[4,-1]],tag:'偏离主旨'}],
- dimTags:[1,0]},
+ opts:[{text:'外婆对"我"的不舍和克制的情感',scores:[[1,3]],correct:true},{text:'外婆平时喜欢在槐树下择菜的生活习惯',scores:[[1,-3]],tag:'表面阅读'},{text:'老槐树在五月开花时院子里很美',scores:[[1,-3]],tag:'表面阅读'},{text:'"我"考上了初中这件事值得高兴',scores:[[1,-3]],tag:'偏离主旨'}],
+ dimTags:[1]},
 {q:'同上篇短文。外婆说"去吧，好好读书"时"声音和平时一样，没什么特别的"，这样写有什么深意？',
- opts:[{text:'表现外婆把不舍藏在平静之下，让情感更动人',scores:[[1,3],[2,1]],correct:true},{text:'说明外婆对"我"的离开其实不太在意',scores:[[1,-3],[0,-1]],tag:'理解反向'},{text:'说明外婆年纪大了，说话声音本来就没有起伏',scores:[[1,-2],[4,-1]],tag:'忽略语境'},{text:'作者这样写只是为了凑字数，没有特别的意思',scores:[[1,-1],[3,-3]],tag:'消极策略'}],
+ opts:[{text:'表现外婆把不舍藏在平静之下，让情感更动人',scores:[[1,3]],correct:true},{text:'说明外婆对"我"的离开其实不太在意',scores:[[1,-3]],tag:'理解反向'},{text:'说明外婆年纪大了，说话声音本来就没有起伏',scores:[[1,-3]],tag:'忽略语境'},{text:'作者这样写只是为了凑字数，没有特别的意思',scores:[[3,-3]],tag:'消极策略'}],
  dimTags:[1,3]},
 {q:'同上篇短文。文中"那棵老槐树的枝叶在风里轻轻摇晃，像是替谁在挥手"用了什么写法？',
- opts:[{text:'拟人——把槐树当作人来写，借景物表达人物情感',scores:[[1,3],[0,2]],correct:true},{text:'夸张——夸大了槐树的摇晃程度',scores:[[1,-2],[4,-1]],tag:'术语混淆'},{text:'对比——用槐树和外婆做对比',scores:[[1,-1],[4,-2]],tag:'术语混淆'},{text:'排比——连续写了好几样东西',scores:[[1,-2],[4,-2],[0,-1]],tag:'术语混淆'}],
+ opts:[{text:'拟人——把槐树当作人来写，借景物表达人物情感',scores:[[1,3],[4,1]],correct:true},{text:'夸张——夸大了槐树的摇晃程度',scores:[[4,-3]],tag:'术语混淆'},{text:'对比——用槐树和外婆做对比',scores:[[4,-3]],tag:'术语混淆'},{text:'排比——连续写了好几样东西',scores:[[4,-3]],tag:'术语混淆'}],
  dimTags:[1,4]},
 {q:'文中"阳光从树叶的缝隙里漏下来，在她花白的头发上跳跃"——"漏"和"跳跃"这两个词用得怎么样？',
- opts:[{text:'"漏"写出光透过树叶的细碎感，"跳跃"写出光影晃动的活泼感，一静一动很有画面感',scores:[[1,3],[2,2],[4,1]],correct:true},{text:'用词准确，让读者知道当时是白天',scores:[[1,-2],[2,-2]],tag:'浅层分析'},{text:'这两个词都很普通，没什么特别的',scores:[[1,-3],[2,-3],[3,-1]],tag:'感知薄弱'},{text:'应该换成"照"和"闪动"更好',scores:[[1,-1],[2,-1],[3,-2]],tag:'错误判断'}],
+ opts:[{text:'"漏"写出光透过树叶的细碎感，"跳跃"写出光影晃动的活泼感，一静一动很有画面感',scores:[[1,3],[2,1]],correct:true},{text:'用词准确，让读者知道当时是白天',scores:[[2,-3]],tag:'浅层分析'},{text:'这两个词都很普通，没什么特别的',scores:[[1,-3],[2,-1]],tag:'感知薄弱'},{text:'应该换成"照"和"闪动"更好',scores:[[2,-3]],tag:'错误判断'}],
  dimTags:[1,2]},
-{q:'做刚才这几道阅读题的过程中，你最接近下面哪种情况？（没有对错，选最像你的）',
- opts:[{text:'先读完文章再做题，做题时能回原文找到对应的句子',scores:[[3,3],[0,1],[1,1]]},{text:'读完文章大概知道意思，做题时凭印象选，偶尔回看',scores:[[3,0],[1,0]]},{text:'直接看题目，然后去文章里找关键词，文章没有完整读完',scores:[[3,-2],[1,-2],[0,-1]]},{text:'读完觉得懂了但做题时在两个选项之间纠结很久',scores:[[3,-3],[1,-2],[0,-1]]}],
+{q:'做刚才这几道阅读题的过程中，你最接近下面哪种情况？（没有对错，选最像你的。此题用于交叉验证你的阅读策略习惯）',
+ opts:[{text:'先读完文章再做题，做题时能回原文找到对应的句子',scores:[[3,3],[1,1]]},{text:'读完文章大概知道意思，做题时凭印象选，偶尔回看',scores:[[3,0],[1,0]]},{text:'直接看题目，然后去文章里找关键词，文章没有完整读完',scores:[[3,-3],[1,-1]]},{text:'读完觉得懂了但做题时在两个选项之间纠结很久',scores:[[3,-3],[1,-1]]}],
  dimTags:[3,1]},
 {q:'读孟浩然《宿建德江》："移舟泊烟渚，日暮客愁新。野旷天低树，江清月近人。"这首诗主要表达了什么情感？',
- opts:[{text:'旅途中的孤独和对故乡的思念',scores:[[1,3],[4,2]],correct:true},{text:'在江边停船看风景的愉快心情',scores:[[1,-3],[4,-1]],tag:'理解反向'},{text:'对自然风光和月色的赞美',scores:[[1,-2],[4,-1]],tag:'表面阅读'},{text:'和朋友一起泛舟游玩的快乐',scores:[[1,-2],[0,-1]],tag:'忽略语境'}],
- dimTags:[1,4]},
+ opts:[{text:'旅途中的孤独和对故乡的思念',scores:[[1,3]],correct:true},{text:'在江边停船看风景的愉快心情',scores:[[1,-3]],tag:'理解反向'},{text:'对自然风光和月色的赞美',scores:[[1,-3]],tag:'表面阅读'},{text:'和朋友一起泛舟游玩的快乐',scores:[[1,-3]],tag:'忽略语境'}],
+ dimTags:[1]},
 {q:'读下面文言句子："友人惭，下车引之。元方入门不顾。"这里的"引"最可能是什么意思？',
- opts:[{text:'拉、牵',scores:[[0,3],[4,2]],correct:true},{text:'引导',scores:[[0,-2],[4,-1]],tag:'义项混淆'},{text:'引用',scores:[[0,-3],[4,-1]],tag:'义项混淆'},{text:'引起',scores:[[0,-2],[4,-1]],tag:'义项混淆'}],
- dimTags:[0,4]},
+ opts:[{text:'拉、牵',scores:[[0,3]],correct:true},{text:'引导',scores:[[0,-3]],tag:'义项混淆'},{text:'引用',scores:[[0,-3]],tag:'义项混淆'},{text:'引起',scores:[[0,-3]],tag:'义项混淆'}],
+ dimTags:[0]},
 {q:'"春风又绿江南岸"——如果把"绿"换成"到""过""入"，表达效果有什么不同？',
- opts:[{text:'"绿"写出了春风使大地变绿这个动态的色彩变化，一个字让画面有了颜色和生命',scores:[[1,3],[2,2],[4,1]],correct:true},{text:'换成"到"最准确直接，诗歌就应该简单明了',scores:[[1,-3],[2,-2],[4,-1]],tag:'审美偏差'},{text:'几个字意思差不多，用哪个都行，诗人只是随便选的',scores:[[1,-2],[2,-2],[3,-2]],tag:'感知薄弱'},{text:'"绿"不如"满"好，因为"满"更有春天的感觉',scores:[[1,-1],[2,-1]],tag:'有判断但不到位'}],
+ opts:[{text:'"绿"写出了春风使大地变绿这个动态的色彩变化，一个字让画面有了颜色和生命',scores:[[1,3],[2,1]],correct:true},{text:'换成"到"最准确直接，诗歌就应该简单明了',scores:[[1,-3]],tag:'审美偏差'},{text:'几个字意思差不多，用哪个都行，诗人只是随便选的',scores:[[2,-3]],tag:'感知薄弱'},{text:'"绿"不如"满"好，因为"满"更有春天的感觉',scores:[[2,-3]],tag:'有判断但不到位'}],
  dimTags:[1,2]},
-{q:'背诵古诗文时，下面哪种描述最接近你的真实情况？',
- opts:[{text:'先理解每句的意思和整首诗在说什么，理解了自然就记住了',scores:[[3,3],[4,2],[1,1]]},{text:'反复大声朗读，靠节奏和押韵"顺"下来，不太管意思',scores:[[3,0],[4,0],[1,-1]]},{text:'边抄边背，抄几遍就记住了，但过一阵子又忘了',scores:[[3,-1],[4,-1]]},{text:'背得很吃力，经常背了忘忘了背，看到背诵就头疼',scores:[[3,-3],[4,-3],[1,-2]]}],
+{q:'背诵古诗文时，下面哪种描述最接近你的真实情况？（没有对错，选最像你的。此题用于交叉验证你的学习策略）',
+ opts:[{text:'先理解每句的意思和整首诗在说什么，理解了自然就记住了',scores:[[3,3],[4,1],[1,1]]},{text:'反复大声朗读，靠节奏和押韵"顺"下来，不太管意思',scores:[[3,0],[4,0],[1,-1]]},{text:'边抄边背，抄几遍就记住了，但过一阵子又忘了',scores:[[3,-1],[4,-1]]},{text:'背得很吃力，经常背了忘忘了背，看到背诵就头疼',scores:[[3,-3],[4,-3],[1,-1]]}],
  dimTags:[3,4]},
 {q:'下面这句文言文的翻译，哪个最准确？\n"学而不思则罔，思而不学则殆。"',
- opts:[{text:'只学习不思考就会迷惑，只思考不学习就会倦怠（没有收获）',scores:[[0,3],[1,3],[4,2]],correct:true},{text:'学习的时候不要想太多，想太多就学不下去了',scores:[[0,-2],[1,-3]],tag:'解码错误'},{text:'学习和思考同样重要，缺一不可',scores:[[1,-1],[0,0]],tag:'笼统不准确'},{text:'学了就要思考，否则等于白学',scores:[[0,-1],[1,-1]],tag:'不完整'}],
+ opts:[{text:'只学习不思考就会迷惑，只思考不学习就会倦怠（没有收获）',scores:[[0,3],[1,1]],correct:true},{text:'学习的时候不要想太多，想太多就学不下去了',scores:[[0,-3]],tag:'解码错误'},{text:'学习和思考同样重要，缺一不可',scores:[[1,-3]],tag:'笼统不准确'},{text:'学了就要思考，否则等于白学',scores:[[1,-3]],tag:'不完整'}],
  dimTags:[0,1]},
 {q:'作文题目是《那一次，我真后悔》。下面哪个是最关键的要求？',
- opts:[{text:'必须写一件具体的事，重点写"后悔"的感受和原因',scores:[[3,3],[1,2]],correct:true},{text:'只要是关于后悔的都可以写，写感想也行',scores:[[3,-3],[1,-1]],tag:'审题偏差'},{text:'要写一件很大的事，小事不值得写',scores:[[3,-2],[1,-1]],tag:'审题偏差'},{text:'重点是写"后悔之后怎么改正"，后悔本身不重要',scores:[[3,-2],[1,-2]],tag:'偏离重点'}],
- dimTags:[3,1]},
+ opts:[{text:'必须写一件具体的事，重点写"后悔"的感受和原因',scores:[[3,3]],correct:true},{text:'只要是关于后悔的都可以写，写感想也行',scores:[[3,-3]],tag:'审题偏差'},{text:'要写一件很大的事，小事不值得写',scores:[[3,-3]],tag:'审题偏差'},{text:'重点是写"后悔之后怎么改正"，后悔本身不重要',scores:[[3,-3]],tag:'偏离重点'}],
+ dimTags:[3]},
 {q:'如果写《我的同桌》这篇作文，下面哪件事作为素材最出色？',
- opts:[{text:'有一次考试我没带橡皮，同桌把自己的橡皮切成两半分给我——这件事虽小但能写出人物性格',scores:[[2,3],[1,2],[4,1]],correct:true},{text:'同桌学习成绩很好，每次都考班级前三名——说明同桌很优秀',scores:[[2,-2],[1,-1]],tag:'素材平淡'},{text:'同桌长得很高，爱打篮球，是校队的——描写同桌的外貌和爱好',scores:[[2,-2],[1,-1]],tag:'偏离主题'},{text:'同桌每天和我一起上学放学——写我们关系好',scores:[[2,-1],[4,-2]],tag:'素材单薄'}],
- dimTags:[2,1]},
+ opts:[{text:'有一次考试我没带橡皮，同桌把自己的橡皮切成两半分给我——这件事虽小但能写出人物性格',scores:[[2,3]],correct:true},{text:'同桌学习成绩很好，每次都考班级前三名——说明同桌很优秀',scores:[[2,-3]],tag:'素材平淡'},{text:'同桌长得很高，爱打篮球，是校队的——描写同桌的外貌和爱好',scores:[[2,-3]],tag:'偏离主题'},{text:'同桌每天和我一起上学放学——写我们关系好',scores:[[2,-3]],tag:'素材单薄'}],
+ dimTags:[2]},
 {q:'下面是一篇作文中的句子，它们正确的逻辑顺序应该是？\n①外婆把糖饼翻了个面，金黄的饼面上冒起几个小泡\n②放学回家，还在巷子口就闻到了熟悉的甜香\n③外婆从锅里铲起糖饼，吹了吹，递到我手上\n④我咬了一口，外酥里软，红糖在嘴里慢慢化开',
- opts:[{text:'②①③④',scores:[[2,3],[3,2]],correct:true},{text:'②③①④',scores:[[2,-2],[3,-1]],tag:'逻辑偏差'},{text:'①②③④',scores:[[2,-2],[3,-2]],tag:'逻辑偏差'},{text:'②①④③',scores:[[2,-2],[3,-1]],tag:'逻辑偏差'}],
+ opts:[{text:'②①③④',scores:[[2,3],[3,1]],correct:true},{text:'②③①④',scores:[[2,-3],[3,-1]],tag:'逻辑偏差'},{text:'①②③④',scores:[[2,-3],[3,-1]],tag:'逻辑偏差'},{text:'②①④③',scores:[[2,-3],[3,-1]],tag:'逻辑偏差'}],
  dimTags:[2,3]},
 {q:'原句："他很生气。"下面哪个改写最能打动读者？',
- opts:[{text:'他的脸涨得通红，拳头攥得紧紧的，嘴唇抖了半天才挤出一句话来',scores:[[2,3],[1,2],[4,1]],correct:true},{text:'他非常非常生气，简直气坏了，从来没有这么生气过',scores:[[2,-3],[1,-1]],tag:'表达贫乏'},{text:'他生气了，因为有人做了让他不高兴的事情',scores:[[2,-2],[1,-1]],tag:'表达笼统'},{text:'他怒火中烧，气愤填膺，怒发冲冠',scores:[[1,-1],[2,0],[4,-2]],tag:'堆砌成语'}],
- dimTags:[2,1]},
-{q:'拿到作文题目后，你最常出现的情况是？（没有对错，选最像你的）',
- opts:[{text:'先花几分钟审题想清楚要写什么，心里有个大概的框架再动笔',scores:[[3,3],[2,1]]},{text:'脑子里有个大概想法就开始写，写着写着再想下面写什么',scores:[[3,-1],[2,-1]]},{text:'想半天不知道怎么开头，但开头写顺了后面就能顺着写下去',scores:[[3,-2],[2,-2]]},{text:'开头和中间都能写，结尾总是匆匆收场不知道写什么',scores:[[3,-2],[2,-2]]}],
+ opts:[{text:'他的脸涨得通红，拳头攥得紧紧的，嘴唇抖了半天才挤出一句话来',scores:[[2,3]],correct:true},{text:'他非常非常生气，简直气坏了，从来没有这么生气过',scores:[[2,-3]],tag:'表达贫乏'},{text:'他生气了，因为有人做了让他不高兴的事情',scores:[[2,-3]],tag:'表达笼统'},{text:'他怒火中烧，气愤填膺，怒发冲冠',scores:[[2,-3]],tag:'堆砌成语'}],
+ dimTags:[2]},
+{q:'拿到作文题目后，你最常出现的情况是？（没有对错，选最像你的。此题用于交叉验证你的写作策略）',
+ opts:[{text:'先花几分钟审题想清楚要写什么，心里有个大概的框架再动笔',scores:[[3,3],[2,1]]},{text:'脑子里有个大概想法就开始写，写着写着再想下面写什么',scores:[[3,-1],[2,-1]]},{text:'想半天不知道怎么开头，但开头写顺了后面就能顺着写下去',scores:[[3,-3],[2,-1]]},{text:'开头和中间都能写，结尾总是匆匆收场不知道写什么',scores:[[3,-3],[2,-1]]}],
  dimTags:[3,2]},
 {q:'下面哪个词语的字形完全正确？',
- opts:[{text:'迫不及待',scores:[[0,3],[4,2]],correct:true},{text:'迫不急待',scores:[[0,-2],[4,-1]],tag:'字形混淆'},{text:'迫不亟待',scores:[[0,-3],[4,-2]],tag:'字形混淆'},{text:'迫不及代',scores:[[0,-2],[4,-1]],tag:'字形混淆'}],
+ opts:[{text:'迫不及待',scores:[[0,3],[4,1]],correct:true},{text:'迫不急待',scores:[[4,-3]],tag:'字形混淆'},{text:'迫不亟待',scores:[[4,-3]],tag:'字形混淆'},{text:'迫不及代',scores:[[4,-3]],tag:'字形混淆'}],
  dimTags:[0,4]},
 {q:'下面哪个句子中成语使用最恰当？',
- opts:[{text:'老师讲的故事很感人，我们都听得津津有味',scores:[[4,3],[0,2],[1,2]],correct:true},{text:'听到这个好消息，大家都忍俊不禁地笑了起来',scores:[[4,-2],[0,-1]],tag:'成语误用'},{text:'运动会上他跑得最快，简直是罄竹难书',scores:[[4,-3],[0,-2],[1,-1]],tag:'成语误用'},{text:'他写的作文天花乱坠，让人看不明白',scores:[[4,-2],[0,-1],[1,-1]],tag:'成语误用'}],
- dimTags:[4,0]},
+ opts:[{text:'老师讲的故事很感人，我们都听得津津有味',scores:[[4,3]],correct:true},{text:'听到这个好消息，大家都忍俊不禁地笑了起来',scores:[[4,-3]],tag:'成语误用'},{text:'运动会上他跑得最快，简直是罄竹难书',scores:[[4,-3]],tag:'成语误用'},{text:'他写的作文天花乱坠，让人看不明白',scores:[[4,-3]],tag:'成语误用'}],
+ dimTags:[4]},
 {q:'下面哪个句子没有语病？',
- opts:[{text:'我们要善于发现并改正自己的缺点',scores:[[0,3],[1,2],[4,1]],correct:true},{text:'通过这次学习，使我明白了做人的道理',scores:[[0,-2],[1,-1]],tag:'语法感知弱'},{text:'同学们基本上全部都完成了作业',scores:[[0,-1],[1,-1]],tag:'语法感知弱'},{text:'他的写作水平有了明显的提高和进步',scores:[[0,-1],[1,-1],[4,-1]],tag:'语法感知弱'}],
+ opts:[{text:'我们要善于发现并改正自己的缺点',scores:[[0,3],[1,1]],correct:true},{text:'通过这次学习，使我明白了做人的道理',scores:[[0,-3]],tag:'语法感知弱'},{text:'同学们基本上全部都完成了作业',scores:[[0,-3]],tag:'语法感知弱'},{text:'他的写作水平有了明显的提高和进步',scores:[[0,-3]],tag:'语法感知弱'}],
  dimTags:[0,1]},
 {q:'例句："书籍是打开知识大门的钥匙。"仿照这个句式（用比喻），写一个关于"友谊"的句子。下面哪个仿写最贴切？',
- opts:[{text:'友谊是连接心灵的桥梁',scores:[[2,3],[1,2],[4,1]],correct:true},{text:'友谊是两个人之间的关系',scores:[[2,-3],[1,-2]],tag:'没有比喻'},{text:'友谊让我们每天都很快乐',scores:[[2,-2],[1,-1]],tag:'没有比喻'},{text:'友谊就像春天的阳光',scores:[[2,0],[1,0]],tag:'比喻空泛'}],
- dimTags:[2,1]},
-{q:'语文考试前一两周，你通常怎么复习？（没有对错，选最像你的）',
- opts:[{text:'我知道自己哪里薄弱（比如文言文不行），会有针对性地多花时间在那个地方',scores:[[3,3],[4,1],[0,1]]},{text:'把课本和笔记从头翻一遍，老师划的重点都过一遍',scores:[[3,0],[4,1]]},{text:'做几套卷子找找手感，能复习多少算多少，没有特别的计划',scores:[[3,-2],[4,-2]]},{text:'翻翻书觉得没什么可复习的，或者根本不知道从哪里开始复习',scores:[[3,-3],[4,-3],[1,-2]]}],
+ opts:[{text:'友谊是连接心灵的桥梁',scores:[[2,3],[1,1]],correct:true},{text:'友谊是两个人之间的关系',scores:[[2,-3]],tag:'没有比喻'},{text:'友谊让我们每天都很快乐',scores:[[2,-3]],tag:'没有比喻'},{text:'友谊就像春天的阳光',scores:[[2,-1],[1,-1]],tag:'比喻空泛'}],
+ dimTags:[2]},
+{q:'语文考试前一两周，你通常怎么复习？（没有对错，选最像你的。此题用于交叉验证你的复习策略）',
+ opts:[{text:'我知道自己哪里薄弱（比如文言文不行），会有针对性地多花时间在那个地方',scores:[[3,3],[4,1]]},{text:'把课本和笔记从头翻一遍，老师划的重点都过一遍',scores:[[3,0],[4,1]]},{text:'做几套卷子找找手感，能复习多少算多少，没有特别的计划',scores:[[3,-3],[4,-1]]},{text:'翻翻书觉得没什么可复习的，或者根本不知道从哪里开始复习',scores:[[3,-3],[4,-3],[1,-1]]}],
  dimTags:[3,4]}
 ];
-
 const SECTIONS=[{name:'现代文阅读',cls:'badge-reading',start:0,end:4},{name:'古诗文阅读',cls:'badge-poetry',start:5,end:9},{name:'写作',cls:'badge-writing',start:10,end:14},{name:'语言基础与运用',cls:'badge-language',start:15,end:19}];
-
-// ====== 七大诊断画像 ======
 const PROFILES={P1:{id:'P1',name:'字词解码薄弱型',tag:'基础关卡',icon:'🔤',
-  desc:'你在字词识别和阅读流畅度方面存在基础性困难。这是语文学习最底层的"地基"——如果不先解决这个问题，阅读理解、写作表达都会受到拖累。好消息是：这个层面的问题通过有针对性的训练是完全可以改善的。',
-  studentTitle:'你的首要任务：打通阅读的第一关',
-  studentPlan:['每天出声朗读一篇200字段落，遇到不认识的字当场查字典，记录在本子上——每天只做10分钟','每周认识30个新字词，将它们分类记在便签纸上贴在书桌前——"本周新字词"','两周后用你新认识的字词写一段话，看到自己可以用这些字词写东西，会非常有成就感'],
-  parentMsg:'孩子目前在字词识别和阅读流畅度方面需要加强——这是语文学习最基础的一环，就像盖房子的砖块。好消息是这个层面的问题通过持续练习完全可以改善。',
-  parentActions:['每天陪孩子朗读10分钟——选孩子感兴趣的短文，遇到不认识的字一起查、一起记','在家里显眼位置贴一张"本周新字词"，每认识一个就写上去，让积累可见','不要急于求成——字词积累是一个耐心的过程，每天认识3-5个新字词就很好'],
-  teacherPriority:'解码层是当前首要干预点。课堂中关注该生朗读表现，及时发现和纠正识字错误。',
-  teacherStrategies:['布置"每日5分钟朗读+3个新词"的微习惯作业，不求多只求坚持','使用"字源识字法"——讲字形结构帮助记忆，而非机械抄写','与家长协调：学校的字词积累和家庭的亲子朗读同步进行'],
-  teacherMonitor:'两个月内朗读错误率明显下降；字词听写正确率提升10个百分点以上。',
+  desc:'诊断发现：你在识别字词和流畅阅读上存在基础性困难。这直接影响了你的阅读速度和理解准确性——字词是理解的基础，认不全、读不顺，后面的理解和表达都会被打折扣。',
+  studentTitle:'核心问题：字词识别不过关，影响阅读速度和理解',
+  studentPlan:['每天出声朗读200字段落（可以从课本或课外书选）——读出声来，遇到不认识的字立刻查字典，记在专门的"生字本"上。每天10分钟。','每周整理"生字本"里的新字词，分类记录（易错字/陌生字/文言实词），周末用这些字词写一段话，检验是否真正掌握了。','两周后做一次"自测"：遮住拼音读一遍之前记录的字词，统计正确率。目标是正确率提高10%以上。'],
+  parentMsg:'诊断发现：孩子目前在准确识别字词和流畅阅读这个基础环节需要加强。这不是"笨"，而是字词积累量还不够——可以通过持续练习解决。',
+  parentActions:['每天固定10分钟"亲子朗读时间"：选孩子感兴趣的书，轮流朗读。遇到不认识的字一起查字典，记下来。关键是每天坚持，不是一次读很多。','在家里贴"本周新字词"便签（冰箱/书桌旁），每认识一个就写上去。周末和孩子一起数"这周认识了多少新字词"。','用碎片时间口头抽查（吃饭时、车上）——"昨天那个字念什么来着？"用聊天的方式，不是考试。'],
+  teacherPriority:'解码层是首要干预点——这是最底层能力，不解决会持续拖累理解和表达。',
+  teacherStrategies:['课堂关注该生朗读：及时发现错读、漏读、回读现象。每次纠正1-2个具体的字，不要一次纠正太多。','布置"每日朗读+3个新词"微习惯作业，只检查坚持不检查数量。使用"字源识字法"讲解字形结构。','与家长建立"双线反馈"：学校发现的识字问题告知家长→家庭朗读实践→两周后课堂观察是否有改善。'],
+  teacherMonitor:'关键指标：①朗读错误率（每100字错读字数）是否在下降；②字词听写正确率是否提升。监测周期：每两周评估一次。',
   priority:[0,1,4,3,2]},
 P2:{id:'P2',name:'阅读理解断层型',tag:'意义建构',icon:'💭',
-  desc:'你能较流畅地阅读字词，但在"读懂文字背后的意思"这个环节出现了断层。简单说：字都认识，但连起来之后作者的真正意图、文章的深层含义，你还不能准确把握。这是从小学阅读向初中阅读跨越的关键能力节点。',
-  studentTitle:'你的突破口：从"读懂字"到"读懂意"',
-  studentPlan:['每天读一段文字（100-200字），读完后用嘴巴说出来"这段在讲什么"——说出来比只在脑子里想更有效','做阅读理解题时，每选一个答案都在文中找到对应的句子做证据——"我选这个是因为文中说了..."','每周找一篇短文，读完后问自己三个问题：①这段主要在说什么？②作者为什么要写这段？③这段让我感受到什么？'],
-  parentMsg:'孩子能较流畅地阅读字词，但在"读懂深层意思"这个环节还需要加强——就像能听清别人说的每个字，但不太能抓住对方真正想表达什么。这是从小学阅读到初中阅读的关键跨越。',
-  parentActions:['每天和孩子一起读一个小故事（3-5分钟），读完后让孩子用自己话讲一遍——这个"复述"练习效果非常好','问孩子"你觉得作者为什么要写这段""你觉得这个人当时是什么心情"——不要检查对错，只问"你觉得呢"','在生活中有意识地培养"推理"习惯——比如看到一个人的表情，猜猜TA现在是什么心情'],
-  teacherPriority:'理解层是核心瓶颈。该生字词解码基本过关，意义建构是当前最需要突破的环节。',
-  teacherStrategies:['课堂上专门训练"推理三问"——读完一段引导学生回答"写了什么→为什么写→写得怎么样"','使用"出声思维法"——教师在课堂上示范"我是怎么读懂这段话的"，把理解过程外化给学生看','从"短段落+单一问题"开始训练——每次只读一小段，只回答一个问题，降低认知负荷'],
-  teacherMonitor:'四周内学生能独立完成200字段落的准确复述；阅读理解题正确率提升。',
+  desc:'诊断发现：你能基本认出文章里的字词，但在"读懂文字背后的意思"这个环节出现了断层。典型表现：文章每个字都认识，但读完不知道作者到底在说什么，或者只能理解字面意思，抓不住深层含义。这是从"读字"到"读意"的关键能力跨越——还没有完成。',
+  studentTitle:'核心问题：字都认识但理解不到位——停留在"读字"层面',
+  studentPlan:['每天读一段文字（100-200字），读完后用嘴巴说出来"这段主要在讲什么"——说出来比只在脑子里想更有效。先用这个方式把"概括大意"练熟。','做阅读理解题时，每选一个答案都必须在文中找到对应的句子作为证据——在旁边标注"我选A是因为文中第X段说了..."。没有证据的选择不要选。','每周找一篇短文，读完后问自己三个固定问题：①这段主要在说什么？②作者为什么要写这段？③这段让我感受到什么？——先练短段落，再练长文章。'],
+  parentMsg:'诊断发现：孩子目前的困难是"能读字词但不太能读懂意思"——就像一个孩子能听清你说的每个字，但不理解你说的整句话是什么意思。这不是"笨"，是"意义建构"这个环节需要训练。',
+  parentActions:['每天一起读一个小故事（3-5分钟即可），读完后让孩子用自己的话讲一遍——你认真听，不要中途纠正错误。这个"复述"练习比做很多阅读理解题都管用。','和孩子聊天时多问"为什么"——"你觉得这个人当时是什么心情？""你觉得作者为什么要写这一段？"重点是让孩子习惯"多想一层"。','生活中培养推理习惯：看到一个人的表情→猜猜TA现在是什么心情→为什么你这么觉得？把阅读理解的能力在生活中"预热"。'],
+  teacherPriority:'理解层是核心瓶颈——字词解码基本过关，意义建构是当前最需要突破的环节。',
+  teacherStrategies:['课堂上专门训练"推理三问"——每读完一段引导学生回答"写了什么→为什么写→写得怎么样"。从全班齐答过渡到个别提问。','使用"出声思维法"——教师在课堂上示范"我是怎么读懂这段话的"，把理解过程外化给学生看。让学生模仿并出声说出自己的理解过程。','从"短段落+单一问题"开始训练——每次只读一小段，只回答一个问题，降低认知负荷。逐步过渡到长段落+多问题。'],
+  teacherMonitor:'关键指标：学生能否独立完成200字段落的准确复述（不遗漏重要信息、不曲解原意）。监测周期：四周。',
   priority:[1,3,2,4,0]},
 P3:{id:'P3',name:'语言表达阻滞型',tag:'输出转化',icon:'✍️',
-  desc:'你能理解文章，也有自己的想法，但在"把想法组织成清晰文字"这个环节遇到了困难。这个问题的典型表现是：口头能说出来，写到纸上就变味了；心里明白答案是什么，但写出来的答案让老师看不明白。',
-  studentTitle:'你的关键战役：把脑子里的想法"翻译"成纸上的文字',
-  studentPlan:['写任何东西之前，先用嘴巴说一遍，录音下来，再听着录音写——这叫"先说后写"法，非常管用','每天写50字"微日记"——记一件小事，写清楚"谁+做了什么+结果怎样"，不求精彩只求清楚','答题时试着用"第一……第二……第三……"来组织你的答案，让阅卷老师一眼看清你的思路'],
-  parentMsg:'孩子能理解文章也有自己的想法，但在"写出来"这个环节还需要帮助——就像心里有一幅画但画笔还不太听使唤。需要的是练习和鼓励，而非批评。',
-  parentActions:['让孩子先口头讲一遍要写的作文内容，讲顺了再去写——这个"口述草稿"的方法能帮孩子理顺思路','孩子写完东西后，先肯定再提建议（"这个想法很有意思"→"如果这里再加一句感受会更好"）','从"三句话日记"开始——每天只写三句话，不要求多，只要求写清楚一件事'],
-  teacherPriority:'表达层是核心障碍。该生理解能力尚可，"口头→书面"的转化是主要瓶颈。',
-  teacherStrategies:['课堂中使用"口述草稿法"——让学生先口头组织答案再写下来','提供"表达脚手架"——常用答题句式模板，先用模板再逐步脱模','"分层训练"：第一步只练"把答案分层"（用序号），第二步练"每层给一个中心句"，第三步练"中心句+支撑句"'],
-  teacherMonitor:'四周内能写出层次分明的200字段落；答题的条理性和完整性明显改善。',
+  desc:'诊断发现：你能理解文章也有自己的想法，但在"把想法组织成清晰的书面文字"这个环节遇到了明显困难。典型表现：口头能说出来，写到纸上就变味了；或者心里明白答案，但写出来的答案别人看不懂。这说明你的"输入"和"输出"之间有一道坎——理解力可以，但表达力没跟上。',
+  studentTitle:'核心问题：心里明白但写不清楚——"口头→书面"转化卡住了',
+  studentPlan:['写任何东西之前，先用嘴巴说一遍，录音下来，再听着录音整理成文字——这叫"先说后写"法。利用你"说比写好"的特点帮你把思路理顺。','每天写50字"微日记"——记一件小事，写清楚"谁+做了什么+结果怎样"，不求精彩只求清楚。先练"写得明白"，再练"写得好"。','答题时养成"分点写"的习惯：用"第一……第二……第三……"来组织答案，让阅卷老师一眼看到你的思路。每道题至少写两个要点。'],
+  parentMsg:'诊断发现：孩子能理解也有自己的想法，但在"写出来"这个环节还需要帮助——就像心里有一幅画但画笔还不太听使唤。这是需要练习的技能，不是态度问题。',
+  parentActions:['让孩子写作文前先口头讲一遍要写什么（像讲故事一样讲给你听），讲顺了再去写。这个"口述草稿"法能帮孩子把思路理顺——口头表达是TA的优势通道。','孩子写完东西后，先肯定一点再提一个建议（"这个想法很有意思→如果这里再加一句感受会更好"）。不要一次性纠正所有问题——每次只关注一个方面。','从"三句话日记"开始——每天只写三句话，不要求多，只要求写清楚一件事。坚持两周后慢慢增加字数。'],
+  teacherPriority:'表达层是核心障碍——该生"输入"能力尚可，"口头→书面"转化是主要瓶颈。',
+  teacherStrategies:['课堂中使用"口述草稿法"——让学生先口头组织答案再写下来。给出具体句式模板（"这句话运用了___写出了___产生了___的效果"），先套用再脱模。','"分层训练法"：第一步只练"把答案分层"（用序号），第二步练"每层给一个中心句"，第三步练"中心句+支撑句"。每步训练2-3周。','"一句精改"——每周只精细修改一个句子，从"能看懂"改到"写得通"再到"写得顺"。不追求一次改对所有问题。'],
+  teacherMonitor:'关键指标：能否写出层次分明的200字段落（有中心句、有支撑句、有逻辑顺序）。监测周期：四周。',
   priority:[2,3,1,4,0]},
 P4:{id:'P4',name:'应试策略缺失型',tag:'方法优化',icon:'🎯',
-  desc:'你的语文基本功没有大问题，但在"怎么审题、怎么组织答案、怎么检查"这些应试策略上还没有形成有效的习惯。同样的能力水平，策略好的同学能多拿10-15分——这是"性价比"最高的提升方向。',
-  studentTitle:'你离更好的分数只差一套"答题方法"',
-  studentPlan:['做题前圈出题目里的关键词再选答案——哪怕你觉得这道题很简单，养成"先审题"的条件反射','每次做完练习或小测，把错题分成两类——"真的不会"和"粗心/没看清题"，看看哪种更多','考前不再"什么都看"，而是只复习自己最薄弱的两个地方——把精力用在刀刃上'],
-  parentMsg:'孩子的语文能力本身没有大问题，但在学习方法策略上还需要优化——就像有一辆好车但还不太熟悉最佳路线。帮孩子建立好习惯，比多做几道题更重要。',
-  parentActions:['关注学习习惯多过关注分数——"这次考试前你是怎么复习的""做错的题后来搞懂了吗"','帮孩子准备一个"错题小本"——不是抄题目，而是用一两句话写清楚"为什么错""下次怎么避免"','减少"考了多少分"的追问，增加"你觉得这次哪里比以前有进步"的引导'],
-  teacherPriority:'策略训练是该生当前"性价比"最高的干预点——能力基础尚可，策略优化可直接提升考试成绩。',
-  teacherStrategies:['"审题专项"——每周2-3次，每次3道题的纯审题训练（圈关键词+判断题型+说答题方向，不写答案）','"元认知提示卡"——制作小卡片列3个问题（"这道题在问什么？""我该用什么方法？""答完我怎么检查？"），做题时对照','"策略复盘"——每次测试后用5分钟让学生写"这次我的策略用得怎么样"的两句话反思'],
-  teacherMonitor:'三周后审题准确率提升；考试中"粗心失分"比例下降。',
+  desc:'诊断发现：你的语文基本功本身没有大问题，但在"怎么审题、怎么组织答案、怎么检查"这些考试策略上还没有形成有效习惯。同样的能力水平，策略好的同学能多拿10-15分。你的失分往往不是因为"不会做"，而是因为"没看清题""答偏了""没检查"。',
+  studentTitle:'核心问题：能力有但考试发挥不出来——需要一套答题方法',
+  studentPlan:['建立"先审题"条件反射：拿到任何题目，先圈出题干中的关键词和限制条件（"最恰当的""不正确的""结合全文"），圈完了再选答案——哪怕你觉得题很简单。','每次作业或小测后做"错题归因"：把错题分成两类——"真的不会"和"粗心/审题/检查不够"。如果后者占比超过40%，说明策略问题是主要失分原因。','考试前只复习自己最薄弱的两个板块，不要"从头翻到尾"。考前给自己写一个"策略提醒便签"（"圈关键词→答完检查有没有漏→不确定的做标记回头再看"），贴在笔盒上。'],
+  parentMsg:'诊断发现：孩子的语文能力基础可以，但目前"会的东西不能稳定考出来"——这不是能力问题，是"怎么学"和"怎么考"的策略需要建立。',
+  parentActions:['关注学习习惯多过关注分数——"这次考试前你是怎么复习的？""做错的题你后来搞懂了吗？"帮孩子意识到"怎么学"比"学多久"更重要。','帮孩子建立"错题小本"——不是抄题目，而是用一两句话写清楚"为什么错"和"下次怎么避免"。每周翻一次。','减少"考了多少分"的追问，增加"你觉得这次哪里比上次进步了"的引导。让孩子关注自己的进步，而非和别人比。'],
+  teacherPriority:'策略训练是该生"性价比"最高的干预点——能力基础尚可，策略优化可直接提升考试成绩。',
+  teacherStrategies:['"审题专项"——每周2-3次，每次3道题的纯审题训练（只圈关键词+判断题型+说答题方向，不写完整答案）。坚持三周。','制作"元认知提示卡"——列3个问题贴在课桌上（"这道题在问什么？→我该用什么方法？→答完我怎么检查？"），做题时对照。','每次测试后用5分钟做"策略复盘"——用一两句话写下"这次我的策略用得怎么样"（不是"考了多少分"），培养自我监控习惯。'],
+  teacherMonitor:'关键指标：①审题准确率（特别关注"答非所问"和"漏掉限定条件"的减少）；②"粗心失分"占比是否下降。监测周期：三周。',
   priority:[3,1,2,4,0]},
 P5:{id:'P5',name:'知识储备不足型',tag:'弹药补给',icon:'📚',
-  desc:'你的语言基本功底——成语、古诗文、文学常识等"硬知识"的储备还不够。这就像上战场弹药不足：遇到需要调用知识的题目（古诗鉴赏、文言文翻译、成语运用）时，你不知道该用什么来答题。',
-  studentTitle:'你现在最缺的是"弹药"——语文知识储备',
-  studentPlan:['每天只积累3个知识点——一个你老写错的字+一个有趣的成语+一句你喜欢的诗，三件事不超过10分钟','准备一个"知识便签本"，分成几个区——"易错字""新成语""好句子"，排队等车时翻翻','一周后回头翻翻便签本，你会惊喜地发现自己积累了这么多！把学到的成语和诗句用到作文里去'],
-  parentMsg:'孩子目前最需要的是"知识积累"——成语、古诗、好词好句的储备还不够。好消息是：积累是所有语文能力中最不需要天赋、最能靠坚持做到的。',
-  parentActions:['每天只要求积累3个知识点（一个易错字+一个成语+一句诗），不要贪多——"少但日日不断"比"多但三天打鱼"有效得多','把这些知识点写在便签纸上贴在家里显眼处（冰箱、书桌前），让积累可见','吃饭时花2分钟口头抽查（不要像考试，就像聊天），每积累到50个给孩子一个小奖励'],
-  teacherPriority:'知识储备是当前瓶颈——该生各项能力尚可但"弹药不足"，积累提升将带动多个板块进步。',
-  teacherStrategies:['从"微积累"启动——每天只要求3个知识点，建立"小但日日不断"的习惯','引入"间隔复习轮"——每天花课前2-3分钟用卡片快速回顾之前积累的内容','"积累可视化"——在教室设"积累进度图"，让学生看到自己的积累量在增长'],
-  teacherMonitor:'四周内字音字形和成语运用正确率有可测量的提升；古诗文默写错误率下降。',
+  desc:'诊断发现：你的语文"知识弹药库"——成语、古诗文、文学常识、易错字词等"硬知识"的储备还不够。遇到需要调用知识的题目（古诗鉴赏、文言翻译、成语运用、字形辨析）时，你不知道该用什么来答题。积累是语文学习中最不需要天赋、最能靠坚持做到的——起步不难，难在每天做。',
+  studentTitle:'核心问题：语文"知识弹药"不够——字词成语诗句积累少',
+  studentPlan:['每天只做三件小事（总共不超过10分钟）：①学一个你老是写错的字（搞懂它为什么这样写，不是死记）；②记一个成语（搞清楚它真正的意思和用法，用一个例句）；③背一句你喜欢的诗（先理解意思再背）。不求多，只求每天不间断。','准备一个"知识便签本"分三个区：易错字/成语库/好诗句。排队、等车时翻翻——把碎片时间变成"复习时间"。','每周统计一次积累量：这周新记了多少个字？多少成语？几句诗？看到便签本一天天变厚，这就是你的"弹药库"在增长。'],
+  parentMsg:'诊断发现：孩子目前最需要的是"知识积累"——字词诗句的储备还不够。这恰是所有语文能力中最不需要天赋、最能靠坚持做到的。',
+  parentActions:['每天只要求积累3个知识点（一个易错字+一个成语+一句诗），不要贪多。"少但日日不断"比"多但三天打鱼"有效得多。','把知识点写在便签纸上贴在家里（冰箱、书桌、洗手间镜子），让碎片时间变成"复习时间"。','吃晚饭时花2分钟口头抽查，用聊天的语气（"昨天那个成语你还记得吗？"），每积累50个给孩子一个小奖励。'],
+  teacherPriority:'知识储备是当前瓶颈——该生其他能力尚可但"弹药不足"，积累提升将带动多个板块进步。',
+  teacherStrategies:['从"微积累"启动——每天只要求3个知识点，建立"小但日日不断"的习惯。课前2-3分钟用卡片快速回顾。','教"间隔复习法"——新知识当天+三天后+一周后+考前，四次有节奏的复习，比"背到会为止"效率高得多。','"积累可视化"——在教室墙上设"积累进度图"，让学生看到自己的积累量在增长，获得成就感。'],
+  teacherMonitor:'关键指标：字音字形和成语运用正确率是否有可测量的提升；古诗文默写错误率是否下降。监测周期：四周。',
   priority:[4,0,3,1,2]},
 P6:{id:'P6',name:'多因素复合型',tag:'系统提升',icon:'🔧',
-  desc:'你的语文学习在多个层面同时存在需要加强的地方。这不是一个坏消息——恰恰说明你还有很大的提升空间。关键是找到正确的优先级：先打好基础（字词+积累），再提升理解和表达，最后优化策略。',
-  studentTitle:'你需要一个"分步走"的提升计划',
-  studentPlan:['第一步（第1-2周）：每天朗读+积累字词——把最基础的"砖块"准备好','第二步（第3-4周）：在字词基础上开始做"读后复述"练习——每读一段说出它讲什么','第三步（第5-6周）：开始练"先说后写"——把理解到的东西转化成文字'],
-  parentMsg:'孩子在语文学习的多个方面需要同步提升。这不是孩子不努力，而是需要找到正确的提升顺序——就像练武要先练基本功再学招式。请多一些耐心，按步骤来。',
-  parentActions:['先关注最基础的问题（字词和阅读流畅度），不要同时要求所有方面都进步','每天固定一个"语文时间"（15-20分钟），坚持比时长更重要','关注孩子的进步而非差距——"你今天又认识了3个新字"比"你这次怎么才考了xx分"更能帮到孩子'],
-  teacherPriority:'该生存在多维根因交织，需按层级分步干预。优先级：解码>积累>理解>表达>策略。',
-  teacherStrategies:['第一阶段（1-2周）：聚焦解码层——每日朗读+字词积累','第二阶段（3-4周）：解码有所改善后加入理解层训练——短段落复述+推理三问','第三阶段（5-6周）：理解稳定后加入表达层训练——口述转书面+微写作'],
-  teacherMonitor:'每阶段结束时评估该层根因得分变化；不以分数为唯一指标，关注学习行为和信心变化。',
+  desc:'诊断发现：你的语文学习在多个层面同时需要加强——不是单一问题，而是多个根因交织。这不是坏消息，恰恰说明你有很大的提升空间。关键是不要"眉毛胡子一把抓"——需要按照正确的优先级分步来：先解决最基础的问题（字词识别+知识积累），再攻理解和表达，最后优化策略。',
+  studentTitle:'核心问题：多个方面需要同步提升——需要一个"分步走"计划',
+  studentPlan:['第一步（第1-2周）：只做两件事——每天朗读10分钟+每天记3个知识点。先把最基础的"砖块"准备到位。','第二步（第3-4周）：基础稳定后加入"读后复述"练习——每读一段文字必须说出它主要在讲什么。','第三步（第5-6周）：开始练"先说后写"——把理解到的东西转化成文字。每一步都只练2周，不跳步、不冒进。'],
+  parentMsg:'诊断发现：孩子在语文学习的多个方面需要同步加强。关键不是同时要求所有方面都进步，而是按正确的顺序一步一步来——就像练武要先练基本功再学招式。',
+  parentActions:['第一阶段：先关注最基础的问题——每日朗读+字词积累。其他方面暂时不要提要求，避免孩子压力太大。','每天固定一个"语文时间"（15-20分钟），在同一时间做同一件事——坚持比时长重要。','关注孩子的进步而非差距——"你今天又认识了3个新字"比"你这次怎么才考了xx分"更能帮到孩子。'],
+  teacherPriority:'该生存在多维根因交织，需按层级分步干预——优先级：解码>积累>理解>表达>策略。',
+  teacherStrategies:['第一阶段（1-2周）：聚焦解码层——每日朗读+字词积累。第二阶段（3-4周）：解码有所改善后加入理解层训练——短段落复述+推理三问。第三阶段（5-6周）：加入表达层训练——口述转书面+微写作。','每阶段结束时评估该层根因得分变化——不以分数为唯一指标，关注学习行为和信心的变化。'],
+  teacherMonitor:'关键指标：每阶段结束时检查该层根因得分是否有改善迹象。不要求"飞跃"，只要求"比上阶段好一点"。监测周期：每两周。',
   priority:[0,4,1,2,3]},
 P7:{id:'P7',name:'均衡发展型',tag:'持续精进',icon:'⭐',
-  desc:'你的各项语文根基能力发展比较均衡，没有明显的短板。这是一个非常好的基础——说明你在语文学习的各个层面都有了扎实的起步。在这个阶段，你可以选择自己感兴趣的方向深入发展。',
-  studentTitle:'你的基础很扎实，接下来可以选择一个方向深入突破',
-  studentPlan:['选择一个你感兴趣的语文方向深入——比如多读一位你喜欢的作家的所有作品、尝试写更长的文章','挑战一些"超年龄"的阅读材料——读比你目前水平稍难一点的书，遇到不懂的查一查','试试"教别人"——把你学会的审题方法、赏析技巧讲给同学听，教别人的过程中你会发现自己还能做得更好'],
-  parentMsg:'孩子的语文基础比较均衡扎实，这是一个非常好的起点。在这个阶段，鼓励孩子在自己感兴趣的领域深入探索，比追求"全面发展"更有价值。',
-  parentActions:['多和孩子聊聊读过的书——不是"考"TA内容，而是"你最喜欢哪一段为什么""如果你来写你会怎么写"','鼓励孩子用写作表达自己——不一定是应试作文，写日记、写信、写读后感都可以','帮孩子找"阅读伙伴"——同学或朋友中喜欢读书的，一起读一起聊'],
-  teacherPriority:'该生各项根因均衡发展，可引导高阶突破。发挥其示范引领作用。',
-  teacherStrategies:['引导挑战更复杂的文本类型——议论性散文、多文本比较阅读、文学短评','鼓励在班级分享学习方法和心得——"同伴示范"对其他学生也有帮助','提供"输出型"任务——整理知识点分享、给全班出题、做课前小讲座'],
-  teacherMonitor:'关注是否在某些领域出现新的兴趣和突破点；防止"均衡"变成"平庸"。',
+  desc:'诊断发现：你的各项语文根基能力发展比较均衡，没有明显的短板。这说明你在语文学习的各个层面都有了扎实的起步。在这个基础上，你可以选择一个自己感兴趣的方向深入发展——不必"补短"，而是"扬长"。',
+  studentTitle:'基础扎实，可以选一个方向深入突破',
+  studentPlan:['选一个你感兴趣的语文方向深入——比如：一位你喜欢的作家的所有作品、一个你感兴趣的朝代的所有古诗、一类你想练的文体（议论文/散文/小说开头）。','挑战比你目前水平稍难一点的阅读材料——遇到不懂的查一查，不求全懂，只求比上次多懂一点。','试试"教别人"——把你学会的审题方法、赏析技巧讲给同学听。教别人的过程中你会发现自己还能做得更好——这是最有效的深度学习方式。'],
+  parentMsg:'诊断发现：孩子的语文基础比较均衡扎实。在这个阶段，鼓励孩子在感兴趣的领域深入探索比追求"全面补短"更有价值。',
+  parentActions:['多和孩子聊聊读过的书——不是"考"TA内容，而是"你最喜欢哪一段为什么""如果你来写你会怎么写"。','鼓励孩子用写作表达自己——不一定是应试作文，写日记、写信、写读后感都可以。让写作成为TA的表达工具，而不只是作业。','帮孩子找"阅读伙伴"——同学或朋友中喜欢读书的，一起读一起聊。同伴的阅读兴趣会互相感染。'],
+  teacherPriority:'该生各项根因均衡发展，可引导高阶突破。发挥其示范引领作用，防止"均衡"变"平庸"。',
+  teacherStrategies:['引导挑战更复杂的文本类型——议论性散文、多文本比较阅读、文学短评。','鼓励在班级分享学习方法和心得——"同伴示范"对其他学生也有帮助。','提供"输出型"高层次任务——整理知识点分享、给全班出题、做课前小讲座。'],
+  teacherMonitor:'关键指标：关注是否在某些领域出现新的兴趣和深度突破。目标不是"变得更好"，而是"找到方向"。',
   priority:[3,2,1,4,0]}};
-
-// ====== 根因解释库 ======
-const RC_EXP={0:{high:{desc:'字词识别和阅读流畅度良好——你能准确认读常见字词，阅读速度基本流畅，不会因为认字问题影响理解。',
-  student:'你的字词基础很扎实。保持每天的阅读习惯，遇到不认识的字继续随手查。可以尝试读一些稍微"超年龄"的书来扩展词汇量。',
-  parent:'孩子识字量和阅读流畅度都在正常范围以上。请继续保持每日阅读的习惯，可以适当增加一些有挑战性的读物。',
-  teacher:'该生解码能力良好，阅读流畅度不影响课堂学习。可布置略高于当前水平的阅读材料促进词汇扩展。'},
- medium:{desc:'字词识别基本过关，但偶尔会遇到不认识的字词，阅读速度有时偏慢——偶尔会因生词卡住影响理解节奏。',
-  student:'你大部分字词都能认读，但还需要扩大词汇量。每天读课外书时把不认识的字圈出来查一查，每周积累10个新词。坚持一学期，你的阅读速度和理解力都会有明显提升。',
-  parent:'孩子的识字量基本达标但还需要扩充。建议：每天督促孩子课外阅读15分钟，遇到不认识的字随手查并记在本子上——不需要额外做题，多读就是最好的训练。',
-  teacher:'该生解码能力中等。课堂中注意在讲解生词时多做"语境猜词"训练——让学生在阅读中遇到生词先根据上下文猜意思再查字典，而非直接告知。可推荐每日10-15分钟课外阅读。'},
- low:{desc:'字词识别存在困难——可能经常读错字、对稍复杂词汇感到陌生，阅读速度明显偏慢。这是当前最需要优先解决的问题，因为字词是理解一切文本的基础。',
-  student:'别担心，字词是可以练好的。从现在开始：①每天读一篇短文（可以从200字的故事开始），出声读，遇到不认识的字马上查字典并写在便签纸上贴在书桌前；②准备一个小本子，把每天新认识的字词记下来；③一周后回头翻翻小本子，你会惊喜地发现自己认识了这么多新词！',
-  parent:'孩子的识字量和阅读流畅度是目前最需要关注的基础问题。建议：①每天陪孩子朗读一篇短文（10分钟即可），遇到不认识的字一起查、一起记；②在家里显眼位置贴一张"本周新字词"，每认识一个新字就写上去；③不要急于求成——字词积累是一个需要耐心的过程，但效果是最扎实的。',
-  teacher:'该生解码层是当前首要干预点。建议：①课堂中关注该生的朗读表现，及时发现和纠正识字错误；②布置"每日5分钟朗读+3个新词"的微习惯作业，不求多只求坚持；③推荐使用"字源识字法"——讲字形结构帮助记忆，而非机械抄写；④与家长沟通，建议在家同步进行亲子阅读。监控指标：两个月内朗读错误率明显下降。'}},
-1:{high:{desc:'阅读理解能力强——能准确把握主旨、进行合理推断、理解隐含意义和作者意图。这是语文学习中很核心的能力。',
-  student:'你的阅读理解能力很棒！下一步可以挑战更复杂的文本——比如读一些有深度的散文或短篇议论文，试着分析作者是怎么一步步说服读者或打动读者的。',
-  parent:'孩子的阅读理解能力较好。可以多和孩子聊聊读过的书——不是"考"TA内容，而是问"你觉得作者为什么这样写""你最喜欢哪一段为什么"。',
-  teacher:'该生理解层能力突出。课堂中可将其作为"深度解读示范者"，让其分享理解和分析过程。可引导挑战更复杂的文本类型（如议论性散文、多文本比较阅读）。'},
- medium:{desc:'基本能理解文章大意，但对深层含义和隐含信息的把握还不够稳定——有时能准确推断，有时会停留在字面意思。',
-  student:'你大概能读懂文章在说什么，但有时候作者的"言外之意"你可能没注意到。试试这个方法：读完一段后问自己三个问题——①这一段主要在说什么？（概括）②作者为什么要写这一段？（目的）③这一段让我感受到什么？（体验）坚持练习，你的理解会越来越深。',
-  parent:'孩子能看懂文章大意，但抓深层含义还不太稳。在家可以这样做：和孩子一起读一篇短文后，问TA"你觉得作者写这段的时候心里在想什么""如果是你经历这件事，你会是什么感受"——不要检查对错，重点是让孩子习惯"多想一层"。',
-  teacher:'该生理解层处于发展期。建议：①课堂上专门训练"推理三问"——读完一段后引导学生回答"写了什么→为什么写→写得怎么样"；②利用对比阅读——同一主题不同写法的文章放在一起，帮助学生理解"同样的事可以有不同的表达方式"；③在习题讲解中强调"如何在文中找到证据支持自己的理解"。'},
- low:{desc:'理解层存在明显断层——能读通字词但建构意义困难，对主旨、推断、隐含意义的把握经常出现偏差。这是从"读字"到"读意"的关键跨越尚未完成。',
-  student:'你可能有过这样的感受：文章每个字都认识，但读完了不知道作者到底在说什么。别急，这不是你笨，而是"意义建构"这个能力还需要训练。从现在开始：每读一段话，停下来用嘴巴说一遍"这段在讲什么"——说出来比在脑子想更有效。先练短段落，再练长文章。',
-  parent:'孩子目前的主要困难是"能读字词但不太能读懂意思"。这就像一个孩子能听清你说的每个字但不太理解你在说什么——不是耳朵的问题，而是大脑"翻译"信息的能力还需要锻炼。在家建议：每天和孩子一起读一个小故事（3-5分钟），读完后让孩子用自己话讲一遍故事，你认真听——这个"复述"练习比做很多阅读理解题都管用。',
-  teacher:'该生理解层是当前核心瓶颈。建议：①从"短段落+单一问题"开始训练——每次只读一小段，只回答一个问题，降低认知负荷；②引入"出声思维法"——教师在课堂上示范"我是怎么读懂这段话的"，把自己的理解过程说出来给学生看；③使用"框架复述法"——提供固定句式（"这段话主要在说...，作者的态度是...，我觉得...")帮助学生建立理解的脚手架；④监控指标：四周内学生能独立完成200字段落的准确复述。'}},
-2:{high:{desc:'语言表达能力强——回答有层次、有条理，能清晰地将想法转化为书面文字。写作中能做到文从字顺、结构完整。',
-  student:'你的表达能力很好——想的清楚也写的清楚。下一步可以从"写清楚"升级到"写精彩"：试着在表达中加入更精准的词汇、更丰富的句式变化。读一些你喜欢的作家，看看他们是怎么把简单的事情写得让人印象深刻的。',
-  parent:'孩子语言表达能力较好。可以鼓励TA用写作表达自己——不一定是应试作文，写日记、写信、写读后感都可以。重点是让TA享受"用文字表达自己"的过程。',
-  teacher:'该生表达层能力突出。可以：①提供更多口头表达和书面表达展示的机会；②引导在"写清楚"基础上追求"写精准""写精彩"——引入句式变化、精准用词等高级表达技巧；③可尝试创意写作或文学短评等高阶表达任务。'},
- medium:{desc:'基本能把想法说清楚，但书面表达时偶尔会出现条理不清、结构松散的情况。口头表达和书面表达之间有一定落差。',
-  student:'你说话时能说清楚，但写到纸上容易乱。试试这个方法：写之前先用嘴巴说一遍答案，录音下来，再听着录音整理成文字——这叫"先说后写"法。另外，答题时试着用"第一……第二……第三……"来组织你的答案，让阅卷老师一眼看清你的思路。',
-  parent:'孩子可能"说比写强"——口头能表达清楚，但写下来就乱了。建议：让孩子写作文前先口头讲一遍要写什么，就像讲故事一样讲给你听，讲顺了再去写。这个"口述草稿"的方法能帮孩子把思路理顺。',
-  teacher:'该生表达层处于发展期，"口头→书面"的转化是主要障碍。建议：①课堂中使用"口述草稿法"——让学生先口头组织答案再写下来；②提供"表达脚手架"——常用答题句式模板（"这句话运用了…写出了…产生了…的效果"），先用模板再逐步脱模；③写作教学中强调"提纲先行"，要求列提纲后才能动笔。'},
- low:{desc:'语言表达存在明显困难——有想法但难以转化为清晰有序的书面文字。答案常常零散、缺乏层次，写作结构松散。这是"输入够但输出卡住"的典型表现。',
-  student:'你可能经常有这种感受：心里明白，但写不出来或者写出来别人看不懂。别因为这个否定自己——表达是一项"输出技能"，和"输入技能"（阅读、听讲）是两回事，需要单独训练。从低门槛开始：先练习用最简单的话把一件事说清楚，不求精彩只求清楚。每天写50字的"微日记"——记一件小事，写清楚"谁+做了什么+结果怎样"就行。',
-  parent:'孩子目前的主要困难是"写不出来"或"写不清楚"。这就像一个孩子心里有一幅很清楚的画但画笔还不太听使唤——需要的是练习而非批评。在家建议：①从低门槛开始——让孩子每天写"三句话日记"，只写三句，不要求多；②孩子写完东西后，先肯定再提建议（"这个想法很有意思"→"如果这里再加一句感受会更好"）；③不要同时纠正所有问题——一次只关注一个方面（如这次只改结构、下次只改用词）。',
-  teacher:'该生表达层是核心障碍，需要系统训练。建议：①"低门槛启动"——从50字微写作开始，只要求"写清楚一件事"，不评价语言质量；②"先说后写"——口头表达→录音→听录音转化为文字，利用口语优势搭建书面表达的桥梁；③"分层训练"——第一步只练"把答案分层"（用序号），第二步练"每层给一个中心句"，第三步练"中心句+支撑句"；④"一句精改"——每周只精细修改一个句子，从"能看懂"改到"写得通"再到"写得顺"。监控指标：四周内能写出层次分明的200字段落。'}},
-3:{high:{desc:'学习策略和应试策略良好——审题习惯好、答题有章法、能自我监控学习状态。这些"软能力"让你的语文实力能充分发挥出来。',
-  student:'你不仅有语文能力，还知道怎么把能力"用出来"——这是一个很大的优势。继续保持审题前圈关键词、写作前列提纲、做完后检查这些好习惯。可以尝试"教别人"——把你审题和答题的方法讲给同学听，教别人的过程你会发现自己还能做得更好。',
-  parent:'孩子有较好的学习方法和应试习惯。请继续鼓励TA保持这些好习惯，同时关注TA是否在某些学科或题型上有"策略疲劳"——长期用同一套方法可能会腻。',
-  teacher:'该生策略层能力较强。可让其在班级中分享审题策略和答题方法——"同伴示范"对策略偏弱的学生尤其有效。可引导TA从"策略使用者"变为"策略反思者"——每做完一套题，用一两句话总结"这次策略上有什么做得好的、什么可以试试不同的"。'},
- medium:{desc:'有一定的学习策略意识，但还不够稳定和系统。偶尔会审题不清、答题缺乏章法，或者对自己的学习状态缺乏清晰的认知。',
-  student:'你有时候能做好但有时候会"发挥失常"——这往往不是能力问题，而是策略不够稳定。试试建立三个小习惯：①做题前圈出题目中的关键词再作答（强迫自己先审题）；②做完大题后花30秒快速检查一遍（检查有没有漏答、有没有写错别字）；③每次考试后问自己"这次丢分是因为不会做还是因为审题/粗心/时间不够"。',
-  parent:'孩子能力不差但成绩不太稳定——这往往是策略和习惯的问题而非能力问题。在家可以关注：①孩子做作业时是否先认真读题再作答（而非"拿起来就写"）；②是否做完后检查一遍；③考试前是否有针对性的复习计划（而非"从头翻到尾"）。这些习惯比多做几道题更值得关注。',
-  teacher:'该生策略层处于发展期，策略不稳定是主要表现。建议：①课堂中定期做"审题专项训练"——每周选2道题，只做审题这一步，不写完整答案；②引入"错题归因法"——每次测试后让学生把错题分为"不会做""审题错""粗心错"三类，帮助学生建立元认知监控意识；③考试前做"策略检查清单"——列3-5条考试中需要提醒自己的策略要点。'},
- low:{desc:'学习策略层面存在明显不足——审题习惯薄弱、答题缺乏章法、对自己学习的优势和薄弱点认知模糊。这导致实际语文能力在考试中不能有效"变现"。',
-  student:'你可能觉得自己"明明会但考试就是考不好"——问题很可能出在策略上而非能力上。从现在开始练三件事：①拿到任何题目，先圈出题目中的关键词再选答案——哪怕你觉得这道题很简单；②每次做完作业或小测后，把错题分成两类——"真的不会"和"粗心/没看清题"，看看哪种更多；③考前不再"什么都看"而是只复习自己最薄弱的两个地方。',
-  parent:'孩子可能面临的问题是"会的东西考不出来"。这通常不是能力不够，而是"怎么学"和"怎么考"的策略需要建立。在家建议：①关注孩子的学习习惯多过关注分数——比如"这次考试前你是怎么复习的""做错的题你后来搞懂了吗"；②帮孩子建立"错题本"——不是抄题目而是用一两句话写清楚"为什么错""下次怎么避免"；③减少"你这次考了多少分"的追问，增加"你觉得自己这次哪里比以前有进步"的引导。',
-  teacher:'该生策略层是当前最值得投入的干预点——能力基础尚可但策略缺失导致"事倍功半"。建议：①"审题专项"——每周2-3次，每次3道题的纯审题训练（圈关键词+判断题型+说答题方向，不写答案）；②"元认知提示卡"——制作小卡片列3个问题（"这道题在问什么？""我该用什么方法？""答完我怎么检查？"），做题时放在旁边对照；③"策略复盘"——每次测试后用5分钟让学生写"这次我的策略用得怎么样"的两句话反思；④与家长沟通时，重点反馈"策略进展"而非"分数高低"。监控指标：三周后学生审题准确率提升。'}},
-4:{high:{desc:'语文知识储备扎实——成语、古诗文、文学常识等积累充足，能在阅读和写作中自然调用。这是语文学习最扎实的底气。',
-  student:'你的知识储备很丰富——字词、成语、诗句信手拈来。下一步不是"积累更多"，而是"用得更好"：试试在写作文时自然地融入你积累的好词好句，不是堆砌，而是让它们为你的表达服务。',
-  parent:'孩子语文知识积累比较扎实。鼓励TA把积累的东西"用出来"——在聊天中引用诗句、在写作中用到成语。输出是最好的巩固。',
-  teacher:'该生知识积累扎实。可以：①引导从"积累者"转变为"输出者"——整理知识点在班级分享、出题给同学做；②在写作教学中鼓励自然运用积累而非生硬堆砌；③可引导建立"知识网络"——将零散的知识点按主题或用法串联。'},
- medium:{desc:'课内要求的基本知识大致能掌握，但主动积累的意识和系统性还不够。存在"背了忘、忘了背"的循环，知识储备的广度和深度都有提升空间。',
-  student:'你的知识储备基本够用但还不够"富裕"。试试"零存整取"法：准备一个小本子，分成几个区——"易错字""新成语""好句子"各一个区。每天只记3个（一个字+一个成语+一句诗），排队等车时翻翻。不求一天记住很多，只求每天都记一点点。一个月下来你就有90个新收获了！',
-  parent:'孩子的基础知识还需要更多积累，但不要用"大量抄写"的方式——效率低且容易厌学。建议：①帮孩子准备一个"知识便签本"，每天只积累2-3个知识点；②利用碎片时间（吃饭时、车上）用"口头问答"的方式抽查；③不要追求"一次性背下来"，而是"多次少量反复看"——今天看一遍、过两天再看一遍、一周后再看一遍。',
-  teacher:'该生积累层处于发展期，需要从"被动积累"转向"主动积累"。建议：①教"间隔复习法"——新知识当天→三天后→一周后→考前四次复习，建立复习节奏；②引入"分类积累本"——按字音字形、成语、古诗文、文学常识等分类整理，降低检索负担；③"输出倒逼输入"——每两周让学生从自己的积累本中选一个知识点在课堂上做1分钟分享；④减少机械抄写类作业，替换为"运用型"作业（如用本周积累的3个成语写一段话）。'},
- low:{desc:'知识储备明显不足——成语量少、古诗文积累薄弱、对文学常识感到陌生。这直接导致了在需要调用知识的题型上的持续失分。',
-  student:'你现在的知识"弹药库"还比较空。别急，积累是语文学习中最不需要天赋、最能靠坚持做好的事。给你一个简单的启动计划：每天只做三件小事——①学一个你老是写错的字（真正搞懂它为什么这样写）；②记一个有趣的成语（不是背解释而是想想它能在什么场景用）；③背一句你喜欢的诗（先理解意思再背）。三件事加起来不超过10分钟，但坚持一学期你会脱胎换骨。',
-  parent:'孩子目前最需要的是"知识积累"——成语、古诗、好词好句的储备还不够。好消息是：积累是所有语文能力中最不需要天赋、最能靠坚持做到的。在家建议：①每天只要求孩子积累3个知识点（一个易错字+一个成语+一句诗），不要贪多；②把这些知识点写在便签纸上贴在家里显眼处（冰箱、书桌前）；③每天吃晚饭时花2分钟口头抽查一下（不要像考试，就像聊天）；④每积累到50个，给孩子一个小奖励——让TA看到自己的进步。',
-  teacher:'该生积累层是当前重要干预点。建议：①从"微积累"启动——每天只要求3个知识点，建立"小但日日不断"的习惯；②引入"间隔复习轮"——每天花课前2-3分钟用卡片快速回顾之前积累的内容；③"积累可视化"——在教室墙上设"积累进度图"，让学生看到自己的积累量在增长，获得成就感；④与家长协调——老师的课堂积累和家长的家庭积累使用同一套知识卡片，形成合力；⑤监控指标：四周内学生在字音字形和成语运用上的正确率有可测量的提升。'}}};
-
-// ====== 五大板块映射 ======
+const RC_EXP={0:{high:{desc:'字词识别准确且阅读流畅。你在涉及字词认读的题目上没有出现错误——这说明你的字词基础扎实，不会因为认字障碍影响理解。',
+  student:'你的字词基础很扎实。建议：保持每天课外阅读的习惯，遇到不认识的字继续随手查。可以尝试读一些比你当前水平稍难的书来扩展词汇量——这是最自然的字词积累方式。',
+  parent:'孩子识字量和阅读流畅度都在正常范围以上。保持每日阅读习惯即可，可以适当增加一些有挑战性的读物。',
+  teacher:'解码能力良好，阅读流畅度不影响课堂学习。可布置略高于当前水平的阅读材料促进词汇扩展。'},
+ medium:{desc:'字词识别基本过关，但偶尔会遇到不认识的字词导致阅读速度偏慢——你在部分涉及字形和词义的题目上出现了犹豫。',
+  student:'你大部分字词都能认读，但词汇量还需要扩大。具体做法：每天课外阅读15分钟，遇到不认识的字圈出来查字典并记在本子上。不需要额外做题——多读就是最有效的字词训练。每周积累10个新词，坚持一学期。',
+  parent:'孩子识字量基本达标但还需要扩充。建议：每天督促课外阅读15分钟，遇到不认识的字随手查并记下来。不需要额外买练习册——多读就是最好的训练。',
+  teacher:'解码能力中等。课堂中多做"语境猜词"训练——让学生先根据上下文猜生词意思再查字典，而非直接告知。推荐每日10-15分钟课外阅读。'},
+ low:{desc:'字词识别存在明显困难——你在涉及字形辨析、文言实词认读的题目上出现了多次错误。这是当前最需要优先解决的问题，因为字词是理解一切文本的基础。',
+  student:'你在字词相关的题目上出错了——比如文言文中的"引"字你没能准确识别它的义项，常见成语"迫不及待"你选了错误的字形。这说明你的字词"基础设施"还需要加固。具体行动：①每天出声读一篇200字短文，遇到不认识的字马上查字典并记在"生字本"上；②重点关注你经常搞混的字——把它们写在小卡片上反复看；③一周后自测一次，看看这些字你是否都记住了。',
+  parent:'孩子目前在准确认读字词方面需要加强。建议：①每天陪孩子朗读一篇短文（10分钟），遇到不认识的字一起查、一起记；②在家里显眼位置贴"本周新字词"便签；③不要急于求成——字词积累需要耐心，但效果是最扎实的。',
+  teacher:'解码层是首要干预点。建议：①关注该生朗读表现，及时发现和纠正识字错误；②布置"每日5分钟朗读+3个新词"微习惯作业；③使用"字源识字法"讲字形结构帮助记忆；④与家长协调同步进行亲子阅读。监控指标：两个月内朗读错误率明显下降。'}},
+1:{high:{desc:'阅读理解能力强——你能准确把握文章主旨、进行合理推断、理解作者隐含意图。你在涉及主旨归纳和深层理解的题目上表现很好。',
+  student:'你的阅读理解能力很棒。下一步可以挑战更复杂的文本——比如读一些有深度的散文或短篇议论文，试着分析作者是怎么一步步说服读者或打动读者的。',
+  parent:'孩子阅读理解能力较好。可以多和孩子聊聊读过的书——"你觉得作者为什么这样写""你最喜欢哪一段为什么"。',
+  teacher:'理解层突出。可将其作为"深度解读示范者"分享理解和分析过程。引导挑战议论性散文、多文本比较阅读等更复杂文本类型。'},
+ medium:{desc:'基本能理解文章大意，但对深层含义和隐含信息的把握还不够稳定——你在部分需要"多想一层"的题目上有时能答对有时会停留在字面。',
+  student:'你大概能读懂文章在说什么，但有时候作者没有直接说出来的意思你没注意到。具体方法：读完一段后问自己三个问题——①这段主要在说什么？②作者为什么要写这一段？③这段让我感受到什么？坚持练习，你的理解会越来越深。',
+  parent:'孩子能看懂文章大意，但抓深层含义还不太稳。在家可以这样做：一起读一篇短文后问TA"你觉得作者写这段的时候心里在想什么"——不要检查对错，重点是让孩子习惯"多想一层"。',
+  teacher:'理解层处于发展期。建议：①课堂训练"推理三问"——写了什么→为什么写→写得怎么样；②利用对比阅读帮助理解不同表达方式；③在习题讲解中强调"如何在文中找到证据支持自己的理解"。'},
+ low:{desc:'理解层存在明显断层——你能读通字词但建构意义困难。你在多道阅读理解题上选择了"表面阅读"类或"理解反向"类错误选项，说明你在从"读字"到"读意"的关键跨越上还需要专门训练。',
+  student:'你可能有过这样的感受：文章每个字都认识，但读完不知道作者到底在说什么。这次诊断中，你在阅读理解题上选的几个错误答案都是"只理解了字面意思"——比如把外婆"平静的声音"理解成"不在意"，把作者的"借景写情"理解成"在描述风景"。这说明你的问题不是认字，而是"建构意义"这个环节需要训练。具体做法：每读一段话，停下来用嘴巴说一遍"这段在讲什么"——说出来比在脑子想更有效。先练短段落，再练长文章。',
+  parent:'孩子目前的主要困难是"能读字词但不太能读懂意思"。建议：每天和孩子一起读一个小故事（3-5分钟），读完后让孩子用自己的话讲一遍——你认真听，这个"复述"练习比做很多阅读题都管用。不要纠正"讲得对不对"，重点是让孩子习惯"读完→理解→说出来"的过程。',
+  teacher:'理解层是核心瓶颈。建议：①从"短段落+单一问题"开始训练，每次只读一小段只回答一个问题；②使用"出声思维法"——教师示范"我是怎么读懂这段话的"，把理解过程外化；③使用"框架复述法"——提供固定句式（"这段话主要在说...作者的态度是...我觉得..."）帮助建立理解脚手架。监控指标：四周内能独立完成200字段落的准确复述。'}},
+2:{high:{desc:'语言表达能力强——回答有层次、有条理，能清晰地将想法转化为书面文字。你在涉及表达判断的题目上做出了准确选择。',
+  student:'你的表达能力很好。下一步可以从"写清楚"升级到"写精彩"：在表达中加入更精准的词汇和更丰富的句式变化。读一些你喜欢的作家，看看他们是怎么把简单的事情写得让人印象深刻的。',
+  parent:'孩子语言表达能力较好。鼓励TA用写作表达自己——日记、写信、读后感都可以。重点是让TA享受"用文字表达自己"的过程。',
+  teacher:'表达层突出。提供更多口头/书面表达展示机会；引导从"写清楚"到"写精准""写精彩"；可尝试创意写作或文学短评等高阶任务。'},
+ medium:{desc:'基本能把想法说清楚，但书面表达时偶尔会出现条理不清、结构松散——你的口头表达可能比书面表达好，这是常见的学习阶段。',
+  student:'你在表达相关的题目上有时候能选对有时候选得不够好——这说明你的表达能力有基础但不够稳定。具体方法：写之前先用嘴巴说一遍答案，录音下来，再听着录音整理成文字——这叫"先说后写"法。答题时试着用"第一……第二……第三……"来组织答案。',
+  parent:'孩子可能"说比写强"——口头能表达清楚但写下来就乱了。建议：让孩子写作文前先口头讲一遍要写什么，讲顺了再去写。这个"口述草稿"法能帮孩子理顺思路。',
+  teacher:'表达层处于发展期，"口头→书面"转化是主要障碍。建议：①课堂中使用"口述草稿法"——先口头组织再写；②提供答题句式模板，先套用再脱模；③强调"提纲先行"，要求列提纲后才能动笔。'},
+ low:{desc:'语言表达存在明显困难——你有想法但难以转化为清晰有序的书面文字。你在涉及表达选择的题目上多次出错，说明"输入"和"输出"之间的转化通道还需要系统训练。',
+  student:'你可能经常有这种感受：心里明白但写不出来或者写出来别人看不懂。这次诊断中，你在判断"怎样写最能打动读者"这类表达题上选了比较薄弱的选项。这说明你需要专门训练"怎么说清楚"。不要从这个否定自己——表达能力是"输出技能"，和"输入技能"（阅读）是两回事，需要单独练习。具体行动：①从低门槛开始——每天写50字微日记，写清楚"谁+做了什么+结果怎样"，不求精彩只求清楚；②写之前先说——口头讲一遍→录音→听录音整理成文字；③答题时养成"分点回答"的习惯。',
+  parent:'孩子目前主要困难是"写不出来"或"写不清楚"。建议：①从低门槛开始——让孩子每天写"三句话日记"，不要求多只要求写清楚一件事；②孩子写完东西后，先肯定再提一个建议；③一次只关注一个方面（这次只改结构、下次只改用词），不要同时纠正所有问题。',
+  teacher:'表达层是核心障碍需要系统训练。建议：①"低门槛启动"——50字微写作只要求写清楚一件事；②"先说后写"——口头表达→录音→转文字，利用口语优势搭建书面表达桥梁；③"分层训练"——分层→中心句→支撑句，每步2-3周；④"一句精改"——每周只精细修改一个句子。监控指标：四周内能写出层次分明的200字段落。'}},
+3:{high:{desc:'学习策略和应试策略良好——你有稳定的审题习惯、答题章法和自我监控意识。你的策略层表现说明你知道怎么"把能力用出来"。',
+  student:'你不仅有语文能力，还知道怎么把能力"用出来"——这是很大的优势。继续保持审题前圈关键词、写作前列提纲、做完后检查的习惯。可以试试"教别人"——把你审题和答题的方法讲给同学听，教的过程中你会发现自己还能做得更好。',
+  parent:'孩子有较好的学习方法和应试习惯。保持这些好习惯即可，同时关注TA是否在某些题型上有"策略疲劳"。',
+  teacher:'策略层较强。可让其分享审题策略和答题方法——"同伴示范"对策略偏弱的学生尤其有效。引导从"策略使用者"变为"策略反思者"。'},
+ medium:{desc:'有一定的学习策略意识但不够稳定——有时能审清题、有章法，有时会"发挥失常"。策略不稳定是常见的，需要通过刻意练习来巩固。',
+  student:'你有时候能做好但有时候会"发挥失常"——这不是能力问题，是策略还不够稳定。建立三个小习惯：①做题前圈出题干关键词再作答（强迫自己先审题）；②做完大题后花30秒快速检查有没有漏答和错别字；③每次考试后把丢分分为"不会做"和"粗心/审题/检查不够"两类——如果后者超过40%说明策略是主要问题。',
+  parent:'孩子能力不差但成绩不太稳定——这往往是策略和习惯问题而非能力问题。关注：①做作业时是否先认真读题再写？②是否做完检查一遍？③考试前是否有针对性复习计划？这些习惯比多做几道题更值得关注。',
+  teacher:'策略层处于发展期。建议：①定期做"审题专项训练"——每周2道题只做审题不写答案；②引入"错题归因法"——测试后让学生分"不会做""审题错""粗心错"三类；③考试前做"策略检查清单"。'},
+ low:{desc:'学习策略层面存在明显不足——你在审题和考试策略相关的题目上选择了低效的选项。这说明你的语文能力没问题，但"怎么学"和"怎么考"的策略需要建立——同样的能力水平，策略好的同学能多拿10-15分。',
+  student:'你可能觉得自己"明明会但考试就是考不好"——这次诊断中的自陈题也印证了这一点。问题出在策略上而非能力上——这是好消息，因为策略比能力好改。具体行动：①拿到任何题目先圈关键词再选答案——哪怕你觉得很简单；②每次作业或小测后把错题分成"真的不会"和"粗心/没看清题"两类；③考前不再"什么都看"而是只复习最薄弱的两个地方。',
+  parent:'孩子可能面临"会的东西考不出来"的问题——通常不是能力不够而是"怎么学怎么考"的策略需要建立。建议：①关注学习习惯多过关注分数；②帮孩子建立"错题本"——不是抄题目而是写清楚"为什么错""下次怎么避免"；③减少"考了多少分"的追问，增加"你觉得这次哪里进步了"的引导。',
+  teacher:'策略层是最值得投入的干预点——能力基础尚可但策略缺失导致"事倍功半"。建议：①"审题专项"——每周2-3次每次3道题的纯审题训练；②制作"元认知提示卡"（"在问什么→用什么方法→怎么检查"）；③每次测试后用5分钟做"策略复盘"——写两句话反思策略而非关注分数。监控指标：三周后审题准确率提升。'}},
+4:{high:{desc:'语文知识储备扎实——成语、古诗文、文学常识等积累充足。你在涉及知识调用的题目上表现出色，基础扎实。',
+  student:'你的知识储备很丰富。下一步：把积累的东西"用出来"——在写作文时自然地融入你积累的好词好句，不是堆砌而是让它们为你的表达服务。输出是最好的巩固。',
+  parent:'孩子语文知识积累比较扎实。鼓励TA把积累的东西"用出来"——在聊天中引用诗句、在写作中使用成语。',
+  teacher:'知识积累扎实。引导从"积累者"转变为"输出者"——整理知识点分享、出题给同学做。鼓励自然运用而非生硬堆砌。'},
+ medium:{desc:'课内基本知识大致能掌握，但主动积累的意识和系统性还不够——你在部分需要调动课外知识的题目上可能感到吃力。存在"背了忘、忘了背"的循环。',
+  student:'你的知识储备基本够用但还不够"富裕"。试试"零存整取"法：准备一个小本子分三个区——"易错字""新成语""好句子"。每天只记3个（一个字+一个成语+一句诗），不求多只求每天不间断。一个月下来你就有90个新收获了——比"突击猛背"效果持久得多。',
+  parent:'孩子基础知识还需要更多积累——但不要用"大量抄写"的方式，效率低且容易厌学。建议：①帮孩子准备"知识便签本"每天只积累2-3个知识点；②利用碎片时间口头问答抽查；③"多次少量反复看"而非"一次性背下来"。',
+  teacher:'积累层处于发展期需从"被动积累"转"主动积累"。建议：①教"间隔复习法"——当天→三天后→一周后→考前四次复习；②引入"分类积累本"按字音字形/成语/古诗文/文学常识整理；③"输出倒逼输入"——每两周让学生从积累本选一个知识点做1分钟课堂分享。'},
+ low:{desc:'知识储备明显不足——成语量少、古诗文积累薄弱、对文学常识感到陌生。你在成语运用和字形辨析题上出现了多次错误，这直接导致了需要调用知识的题型上持续失分。',
+  student:'这次诊断中，你在成语使用和字形辨析题上出错了——比如你没认出来"忍俊不禁地笑了起来"是成语误用，或是选了错误的字形变体。这说明你的语文知识"弹药库"还需要大量补充。好消息是：积累是最不需要天赋、最能靠坚持做到的。给你一个每天的"三板斧"：①学一个你老是写错的字（真正搞懂它为什么这样写）；②记一个成语（搞清楚它的意思、用法、造一个句子）；③背一句你喜欢的诗（先理解再背）。三件事加起来不超过10分钟。坚持一学期，你的"弹药库"会脱胎换骨。',
+  parent:'孩子目前最需要的是"知识积累"——字词诗句的储备还不够。建议：①每天只要求积累3个知识点——不要贪多，"少但日日不断"比"多但三天打鱼"有效；②把知识点写便签纸上贴在家里显眼处；③吃晚饭时花2分钟口头抽查——用聊天的语气不是考试；④每积累到50个给孩子一个小奖励。',
+  teacher:'积累层是当前重要干预点。建议：①从"微积累"启动——每天3个知识点建立日日不断的习惯；②教"间隔复习轮"——课前2-3分钟卡片快速回顾积累内容；③"积累可视化"——在教室墙上设积累进度图；④与家长协调使用同一套知识卡片形成合力。监控指标：四周内字音字形和成语运用正确率有可测量提升。'}}};
 const DOMAINS={'语基':{name:'语言基础与运用',dims:[{i:4,w:0.35},{i:0,w:0.35},{i:1,w:0.3}],hint:'字音字形、成语、病句、仿写——积累层和解码层是基础'},'名著':{name:'名著阅读',dims:[{i:4,w:0.35},{i:1,w:0.35},{i:2,w:0.3}],hint:'经典作品熟悉度——积累+理解+表达'},'古诗文':{name:'古诗文阅读',dims:[{i:4,w:0.3},{i:0,w:0.3},{i:1,w:0.4}],hint:'诗词背诵、文言实词、诗歌鉴赏——理解层是核心'},'阅读':{name:'现代文阅读',dims:[{i:1,w:0.35},{i:0,w:0.2},{i:3,w:0.25},{i:2,w:0.2}],hint:'审题策略+信息提取+文本理解+表达——理解层是核心'},'作文':{name:'写作',dims:[{i:2,w:0.35},{i:1,w:0.2},{i:3,w:0.25},{i:4,w:0.2}],hint:'语言表达+逻辑结构+审题+积累——表达层是核心'}};
-
-// ====== 工具函数 ======
-function mapScore(r){return Math.max(1,Math.min(99,Math.round((r-20)/60*98+1)))}
-function getLv(s){return s>=68?'high':(s<42?'low':'medium')}
-
-// ====== 状态管理 ======
-let currentQ=0,rawScores=[50,50,50,50,50],answers=[];
-
+function mapScore(r){var s=Math.round((r-30)/60*100);return Math.max(1,Math.min(99,s))}
+function getLv(s){return s>=70?'high':(s<50?'low':'medium')}
+let currentQ=0,rawScores=[60,60,60,60,60],answers=[];
 function getSection(i){return SECTIONS.find(function(s){return i>=s.start&&i<=s.end})}
+function startDiagnosis(){var nameEl=document.getElementById('student-name');if(!nameEl.value.trim()){alert('请先填写你的姓名哦~');nameEl.focus();return}var saved=null;try{saved=JSON.parse(localStorage.getItem('yuwen_quiz_progress'));}catch(e){}if(saved&&saved.name===nameEl.value.trim()&&saved.answers&&saved.answers.length>0){if(confirm('检测到你上次未完成的答题记录，是否继续上次的进度？\n（选取消将重新开始）')){currentQ=saved.currentQ||0;answers=saved.answers;rawScores=[60,60,60,60,60];document.getElementById('screen-start').classList.add('hidden');document.getElementById('screen-quiz').classList.remove('hidden');document.getElementById('screen-result').classList.add('hidden');renderQuestion();return;}}currentQ=0;rawScores=[60,60,60,60,60];answers=[];document.getElementById('screen-start').classList.add('hidden');document.getElementById('screen-quiz').classList.remove('hidden');document.getElementById('screen-result').classList.add('hidden');renderQuestion()}
 
-// ====== 答题引擎 ======
-function startDiagnosis(){
-  const nameEl=document.getElementById('student-name');
-  if(!nameEl.value.trim()){alert('请先填写你的姓名哦~');nameEl.focus();return}
-  var saved=null;
-  try{saved=JSON.parse(localStorage.getItem('yuwen_quiz_progress'));}catch(e){}
-  if(saved&&saved.name===nameEl.value.trim()&&saved.answers&&saved.answers.length>0){
-    if(confirm('检测到你上次未完成的答题记录，是否继续上次的进度？\n（选"取消"将重新开始）')){
-      currentQ=saved.currentQ||0;answers=saved.answers;rawScores=[50,50,50,50,50];
-      document.getElementById('screen-start').classList.add('hidden');
-      document.getElementById('screen-quiz').classList.remove('hidden');
-      document.getElementById('screen-result').classList.add('hidden');
-      renderQuestion();return;
-    }
-  }
-  currentQ=0;rawScores=[50,50,50,50,50];answers=[];
-  document.getElementById('screen-start').classList.add('hidden');
-  document.getElementById('screen-quiz').classList.remove('hidden');
-  document.getElementById('screen-result').classList.add('hidden');
-  renderQuestion()
-}
-
-function renderQuestion(){
-  const q=QUESTIONS[currentQ],sec=getSection(currentQ);
-  document.getElementById('progress-fill').style.width=(currentQ/QUESTIONS.length*100)+'%';
-  document.getElementById('progress-num').textContent=(currentQ+1)+' / '+QUESTIONS.length;
-  document.getElementById('section-label').innerHTML='<span class="section-badge '+sec.cls+'">'+sec.name+'</span>';
-  const btnNext=document.getElementById('btn-next');
-  const btnPrev=document.getElementById('btn-prev');
-  btnNext.disabled=true;btnNext.textContent=currentQ<QUESTIONS.length-1?'下一题 →':'✨ 查看诊断结果';
-  btnPrev.style.display=currentQ===0?'none':'';
-
-  // 步骤指示器
-  var dotsHTML='';
-  for(var si=0;si<QUESTIONS.length;si++){
-    var cls='';
-    if(si<currentQ)cls=' done';
-    else if(si===currentQ)cls=' active';
-    dotsHTML+='<div class="step-dot'+cls+'"></div>';
-    if(si<QUESTIONS.length-1)dotsHTML+='<div class="step-line"></div>';
-  }
-  document.getElementById('step-dots').innerHTML=dotsHTML;
-
-  const labels=['A','B','C','D'];
-  var html='';
-  // 根因标签
-  if(q.dimTags&&q.dimTags.length>0){
-    html+='<div style="margin-bottom:8px;">';
-    q.dimTags.forEach(function(did){
-      var rc=ROOT_CAUSES[did];
-      html+='<span style="display:inline-block;padding:3px 9px;border-radius:9px;font-size:11px;background:#F3F0EB;color:#8B7355;margin-right:5px;letter-spacing:1px;">'+rc.icon+' '+rc.sname+'</span>';
-    });
-    html+='</div>';
-  }
-  // 题目文本
-  var qText=q.q;
-  var passageEnd=qText.indexOf('\n\n【');
-  if(passageEnd>0){
-    var passage=qText.substring(0,passageEnd);
-    var questionPart=qText.substring(passageEnd+2);
-    html+='<div class="q-passage">'+passage+'</div>';
-    html+='<span class="q-num">'+(currentQ+1)+'</span>';
-    html+='<span class="q-text">'+questionPart+'</span>';
-  }else{
-    html+='<span class="q-num">'+(currentQ+1)+'</span>';
-    html+='<span class="q-text">'+q.q+'</span>';
-  }
-  html+='<div class="options">';
-  q.opts.forEach(function(opt,i){
-    const sel=answers[currentQ]===i?' selected':'';
-    html+='<div class="option'+sel+'" onclick="selectOption('+i+')" id="opt-'+i+'" role="radio" aria-checked="'+(answers[currentQ]===i?'true':'false')+'">';
-    html+='<div class="label">'+labels[i]+'</div><div class="text">'+opt.text+'</div></div>'
-  });
-  html+='</div>';
-  document.getElementById('question-card').innerHTML=html;
-  if(answers[currentQ]!==undefined)btnNext.disabled=false
-}
-
-function selectOption(i){
-  answers[currentQ]=i;
-  document.querySelectorAll('.option').forEach(function(e){e.classList.remove('selected');e.setAttribute('aria-checked','false')});
-  var optEl=document.getElementById('opt-'+i);
-  optEl.classList.add('selected');optEl.setAttribute('aria-checked','true');
-  document.getElementById('btn-next').disabled=false;
-  try{var p={answers:answers,currentQ:currentQ,name:document.getElementById('student-name').value.trim()};localStorage.setItem('yuwen_quiz_progress',JSON.stringify(p));}catch(e){}
-}
-
+function renderQuestion(){var q=QUESTIONS[currentQ],sec=getSection(currentQ);document.getElementById('progress-fill').style.width=(currentQ/QUESTIONS.length*100)+'%';document.getElementById('progress-num').textContent=(currentQ+1)+' / '+QUESTIONS.length;document.getElementById('section-label').innerHTML='<span class="section-badge '+sec.cls+'">'+sec.name+'</span>';var btnNext=document.getElementById('btn-next'),btnPrev=document.getElementById('btn-prev');btnNext.disabled=true;btnNext.textContent=currentQ<QUESTIONS.length-1?'下一题 →':'✨ 查看诊断结果';btnPrev.style.display=currentQ===0?'none':'';var dotsHTML='';for(var si=0;si<QUESTIONS.length;si++){var cls='';if(si<currentQ)cls=' done';else if(si===currentQ)cls=' active';dotsHTML+='<div class="step-dot'+cls+'"></div>';if(si<QUESTIONS.length-1)dotsHTML+='<div class="step-line"></div>';}document.getElementById('step-dots').innerHTML=dotsHTML;var labels=['A','B','C','D'];var html='';if(q.dimTags&&q.dimTags.length>0){html+='<div style="margin-bottom:8px;">';q.dimTags.forEach(function(did){var rc=ROOT_CAUSES[did];html+='<span style="display:inline-block;padding:3px 9px;border-radius:9px;font-size:11px;background:#F3F0EB;color:#8B7355;margin-right:5px;letter-spacing:1px;">'+rc.icon+' '+rc.sname+'</span>';});html+='</div>';}var qText=q.q;var passageEnd=qText.indexOf('\n\n【');if(passageEnd>0){var passage=qText.substring(0,passageEnd);var questionPart=qText.substring(passageEnd+2);html+='<div class="q-passage">'+passage+'</div>';html+='<span class="q-num">'+(currentQ+1)+'</span>';html+='<span class="q-text">'+questionPart+'</span>';}else{html+='<span class="q-num">'+(currentQ+1)+'</span>';html+='<span class="q-text">'+q.q+'</span>';}html+='<div class="options">';q.opts.forEach(function(opt,i){var sel=answers[currentQ]===i?' selected':'';html+='<div class="option'+sel+'" onclick="selectOption('+i+')" id="opt-'+i+'" role="radio" aria-checked="'+(answers[currentQ]===i?'true':'false')+'">';html+='<div class="label">'+labels[i]+'</div><div class="text">'+opt.text+'</div></div>';});html+='</div>';document.getElementById('question-card').innerHTML=html;if(answers[currentQ]!==undefined)btnNext.disabled=false}
+function selectOption(i){answers[currentQ]=i;document.querySelectorAll('.option').forEach(function(e){e.classList.remove('selected');e.setAttribute('aria-checked','false')});var optEl=document.getElementById('opt-'+i);optEl.classList.add('selected');optEl.setAttribute('aria-checked','true');document.getElementById('btn-next').disabled=false;try{var p={answers:answers,currentQ:currentQ,name:document.getElementById('student-name').value.trim()};localStorage.setItem('yuwen_quiz_progress',JSON.stringify(p));}catch(e){}}
 function prevQuestion(){if(currentQ>0){currentQ--;renderQuestion()}}
 function nextQuestion(){if(currentQ<QUESTIONS.length-1){currentQ++;renderQuestion()}else{showResult()}}
-
-// ====== 层级化诊断 ======
-function diagnoseProfile(ns){
-  var primary=null;
-  if(ns[0]<40)primary='P1';
-  else if(ns[1]<40)primary='P2';
-  else if(ns[2]<40)primary='P3';
-  else if(ns[3]<40)primary='P4';
-  else if(ns[4]<40)primary='P5';
-  else{
-    var lowCount=0;
-    for(var i=0;i<5;i++){if(ns[i]<50)lowCount++;}
-    if(lowCount>=2)primary='P6';
-    else primary='P7';
-  }
-  return {profile:PROFILES[primary],profileKey:primary};
-}
-
-// ====== 报告生成 ======
-function showResult(){
-  document.getElementById('screen-quiz').classList.add('hidden');
-  document.getElementById('screen-result').classList.remove('hidden');
-
-  // 计算原始分
-  rawScores=[50,50,50,50,50];
-  answers.forEach(function(a,i){
-    if(a!==undefined){
-      QUESTIONS[i].opts[a].scores.forEach(function(dv){rawScores[dv[0]]+=dv[1];});
-    }
-  });
-  const ns=rawScores.map(mapScore);
-  const diag=diagnoseProfile(ns);
-  const profile=diag.profile;
-  const name=document.getElementById('student-name').value.trim();
-
-  // 打印信息
-  var today=new Date().toLocaleDateString('zh-CN');
-  document.getElementById('print-name').textContent=name;
-  document.getElementById('print-date').textContent=today;
-  document.getElementById('print-date-ft').textContent=today;
-
-  // ====== 1. 诊断画像 + 根因链 ======
-  document.getElementById('profile-badge').textContent=profile.name;
-  document.getElementById('profile-tag').textContent=profile.icon+' '+profile.tag;
-  document.getElementById('profile-desc').textContent=profile.desc;
-
-  // 根因链可视化
-  var chainHTML='<p style="font-size:12px;color:var(--ink-lighter);margin-bottom:8px;text-align:center;">▼ 五层根因诊断链（从基础到高阶）</p>';
-  var bottleneckIdx=null;
-  var sortedByPriority=ns.map(function(v,i){return {v:v,i:i};}).sort(function(a,b){return a.v-b.v;});
-  bottleneckIdx=sortedByPriority[0].i;
-  var chainColors=['#B83A2A','#C77826','#5B8C5A','#4A7B9D','#8B7355'];
-  ns.forEach(function(v,i){
-    var lvl=getLv(v);
-    var color=v>=68?'var(--green)':(v>=42?'var(--gold)':'var(--red)');
-    var label=lvl==='high'?'优势':(lvl==='medium'?'适中':'薄弱');
-    var isBottleneck=(i===bottleneckIdx&&lvl!=='high');
-    chainHTML+='<div class="chain-item'+(isBottleneck?' bottleneck':'')+'">';
-    chainHTML+='<div class="chain-num" style="background:'+chainColors[i]+'">'+(i+1)+'</div>';
-    chainHTML+='<span class="chain-icon">'+ROOT_CAUSES[i].icon+'</span>';
-    chainHTML+='<span class="chain-name">'+ROOT_CAUSES[i].sname+'</span>';
-    chainHTML+='<div class="chain-track"><div class="chain-fill" style="width:'+v+'%;background:'+color+'"></div></div>';
-    chainHTML+='<span class="chain-val" style="color:'+color+'">'+v+'</span>';
-    chainHTML+='<span class="chain-tag" style="background:'+color+'20;color:'+color+'">'+label+'</span>';
-    if(isBottleneck)chainHTML+='<span class="chain-bottleneck-badge">⚠ 当前瓶颈</span>';
-    chainHTML+='</div>';
-  });
-  document.getElementById('root-chain').innerHTML=chainHTML;
-
-  // ====== 2. 能力地图 ======
-  setTimeout(function(){drawRadar('radar-student',ns);},100);
-
-  function calcDomainScores(ns){
-    var result={};
-    for(var dk in DOMAINS){var dom=DOMAINS[dk],score=0;dom.dims.forEach(function(d){score+=ns[d.i]*d.w;});result[dk]=Math.round(score);}
-    return result;
-  }
-  var domainScores=calcDomainScores(ns);
-  var domainHTML='';
-  for(var dk in DOMAINS){
-    var dom=DOMAINS[dk],ds=domainScores[dk];
-    var dcolor=ds>=68?'var(--green)':(ds>=42?'var(--gold)':'var(--red)');
-    domainHTML+='<div class="domain-mini">';
-    domainHTML+='<div class="dm-header"><span class="dm-name">'+dom.name+'</span><span class="dm-score" style="color:'+dcolor+'">'+ds+'</span></div>';
-    domainHTML+='<div class="dm-bar"><div class="dm-bar-fill" style="width:'+ds+'%;background:'+dcolor+'"></div></div>';
-    domainHTML+='<p class="dm-hint">'+dom.hint+'</p>';
-    domainHTML+='</div>';
-  }
-  document.getElementById('domain-minis').innerHTML=domainHTML;
-
-  // ====== 3. 三方报告 ======
-  var weakRC=ns.map(function(v,i){return {v:v,i:i};}).sort(function(a,b){return a.v-b.v;})[0];
-  var strongRC=ns.map(function(v,i){return {v:v,i:i};}).sort(function(a,b){return b.v-a.v;})[0];
-  var rcExp=RC_EXP[weakRC.i][getLv(ns[weakRC.i])];
-
-  // 学生报告
-  var studentHTML='';
-  studentHTML+='<h5 style="font-size:15px;color:var(--red);margin-bottom:10px;">'+profile.studentTitle+'</h5>';
-  studentHTML+='<div class="highlight-box"><span class="hl-icon">🔍</span><strong>诊断发现：</strong>'+rcExp.desc+'</div>';
-  studentHTML+='<div class="highlight-box"><span class="hl-icon">⚠️</span><strong>对你的考试意味着：</strong>'+ROOT_CAUSES[weakRC.i].lowMsg+'</div>';
-  studentHTML+='<p style="margin-bottom:4px;font-size:13px;"><strong>💪 你的优势保护项：</strong>'+RC_EXP[strongRC.i].high.desc.substring(0,80)+'继续保持！</p>';
-  studentHTML+='<div class="week-goal"><h5>🎯 本周就可以开始的三件事</h5><ol>';var steps=profile.studentPlan;
-  steps.forEach(function(step,i){studentHTML+='<li>'+step+'</li>';});
-  studentHTML+='</ol></div>';
-  document.getElementById('tab-student').innerHTML=studentHTML;
-
-  // 家长报告
-  var parentHTML='';
-  parentHTML+='<div class="highlight-box" style="background:linear-gradient(135deg,#FFFBF7,#FFF8F0);border-color:#D4C5A0;">';
-  parentHTML+='<span class="hl-icon">💌</span>'+profile.parentMsg+'</div>';
-  parentHTML+='<p style="font-size:13px;font-weight:700;color:var(--ink);margin-bottom:6px;">🏡 在家可以这样做（每天只需 10 分钟）</p>';
-  var actions=profile.parentActions;
-  actions.forEach(function(action,i){
-    parentHTML+='<div class="action-checklist"><span class="check-icon">✅</span><strong>'+(i+1)+'.</strong> '+action+'</div>';
-  });
-  document.getElementById('tab-parent').innerHTML=parentHTML;
-
-  // 教师报告
-  var teacherHTML='';
-  teacherHTML+='<p style="margin-bottom:8px;font-size:13px;"><strong>🎯 诊断概要：</strong>'+profile.name+' — '+profile.studentTitle+'</p>';
-  teacherHTML+='<p style="margin-bottom:10px;font-size:13px;"><strong>📊 五层根因得分：</strong>';
-  ROOT_CAUSES.forEach(function(rc,i){teacherHTML+=rc.sname+' <b style="color:'+(ns[i]>=68?'var(--green)':(ns[i]>=42?'var(--gold)':'var(--red)'))+'">'+ns[i]+'</b>分 ';});
-  teacherHTML+='</p>';
-  teacherHTML+='<p style="margin-bottom:10px;font-size:13px;"><strong>📝 教学优先级：</strong>'+profile.teacherPriority+'</p>';
-  teacherHTML+='<p style="margin-bottom:6px;font-size:13px;font-weight:700;">💡 核心策略（3 步走）</p>';
-  teacherHTML+='<div class="teacher-summary">';
-  var strats=profile.teacherStrategies;
-  strats.forEach(function(s,i){
-    teacherHTML+='<div class="teacher-point"><span class="tp-num">'+(i+1)+'</span>'+s+'</div>';
-  });
-  teacherHTML+='</div>';
-  teacherHTML+='<p style="font-size:12px;color:var(--ink-light);margin-top:6px;"><strong>📏 监控指标：</strong>'+profile.teacherMonitor+'</p>';
-  document.getElementById('tab-teacher').innerHTML=teacherHTML;
-
-  // 默认显示学生 tab
-  switchReportTab('tab-student');
-
-  // 清除答题进度
-  try{localStorage.removeItem('yuwen_quiz_progress');}catch(e){}
-
-  // 保存数据
-  window._lastReport={name:name,ns:ns,profileKey:diag.profileKey,profileName:profile.name};
-  const reportData={id:Date.now()+Math.random().toString(36),name:name,ns:ns,profileKey:diag.profileKey,profileName:profile.name,profileTag:profile.tag,ts:new Date().toISOString()};
-  try{
-    const existing=JSON.parse(localStorage.getItem('yuwen_diagnosis_students')||'[]');
-    const idx=existing.findIndex(function(s){return s.name===name});
-    if(idx>=0)existing[idx]=reportData;else existing.push(reportData);
-    localStorage.setItem('yuwen_diagnosis_students',JSON.stringify(existing));
-  }catch(e){}
-  syncToTeacher({name:name,ns:ns,ts:new Date().toISOString()});
-}
-
-// ====== Tab 切换 ======
-function switchReportTab(tabId){
-  document.querySelectorAll('.report-tab').forEach(function(t){t.classList.remove('active')});
-  document.querySelector('.report-tab[data-tab="'+tabId+'"]').classList.add('active');
-  document.querySelectorAll('.report-tab-content').forEach(function(c){c.classList.remove('active')});
-  document.getElementById(tabId).classList.add('active');
-}
-
-// ====== 数据同步 ======
-var GITHUB_REPO='yuyubai176-star/yuwen-diagnosis';
-var GITHUB_TOKEN='ghp_'+'V45u1Kj6NFk2yAtlZQXuMWXZenrK543m5NgW';
-
-function githubPutFile(fname,content,message,cb){
-  fetch('https://api.github.com/repos/'+GITHUB_REPO+'/contents/'+fname,{headers:{'Authorization':'token '+GITHUB_TOKEN}})
-  .then(function(r){return r.json()})
-  .then(function(fileInfo){
-    var body={message:message,content:btoa(unescape(encodeURIComponent(content))),branch:'main'};
-    if(fileInfo&&fileInfo.sha){body.sha=fileInfo.sha;}
-    return fetch('https://api.github.com/repos/'+GITHUB_REPO+'/contents/'+fname,{method:'PUT',headers:{'Authorization':'token '+GITHUB_TOKEN,'Content-Type':'application/json'},body:JSON.stringify(body)});
-  })
-  .then(function(r){return r.json()})
-  .then(function(resp){if(resp&&resp.content){cb(true)}else{cb(false)}})
-  .catch(function(){cb(false)});
-}
-
-function syncToTeacher(data){
-  document.getElementById('sync-icon').textContent='⏳';
-  document.getElementById('sync-text').textContent='正在同步数据给老师...';
-  document.getElementById('sync-text').style.color='';
-  var fname='data/'+encodeURIComponent(data.name)+'.json';
-  var content=JSON.stringify(data,null,0);
-  githubPutFile(fname,content,'诊断数据: '+data.name,function(ok){
-    if(ok){
-      document.getElementById('sync-icon').textContent='✅';
-      document.getElementById('sync-text').textContent='数据已同步给老师';
-      document.getElementById('sync-text').style.color='#5B8C5A';
-    }else{
-      document.getElementById('sync-icon').textContent='⚠️';
-      document.getElementById('sync-text').textContent='同步失败，请稍后重试';
-      document.getElementById('sync-text').style.color='#C77826';
-    }
-  });
-}
-
-function printReport(){
-  // 打印时展开所有 tab
-  document.querySelectorAll('.report-tab-content').forEach(function(c){c.classList.add('active')});
-  window.print();
-  // 恢复 tab 状态
-  document.querySelectorAll('.report-tab-content').forEach(function(c){c.classList.remove('active')});
-  var activeTab=document.querySelector('.report-tab.active');
-  if(activeTab){
-    var tabId=activeTab.dataset.tab;
-    document.getElementById(tabId).classList.add('active');
-  }
-}
-
-// ====== 雷达图 ======
+function diagnoseProfile(ns){var primary=null;if(ns[0]<45)primary='P1';else if(ns[1]<45)primary='P2';else if(ns[2]<45)primary='P3';else if(ns[3]<45)primary='P4';else if(ns[4]<45)primary='P5';else{var lowCount=0;for(var i=0;i<5;i++){if(ns[i]<55)lowCount++;}if(lowCount>=2)primary='P6';else primary='P7';}return {profile:PROFILES[primary],profileKey:primary};}
+function getDiagnosisChain(ns,primaryKey){var chain=[];var profile=PROFILES[primaryKey];var priority=profile.priority;var weakest=priority[0];chain.push('诊断判定：你的<b>'+ROOT_CAUSES[weakest].sname+'</b>得分<b>'+ns[weakest]+'</b>分，低于45分阈值——'+ROOT_CAUSES[weakest].sname+'被判定为首要根因。');for(var i=1;i<priority.length;i++){var dim=priority[i];if(ns[dim]<55&&dim>weakest&&ns[dim]<ns[weakest]+15){chain.push('同时你的<b>'+ROOT_CAUSES[dim].sname+'</b>得分也偏低（'+ns[dim]+'分），但这很可能是<b>'+ROOT_CAUSES[weakest].sname+'</b>薄弱的下游表现——先解决底层问题，上层通常会自然改善。');break;}}return chain;}
+function showResult(){document.getElementById('screen-quiz').classList.add('hidden');document.getElementById('screen-result').classList.remove('hidden');rawScores=[60,60,60,60,60];var errorTags=[];answers.forEach(function(a,i){if(a!==undefined){var opt=QUESTIONS[i].opts[a];opt.scores.forEach(function(dv){rawScores[dv[0]]+=dv[1];});if(opt.tag)errorTags.push({tag:opt.tag,qNum:i+1,dimTags:QUESTIONS[i].dimTags});}});var ns=rawScores.map(mapScore);var diag=diagnoseProfile(ns);var profile=diag.profile;var name=document.getElementById('student-name').value.trim();var today=new Date().toLocaleDateString('zh-CN');document.getElementById('print-name').textContent=name;document.getElementById('print-date').textContent=today;document.getElementById('print-date-ft').textContent=today;document.getElementById('profile-badge').textContent=profile.name;document.getElementById('profile-tag').textContent=profile.icon+' '+profile.tag;var chainTexts=getDiagnosisChain(ns,diag.profileKey);var descHTML=profile.desc+'<div style="margin-top:10px;padding:10px 14px;background:var(--cream);border-radius:var(--radius-sm);font-size:13px;line-height:1.9;">';chainTexts.forEach(function(t){descHTML+='<p style="margin-bottom:4px;">→ '+t+'</p>';});descHTML+='</div>';document.getElementById('profile-desc').innerHTML=descHTML;var chainHTML='<p style="font-size:12px;color:var(--ink-lighter);margin-bottom:8px;text-align:center;">▼ 五层根因链（从基础到高阶）</p>';var bottleneckIdx=ns.map(function(v,i){return {v:v,i:i};}).sort(function(a,b){return a.v-b.v;})[0].i;var chainColors=['#B83A2A','#C77826','#5B8C5A','#4A7B9D','#8B7355'];ns.forEach(function(v,i){var lvl=getLv(v);var color=v>=70?'var(--green)':(v>=50?'var(--gold)':'var(--red)');var label=lvl==='high'?'稳健':(lvl==='medium'?'需关注':'薄弱');var isBottleneck=(i===bottleneckIdx&&lvl!=='high');chainHTML+='<div class="chain-item'+(isBottleneck?' bottleneck':'')+'">';chainHTML+='<div class="chain-num" style="background:'+chainColors[i]+'">'+(i+1)+'</div>';chainHTML+='<span class="chain-icon">'+ROOT_CAUSES[i].icon+'</span>';chainHTML+='<span class="chain-name">'+ROOT_CAUSES[i].sname+'</span>';chainHTML+='<div class="chain-track"><div class="chain-fill" style="width:'+v+'%;background:'+color+'"></div></div>';chainHTML+='<span class="chain-val" style="color:'+color+'">'+v+'</span>';chainHTML+='<span class="chain-tag" style="background:'+color+'20;color:'+color+'">'+label+'</span>';if(isBottleneck)chainHTML+='<span class="chain-bottleneck-badge">⚠ 当前瓶颈</span>';chainHTML+='</div>';});document.getElementById('root-chain').innerHTML=chainHTML;setTimeout(function(){drawRadar('radar-student',ns);},100);var calcDomainScores=function(ns){var result={};for(var dk in DOMAINS){var dom=DOMAINS[dk],score=0;dom.dims.forEach(function(d){score+=ns[d.i]*d.w;});result[dk]=Math.round(score);}return result;};var domainScores=calcDomainScores(ns);var domainHTML='';for(var dk in DOMAINS){var dom=DOMAINS[dk],ds=domainScores[dk];var dcolor=ds>=70?'var(--green)':(ds>=50?'var(--gold)':'var(--red)');domainHTML+='<div class="domain-mini"><div class="dm-header"><span class="dm-name">'+dom.name+'</span><span class="dm-score" style="color:'+dcolor+'">'+ds+'</span></div><div class="dm-bar"><div class="dm-bar-fill" style="width:'+ds+'%;background:'+dcolor+'"></div></div><p class="dm-hint">'+dom.hint+'</p></div>';}document.getElementById('domain-minis').innerHTML=domainHTML;var tagCount={};errorTags.forEach(function(et){tagCount[et.tag]=(tagCount[et.tag]||0)+1;});var errorHTML='';if(Object.keys(tagCount).length===0){errorHTML='<p style="font-size:13px;color:var(--green);line-height:1.8;">👍 你在本次诊断中没有出现典型的错误模式——所有题目都答对了或只有个别失误。继续保持！</p>';}else{var sortedTags=Object.entries(tagCount).sort(function(a,b){return b[1]-a[1]});errorHTML+='<p style="font-size:13px;color:var(--ink-light);line-height:1.8;margin-bottom:10px;">在20道题中，你共出现 <b>'+errorTags.length+'</b> 次错误选择。以下是你的错误类型分布：</p>';sortedTags.forEach(function(entry){var tag=entry[0],count=entry[1];var relatedDim='';for(var qi=0;qi<errorTags.length;qi++){if(errorTags[qi].tag===tag&&errorTags[qi].dimTags){relatedDim=ROOT_CAUSES[errorTags[qi].dimTags[0]].sname;break;}}errorHTML+='<div class="error-pattern-card"><strong style="color:var(--red);">'+tag+'</strong> <span class="error-tag">×<span class="et-count">'+count+'</span>次</span> <span style="font-size:11px;color:var(--ink-lighter);">→ 主要关联：'+relatedDim+'</span></div>';});var topTag=sortedTags[0][0];errorHTML+='<p style="font-size:13px;color:var(--ink);line-height:1.8;margin-top:8px;"><strong>📌 核心发现：</strong>你最常犯的错误类型是「<b style="color:var(--red);">'+topTag+'</b>」——这直接指向了你的底层薄弱环节。上方的诊断画像和下面的提升计划都是围绕这个核心发现来制定的。</p>';}document.getElementById('error-pattern-content').innerHTML=errorHTML;var weakRC=ns.map(function(v,i){return {v:v,i:i};}).sort(function(a,b){return a.v-b.v;})[0];var strongRC=ns.map(function(v,i){return {v:v,i:i};}).sort(function(a,b){return b.v-a.v;})[0];var rcExp=RC_EXP[weakRC.i][getLv(ns[weakRC.i])];var studentHTML='<h5 style="font-size:15px;color:var(--red);margin-bottom:10px;">'+profile.studentTitle+'</h5>';studentHTML+='<div class="highlight-box"><strong>诊断发现：</strong>'+rcExp.desc+'</div>';studentHTML+='<p style="margin-bottom:4px;font-size:13px;"><strong>你的优势项：</strong>'+RC_EXP[strongRC.i].high.desc.substring(0,80)+'</p>';studentHTML+='<div class="week-goal"><h5>具体行动方案</h5><ol>';profile.studentPlan.forEach(function(step,i){studentHTML+='<li>'+step+'</li>';});studentHTML+='</ol></div>';document.getElementById('tab-student').innerHTML=studentHTML;var parentHTML='<div class="highlight-box" style="background:linear-gradient(135deg,#FFFBF7,#FFF8F0);border-color:#D4C5A0;">'+profile.parentMsg+'</div>';parentHTML+='<p style="font-size:13px;font-weight:700;color:var(--ink);margin-bottom:6px;">在家可以这样做（每天只需10分钟）</p>';profile.parentActions.forEach(function(action,i){parentHTML+='<div class="action-checklist"><span class="check-icon">✅</span><strong>'+(i+1)+'.</strong> '+action+'</div>';});document.getElementById('tab-parent').innerHTML=parentHTML;var teacherHTML='<p style="margin-bottom:8px;font-size:13px;"><strong>诊断概要：</strong>'+profile.name+' — '+profile.studentTitle+'</p>';teacherHTML+='<p style="margin-bottom:10px;font-size:13px;"><strong>五层根因得分：</strong>';ROOT_CAUSES.forEach(function(rc,i){teacherHTML+=rc.sname+' <b style="color:'+(ns[i]>=70?'var(--green)':(ns[i]>=50?'var(--gold)':'var(--red)'))+'">'+ns[i]+'</b>分 ';});teacherHTML+='</p><p style="margin-bottom:10px;font-size:13px;"><strong>教学优先级：</strong>'+profile.teacherPriority+'</p>';teacherHTML+='<p style="margin-bottom:6px;font-size:13px;font-weight:700;">核心策略</p><div class="teacher-summary">';profile.teacherStrategies.forEach(function(s,i){teacherHTML+='<div class="teacher-point"><span class="tp-num">'+(i+1)+'</span>'+s+'</div>';});teacherHTML+='</div><p style="font-size:12px;color:var(--ink-light);margin-top:6px;"><strong>监控指标：</strong>'+profile.teacherMonitor+'</p>';document.getElementById('tab-teacher').innerHTML=teacherHTML;switchReportTab('tab-student');try{localStorage.removeItem('yuwen_quiz_progress');}catch(e){}window._lastReport={name:name,ns:ns,profileKey:diag.profileKey,profileName:profile.name};var reportData={id:Date.now()+Math.random().toString(36),name:name,ns:ns,profileKey:diag.profileKey,profileName:profile.name,profileTag:profile.tag,ts:new Date().toISOString()};try{var existing=JSON.parse(localStorage.getItem('yuwen_diagnosis_students')||'[]');var idx=existing.findIndex(function(s){return s.name===name});if(idx>=0)existing[idx]=reportData;else existing.push(reportData);localStorage.setItem('yuwen_diagnosis_students',JSON.stringify(existing));}catch(e){}syncToTeacher({name:name,ns:ns,ts:new Date().toISOString()});}
+function switchReportTab(tabId){document.querySelectorAll('.report-tab').forEach(function(t){t.classList.remove('active')});document.querySelector('.report-tab[data-tab="'+tabId+'"]').classList.add('active');document.querySelectorAll('.report-tab-content').forEach(function(c){c.classList.remove('active')});document.getElementById(tabId).classList.add('active');}
+var GITHUB_REPO='yuyubai176-star/yuwen-diagnosis';var GITHUB_TOKEN='ghp_'+'V45u1Kj6NFk2yAtlZQXuMWXZenrK543m5NgW';
+function githubPutFile(fname,content,message,cb){fetch('https://api.github.com/repos/'+GITHUB_REPO+'/contents/'+fname,{headers:{'Authorization':'token '+GITHUB_TOKEN}}).then(function(r){return r.json()}).then(function(fileInfo){var body={message:message,content:btoa(unescape(encodeURIComponent(content))),branch:'main'};if(fileInfo&&fileInfo.sha){body.sha=fileInfo.sha;}return fetch('https://api.github.com/repos/'+GITHUB_REPO+'/contents/'+fname,{method:'PUT',headers:{'Authorization':'token '+GITHUB_TOKEN,'Content-Type':'application/json'},body:JSON.stringify(body)});}).then(function(r){return r.json()}).then(function(resp){if(resp&&resp.content){cb(true)}else{cb(false)}}).catch(function(){cb(false)});}
+function syncToTeacher(data){document.getElementById('sync-icon').textContent='⏳';document.getElementById('sync-text').textContent='正在同步数据给老师...';var fname='data/'+encodeURIComponent(data.name)+'.json';var content=JSON.stringify(data,null,0);githubPutFile(fname,content,'诊断数据: '+data.name,function(ok){if(ok){document.getElementById('sync-icon').textContent='✅';document.getElementById('sync-text').textContent='数据已同步给老师';document.getElementById('sync-text').style.color='#5B8C5A';}else{document.getElementById('sync-icon').textContent='⚠️';document.getElementById('sync-text').textContent='同步失败，请稍后重试';document.getElementById('sync-text').style.color='#C77826';}});}
+function printReport(){document.querySelectorAll('.report-tab-content').forEach(function(c){c.classList.add('active')});window.print();document.querySelectorAll('.report-tab-content').forEach(function(c){c.classList.remove('active')});var activeTab=document.querySelector('.report-tab.active');if(activeTab){document.getElementById(activeTab.dataset.tab).classList.add('active');}}
 let chartLoaded=false,chartLoading=false,chartCbs=[];
-function loadChart(cb){if(chartLoaded){cb();return}chartCbs.push(cb);if(chartLoading)return;chartLoading=true;
-  const urls=['https://registry.npmmirror.com/chart.js/4.4.0/files/dist/chart.umd.min.js','https://unpkg.com/chart.js@4.4.0/dist/chart.umd.min.js','https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js'];
-  function tryLoad(i){if(i>=urls.length){chartLoaded=true;chartLoading=false;chartCbs.forEach(function(c){c()});chartCbs=[];return}
-    const s=document.createElement('script');s.src=urls[i];s.onload=function(){chartLoaded=true;chartLoading=false;chartCbs.forEach(function(c){c()});chartCbs=[]};s.onerror=function(){tryLoad(i+1)};document.head.appendChild(s)}tryLoad(0)}
+function loadChart(cb){if(chartLoaded){cb();return}chartCbs.push(cb);if(chartLoading)return;chartLoading=true;var urls=['https://registry.npmmirror.com/chart.js/4.4.0/files/dist/chart.umd.min.js','https://unpkg.com/chart.js@4.4.0/dist/chart.umd.min.js','https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js'];function tryLoad(i){if(i>=urls.length){chartLoaded=true;chartLoading=false;chartCbs.forEach(function(c){c()});chartCbs=[];return}var s=document.createElement('script');s.src=urls[i];s.onload=function(){chartLoaded=true;chartLoading=false;chartCbs.forEach(function(c){c()});chartCbs=[]};s.onerror=function(){tryLoad(i+1)};document.head.appendChild(s)}tryLoad(0)}
+function drawRadar(id,ns){var el=document.getElementById(id);if(!el)return;loadChart(function(){var ctx=el.getContext('2d');if(ctx._chart)ctx._chart.destroy();ctx._chart=new Chart(ctx,{type:'radar',data:{labels:ROOT_CAUSES.map(function(d){return d.icon+' '+d.sname}),datasets:[{data:ns,backgroundColor:'rgba(184,58,42,0.08)',borderColor:'#B83A2A',borderWidth:2,pointBackgroundColor:'#B83A2A',pointBorderColor:'#fff',pointBorderWidth:2,pointRadius:5}]},options:{responsive:true,maintainAspectRatio:true,plugins:{legend:{display:false}},scales:{r:{min:0,max:100,ticks:{stepSize:20,backdropColor:'transparent',font:{size:10}},pointLabels:{font:{size:12}},grid:{color:'#E0D5C9'},angleLines:{color:'#E0D5C9'}}}}});});}
+function restart(){var el=document.getElementById('radar-student');if(el){var ctx=el.getContext('2d');if(ctx._chart)ctx._chart.destroy()}document.getElementById('screen-result').classList.add('hidden');document.getElementById('screen-start').classList.remove('hidden');}
 
-function drawRadar(id,ns){
-  const el=document.getElementById(id);if(!el)return;
-  loadChart(function(){
-    const ctx=el.getContext('2d');if(ctx._chart)ctx._chart.destroy();
-    ctx._chart=new Chart(ctx,{type:'radar',
-      data:{labels:ROOT_CAUSES.map(function(d){return d.icon+' '+d.sname}),datasets:[{data:ns,backgroundColor:'rgba(184,58,42,0.08)',borderColor:'#B83A2A',borderWidth:2,pointBackgroundColor:'#B83A2A',pointBorderColor:'#fff',pointBorderWidth:2,pointRadius:5}]},
-      options:{responsive:true,maintainAspectRatio:true,plugins:{legend:{display:false}},scales:{r:{min:0,max:100,ticks:{stepSize:20,backdropColor:'transparent',font:{size:10}},pointLabels:{font:{size:12}},grid:{color:'#E0D5C9'},angleLines:{color:'#E0D5C9'}}}}});
-  });
-}
-
-function restart(){
-  const el=document.getElementById('radar-student');
-  if(el){const ctx=el.getContext('2d');if(ctx._chart)ctx._chart.destroy()}
-  document.getElementById('screen-result').classList.add('hidden');
-  document.getElementById('screen-start').classList.remove('hidden');
-}
 </script>
 </body>
 </html>
