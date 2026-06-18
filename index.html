@@ -1,123 +1,240 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="zh-CN">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>语文学情诊断 · 学生版</title>
 <style>
+/* ====== CSS 设计系统 V3 ====== */
 :root {
-  --red:#B83A2A; --gold:#B8860B; --cream:#FBF7F2; --ink:#2C1810;
-  --ink-light:#5E5046; --white:#FFF; --border:#E0D5C9; --bg-card:#FFFBF7;
+  --red:#B83A2A; --red-light:#D4453A; --gold:#B8860B; --gold-light:#D4A017;
+  --cream:#FBF7F2; --ink:#2C1810; --ink-light:#5E5046; --ink-lighter:#8A7E76;
+  --white:#FFF; --border:#E0D5C9; --bg-card:#FFFBF7;
   --green:#5B8C5A; --blue:#4A7B9D; --orange:#C77826;
+  --shadow-sm:0 1px 3px rgba(44,24,16,0.04);
+  --shadow-md:0 3px 12px rgba(44,24,16,0.06);
+  --shadow-lg:0 6px 24px rgba(44,24,16,0.08);
+  --radius-sm:8px; --radius-md:12px; --radius-lg:16px;
+  --transition:0.2s cubic-bezier(0.4,0,0.2,1);
 }
 *{margin:0;padding:0;box-sizing:border-box}
-body{font-family:"Microsoft YaHei","PingFang SC",sans-serif;background:var(--cream);color:var(--ink);min-height:100vh}
+body{font-family:"Microsoft YaHei","PingFang SC",sans-serif;background:linear-gradient(180deg, #FBF7F2 0%, #F5EDE3 100%);color:var(--ink);min-height:100vh}
 .container{max-width:720px;margin:0 auto;padding:24px 20px}
 
+/* ====== 页头 ====== */
 .header{text-align:center;padding:36px 0 24px}
-.header .icon{font-size:48px;margin-bottom:8px}
-.header h1{font-size:28px;color:var(--red);font-weight:700;letter-spacing:3px;margin-bottom:4px}
-.header .sub{font-size:13px;color:var(--ink-light);letter-spacing:1px}
+.header .icon{font-size:52px;margin-bottom:8px;display:inline-block;animation: float 3s ease-in-out infinite}
+@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-6px)}}
+.header h1{font-size:28px;color:var(--red);font-weight:700;letter-spacing:4px;margin-bottom:4px}
+.header .sub{font-size:13px;color:var(--ink-light);letter-spacing:2px}
+.header .ornament{width:60px;height:2px;background:linear-gradient(90deg,transparent,var(--gold),transparent);margin:12px auto 0;border-radius:1px}
 
-.card{background:var(--bg-card);border-radius:14px;padding:22px 20px;margin-bottom:12px;box-shadow:0 2px 8px rgba(44,24,16,0.04);border:1px solid var(--border)}
-.card h3{font-size:16px;color:var(--ink);margin-bottom:12px;line-height:1.7}
+/* ====== 卡片 ====== */
+.card{background:var(--bg-card);border-radius:var(--radius-lg);padding:22px 20px;margin-bottom:16px;box-shadow:var(--shadow-sm);border:1px solid var(--border);transition:box-shadow var(--transition)}
+.card:hover{box-shadow:var(--shadow-md)}
+.card h3{font-size:16px;color:var(--ink);margin-bottom:12px;line-height:1.8}
+.card h4{font-size:15px;margin-bottom:12px;padding-left:10px;border-left:3px solid var(--red);color:var(--ink);display:flex;align-items:center;gap:6px}
 
-.section-badge{display:inline-block;padding:3px 12px;border-radius:12px;font-size:12px;font-weight:600;letter-spacing:1px;margin-bottom:10px}
+/* ====== 板块标签 ====== */
+.section-badge{display:inline-block;padding:4px 14px;border-radius:14px;font-size:12px;font-weight:600;letter-spacing:1px;margin-bottom:10px}
 .badge-reading{background:#FFF0EE;color:var(--red)}
 .badge-poetry{background:#F3F0EB;color:#8B7355}
 .badge-writing{background:#EEF4F0;color:var(--green)}
 .badge-language{background:#F0F0F8;color:var(--blue)}
 
-.q-num{display:inline-block;background:var(--red);color:#fff;font-size:11px;padding:2px 9px;border-radius:9px;margin-right:7px;vertical-align:middle}
+/* ====== 题目 ====== */
+.q-num{display:inline-block;background:var(--red);color:#fff;font-size:11px;padding:3px 10px;border-radius:10px;margin-right:8px;vertical-align:middle;font-weight:700}
+.q-text{font-size:14.5px;line-height:2.1;white-space:pre-wrap;color:var(--ink)}
+.q-passage{background:#FFFBF5;border-left:3px solid var(--gold);padding:10px 14px;border-radius:0 var(--radius-sm) var(--radius-sm) 0;margin:8px 0;font-size:14px;line-height:2.1;white-space:pre-wrap;color:var(--ink)}
 
-.options{display:flex;flex-direction:column;gap:8px}
-.option{display:flex;align-items:flex-start;gap:10px;padding:12px 14px;border:1.5px solid var(--border);border-radius:10px;cursor:pointer;transition:all .18s;background:var(--white)}
-.option:hover{border-color:var(--gold);background:#FFFBF2}
-.option.selected{border-color:var(--red);background:#FFF5F3}
-.option .label{width:24px;height:24px;border-radius:50%;background:var(--cream);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:var(--ink-light);flex-shrink:0;margin-top:1px}
-.option.selected .label{background:var(--red);color:#fff}
-.option .text{font-size:14px;line-height:1.55;flex:1}
+/* ====== 选项 ====== */
+.options{display:flex;flex-direction:column;gap:9px;margin-top:12px}
+.option{display:flex;align-items:flex-start;gap:10px;padding:13px 15px;border:1.5px solid var(--border);border-radius:var(--radius-md);cursor:pointer;transition:all var(--transition);background:var(--white);position:relative}
+.option:hover{border-color:var(--gold);background:#FFFBF2;transform:translateX(2px);box-shadow:var(--shadow-sm)}
+.option.selected{border-color:var(--red);background:#FFF5F3;transform:scale(1.01);box-shadow:0 2px 8px rgba(184,58,42,0.12)}
+.option .label{width:26px;height:26px;border-radius:50%;background:var(--cream);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:var(--ink-light);flex-shrink:0;margin-top:1px;transition:all var(--transition)}
+.option.selected .label{background:var(--red);color:#fff;transform:scale(1.1)}
+.option .text{font-size:14px;line-height:1.65;flex:1}
 
-.btn{display:block;width:100%;padding:12px;border:none;border-radius:10px;font-size:15px;font-weight:600;cursor:pointer;transition:all .2s;letter-spacing:1px}
-.btn-primary{background:var(--red);color:#fff}
-.btn-primary:hover{opacity:.9;transform:translateY(-1px)}
-.btn-primary:disabled{opacity:.35;cursor:not-allowed;transform:none}
+/* ====== 按钮 ====== */
+.btn{display:block;width:100%;padding:13px;border:none;border-radius:var(--radius-md);font-size:15px;font-weight:600;cursor:pointer;transition:all var(--transition);letter-spacing:1px;position:relative;overflow:hidden}
+.btn:active{transform:scale(0.98)}
+.btn-primary{background:linear-gradient(135deg,var(--red),var(--red-light));color:#fff;box-shadow:0 3px 12px rgba(184,58,42,0.25)}
+.btn-primary:hover{box-shadow:0 5px 18px rgba(184,58,42,0.35);transform:translateY(-1px)}
+.btn-primary:disabled{opacity:.35;cursor:not-allowed;transform:none;box-shadow:none}
 .btn-outline{background:var(--white);color:var(--red);border:2px solid var(--red)}
-.btn-outline:hover{background:#FFF5F3}
-.btn-small{padding:8px 16px;font-size:13px;width:auto;display:inline-block}
+.btn-outline:hover{background:#FFF5F3;transform:translateY(-1px)}
+.btn-small{padding:8px 16px;font-size:13px;width:auto;display:inline-block;border-radius:var(--radius-sm)}
+.btn-ghost{background:transparent;color:var(--ink-light);border:1px solid var(--border);width:auto;display:inline-block;padding:6px 14px;font-size:12px;border-radius:var(--radius-sm)}
+.btn-ghost:hover{background:var(--cream);color:var(--ink)}
 
+/* ====== 进度 ====== */
 .progress-wrap{margin-bottom:16px}
-.progress-bar{height:5px;background:var(--border);border-radius:3px;overflow:hidden}
-.progress-fill{height:100%;background:var(--red);border-radius:3px;transition:width .3s}
-.progress-text{display:flex;justify-content:space-between;font-size:11px;color:var(--ink-light);margin-top:4px}
+.progress-bar{height:6px;background:var(--border);border-radius:3px;overflow:hidden}
+.progress-fill{height:100%;background:linear-gradient(90deg,var(--red),var(--red-light));border-radius:3px;transition:width .4s ease}
+.progress-text{display:flex;justify-content:space-between;font-size:11px;color:var(--ink-light);margin-top:5px}
 
+/* ====== 步骤指示器 ====== */
+.step-indicator{display:flex;align-items:center;justify-content:center;gap:6px;margin-bottom:14px;flex-wrap:wrap}
+.step-dot{width:12px;height:12px;border-radius:50%;background:var(--border);transition:all var(--transition);flex-shrink:0}
+.step-dot.active{background:var(--red);box-shadow:0 0 0 4px rgba(184,58,42,0.15);animation:pulse 2s ease-in-out infinite}
+.step-dot.done{background:var(--green)}
+@keyframes pulse{0%,100%{box-shadow:0 0 0 4px rgba(184,58,42,0.15)}50%{box-shadow:0 0 0 8px rgba(184,58,42,0.05)}}
+.step-line{width:24px;height:1px;background:var(--border);flex-shrink:0}
+
+/* ====== 开始页图标列表 ====== */
+.feature-list{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:4px}
+.feature-item{display:flex;align-items:center;gap:8px;padding:8px 10px;background:var(--white);border-radius:var(--radius-sm);font-size:13px;color:var(--ink);border:1px solid var(--border)}
+.feature-item .fi-icon{font-size:18px;flex-shrink:0}
+
+/* ====== 输入框 ====== */
+input[type="text"]{width:100%;padding:12px 16px;border:1.5px solid var(--border);border-radius:var(--radius-md);font-size:15px;outline:none;background:var(--white);transition:all var(--transition)}
+input[type="text"]:focus{border-color:var(--gold);box-shadow:0 0 0 3px rgba(184,134,11,0.08)}
+
+/* ====== 雷达图 ====== */
 .radar-wrap{max-width:380px;margin:0 auto}
 .radar-wrap canvas{width:100%!important;height:auto!important}
 
-.profile-badge{display:inline-block;padding:10px 28px;border:2px solid var(--gold);border-radius:24px;font-size:20px;font-weight:700;color:var(--gold);letter-spacing:3px;margin:8px 0}
-.profile-tag{font-size:14px;color:var(--ink-light);margin-top:4px}
+/* ====== 诊断画像卡 ====== */
+.profile-card{text-align:center;padding:28px 20px}
+.profile-seal{display:inline-block;padding:14px 32px;border:3px solid var(--red);border-radius:8px;font-size:22px;font-weight:700;color:var(--red);letter-spacing:4px;margin:8px 0;position:relative;background:linear-gradient(180deg,#FFFBF7,#FFF5F0)}
+.profile-seal::before{content:'';position:absolute;top:4px;left:4px;right:4px;bottom:4px;border:1px solid rgba(184,58,42,0.2);border-radius:4px;pointer-events:none}
+.profile-tag{font-size:14px;color:var(--ink-light);margin-top:6px}
+.profile-desc{font-size:14px;line-height:1.9;color:var(--ink-light);margin-top:12px;text-align:left}
 
-.report-section{margin-top:16px}
-.report-section h4{font-size:15px;margin-bottom:8px;padding-left:10px;border-left:3px solid var(--red);color:var(--ink)}
-.report-section p{font-size:14px;line-height:1.85;color:var(--ink-light);margin-bottom:8px}
+/* ====== 根因链可视化 ====== */
+.root-chain{margin:12px 0}
+.chain-item{display:flex;align-items:center;gap:10px;padding:8px 12px;margin-bottom:4px;background:var(--white);border-radius:var(--radius-sm);border:1px solid var(--border);position:relative;transition:all var(--transition)}
+.chain-item.bottleneck{border-color:var(--red);background:#FFF5F3;box-shadow:0 2px 8px rgba(184,58,42,0.1)}
+.chain-num{width:26px;height:26px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:#fff;flex-shrink:0}
+.chain-icon{font-size:16px;flex-shrink:0}
+.chain-name{font-size:12px;font-weight:600;width:60px;flex-shrink:0;color:var(--ink)}
+.chain-track{flex:1;height:8px;background:var(--cream);border-radius:4px;overflow:hidden}
+.chain-fill{height:100%;border-radius:4px;transition:width .6s ease}
+.chain-val{font-size:12px;font-weight:700;width:30px;text-align:right;flex-shrink:0}
+.chain-tag{font-size:10px;padding:1px 6px;border-radius:6px;font-weight:600;flex-shrink:0}
+.chain-bottleneck-badge{position:absolute;right:-8px;top:-10px;background:var(--red);color:#fff;font-size:9px;padding:1px 6px;border-radius:6px;white-space:nowrap;font-weight:600}
 
-/* 根因柱状图 */
+/* ====== 能力地图（雷达+板块合并） ====== */
+.ability-map{display:grid;grid-template-columns:1fr 1fr;gap:16px;align-items:start}
+.ability-map .radar-wrap{max-width:100%}
+.domain-mini{padding:8px 10px;margin-bottom:6px;background:var(--white);border-radius:var(--radius-sm);border:1px solid var(--border)}
+.domain-mini .dm-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:3px}
+.domain-mini .dm-name{font-size:12px;font-weight:700;color:var(--ink)}
+.domain-mini .dm-score{font-size:14px;font-weight:700}
+.domain-mini .dm-bar{height:4px;background:var(--cream);border-radius:2px;overflow:hidden;margin-bottom:2px}
+.domain-mini .dm-bar-fill{height:100%;border-radius:2px;transition:width .5s ease}
+.domain-mini .dm-hint{font-size:10px;color:var(--ink-lighter);line-height:1.4}
+
+/* ====== Tab 切换（三方报告） ====== */
+.report-tabs{display:flex;gap:0;margin-bottom:0;background:var(--white);border-radius:var(--radius-md) var(--radius-md) 0 0;border:1px solid var(--border);border-bottom:none;overflow:hidden}
+.report-tab{flex:1;text-align:center;padding:12px 8px;cursor:pointer;font-size:13px;font-weight:600;color:var(--ink-light);transition:all var(--transition);border-bottom:2px solid transparent;background:var(--cream)}
+.report-tab:hover{color:var(--ink);background:#FFFBF5}
+.report-tab.active{color:var(--red);background:var(--bg-card);border-bottom-color:var(--red)}
+.report-tab-content{background:var(--bg-card);border:1px solid var(--border);border-top:none;border-radius:0 0 var(--radius-md) var(--radius-md);padding:18px 16px;display:none}
+.report-tab-content.active{display:block}
+
+/* ====== 报告内容组件 ====== */
+.highlight-box{padding:12px 16px;background:linear-gradient(135deg,#FFFBF2,#FFF5E6);border:1px solid var(--gold);border-radius:var(--radius-sm);margin-bottom:10px;font-size:13px;line-height:1.8}
+.highlight-box .hl-icon{font-size:18px;margin-right:4px}
+.week-goal{padding:14px 18px;background:linear-gradient(135deg,#FFF5F3,#FFEBE8);border:1px solid rgba(184,58,42,0.2);border-radius:var(--radius-md);margin:12px 0}
+.week-goal h5{font-size:13px;color:var(--red);margin-bottom:6px}
+.week-goal li{font-size:12.5px;line-height:1.8;color:var(--ink);margin-bottom:4px;list-style:inside decimal}
+
+.action-checklist{padding:10px 14px;background:var(--white);border-radius:var(--radius-sm);margin-bottom:6px;border:1px solid var(--border);font-size:13px;line-height:1.9}
+.action-checklist .check-icon{color:var(--green);margin-right:6px}
+
+.teacher-summary{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px}
+.teacher-point{padding:10px 12px;background:var(--white);border-radius:var(--radius-sm);border:1px solid var(--border);font-size:12px;line-height:1.7}
+.teacher-point .tp-num{display:inline-block;width:20px;height:20px;border-radius:50%;background:var(--red);color:#fff;text-align:center;line-height:20px;font-size:10px;font-weight:700;margin-right:4px}
+
+/* ====== 同步状态条 ====== */
+.sync-bar{display:flex;align-items:center;justify-content:center;gap:8px;padding:10px;font-size:13px;color:var(--ink-light);background:var(--white);border-radius:var(--radius-sm);border:1px solid var(--border);margin-top:8px}
+
+/* ====== 柱状图 ====== */
 .bar-wrap-student{margin:8px 0;display:flex;align-items:center;gap:8px}
 .bar-lbl-student{width:85px;font-size:12px;color:var(--ink);text-align:right;flex-shrink:0}
-.bar-track-student{flex:1;height:20px;background:var(--cream);border-radius:10px;overflow:hidden}
-.bar-fill-student{height:100%;border-radius:10px;transition:width .5s}
+.bar-track-student{flex:1;height:22px;background:var(--cream);border-radius:11px;overflow:hidden}
+.bar-fill-student{height:100%;border-radius:11px;transition:width .6s cubic-bezier(0.4,0,0.2,1)}
 .bar-val-student{width:32px;font-size:12px;font-weight:600;color:var(--ink-light);flex-shrink:0}
 
-/* 五大板块卡 */
-.domain-card-student{border-left:4px solid var(--gold);padding:8px 14px;margin-bottom:8px;background:var(--white);border-radius:0 10px 10px 0}
+/* ====== 五大板块卡 ====== */
+.domain-card-student{border-left:4px solid var(--gold);padding:10px 14px;margin-bottom:8px;background:var(--white);border-radius:0 var(--radius-sm) var(--radius-sm) 0}
 .domain-card-student strong{color:var(--ink)}
-.domain-card-student .domain-score-student{float:right;font-weight:700;color:var(--red)}
+.domain-card-student .domain-score-student{float:right;font-weight:700}
 
-/* 三方报告 */
-.audience-card{padding:14px 18px;margin-bottom:10px;background:var(--white);border-radius:10px;border:1px solid var(--border)}
-.audience-card h5{font-size:14px;margin-bottom:6px;display:flex;align-items:center;gap:6px}
-.audience-card p,.audience-card li{font-size:13px;line-height:1.8;color:var(--ink-light)}
+/* ====== 建议项 ====== */
+.advice-item{padding:12px 14px;margin-bottom:8px;background:var(--white);border-radius:var(--radius-sm);border:1px solid var(--border);font-size:13.5px;line-height:1.85;color:var(--ink-light);transition:all var(--transition)}
+.advice-item:hover{box-shadow:var(--shadow-sm);border-color:#D0C8BD}
+.advice-item .advice-num{display:inline-flex;align-items:center;justify-content:center;width:24px;height:24px;border-radius:50%;background:var(--red);color:#fff;font-size:11px;font-weight:700;margin-right:8px;flex-shrink:0}
 
-/* 家长寄语 */
-.parent-msg{padding:16px 20px;background:#FFFBF2;border:1px solid var(--gold);border-radius:12px;font-size:14px;line-height:1.9;color:var(--ink-light);margin-top:12px}
-.parent-msg .icon{font-size:24px;margin-right:6px}
-
-.advice-item{padding:11px 13px;margin-bottom:6px;background:var(--white);border-radius:9px;border:1px solid var(--border);font-size:13.5px;line-height:1.75;color:var(--ink-light)}
-.advice-item .advice-num{display:inline-block;width:22px;height:22px;border-radius:50%;background:var(--red);color:#fff;text-align:center;line-height:22px;font-size:11px;font-weight:700;margin-right:7px;flex-shrink:0}
-.advice-item strong{color:var(--ink)}
-
-.copy-box{background:var(--white);border:2px dashed var(--border);border-radius:10px;padding:14px;margin-top:10px;text-align:center}
-.copy-box .code{font-family:monospace;font-size:11px;color:var(--ink-light);word-break:break-all;margin-bottom:8px}
+/* ====== 通用工具类 ====== */
 .hidden{display:none!important}
-.footer-note{text-align:center;padding:24px 0 12px;font-size:11px;color:var(--ink-light)}
+.footer-note{text-align:center;padding:20px 0 12px;font-size:11px;color:var(--ink-lighter)}
+.text-center{text-align:center}
+.mt-8{margin-top:8px}
+.mt-12{margin-top:12px}
+.mb-8{margin-bottom:8px}
 
+/* ====== 打印样式 ====== */
 @media print{
   body{background:#fff;color:#000;font-size:12px}
-  .btn,.footer-note,.progress-wrap,#card-sync{display:none!important}
-  .card{box-shadow:none;border:1px solid #ccc;break-inside:avoid;margin-bottom:6px;padding:10px 14px}
+  .btn,.footer-note,.progress-wrap,#card-sync,.sync-bar,.report-tabs,.step-indicator{display:none!important}
+  .card{box-shadow:none;border:1px solid #ccc;break-inside:avoid;margin-bottom:8px;padding:10px 14px}
+  .card:hover{box-shadow:none}
   .header{padding:12px 0 4px}
   .header h1{color:#000;font-size:20px}
   .header .sub{font-size:11px}
-  .profile-badge{border-color:#000;color:#000;font-size:16px;padding:6px 18px}
+  .header .ornament{background:linear-gradient(90deg,transparent,#999,transparent)}
+  .header .icon{animation:none}
+  .profile-seal{border-color:#000;color:#000;font-size:18px;padding:8px 20px}
+  .profile-desc{font-size:12px}
   .radar-wrap{max-width:260px}
-  .report-section h4{border-left-color:#000}
+  .report-tab-content{display:block!important;border:none;padding:8px 0}
+  .chain-item{border:1px solid #ddd}
+  .chain-item.bottleneck{border-color:#000;background:#fff}
+  .chain-bottleneck-badge{background:#000}
   .bar-fill-student{background:#000!important}
   .bar-val-student,.bar-lbl-student{color:#000!important;font-size:10px}
   .domain-card-student{border-left-color:#000}
   .domain-score-student{color:#000!important}
-  .parent-msg{border-color:#ccc;background:#fff;font-size:12px}
+  .ability-map{grid-template-columns:1fr}
+  .teacher-summary{grid-template-columns:1fr}
   .advice-item{font-size:11px;padding:8px 10px}
+  .highlight-box,.week-goal{border-color:#ccc;background:#fff}
+  .print-only{display:block!important}
 }
-
-.step-indicator{display:flex;align-items:center;justify-content:center;gap:8px;margin-bottom:16px}
-.step-dot{width:10px;height:10px;border-radius:50%;background:var(--border)}
-.step-dot.active{background:var(--red)}
-.step-dot.done{background:var(--green)}
-.step-line{width:30px;height:1px;background:var(--border)}
-
+.print-only{display:none!important}
 .print-header{display:none!important}
 @media print{
-  .print-header{display:block!important}
+  .print-header{display:block!important;margin-bottom:12px}
+  .print-header p{font-size:13px;margin-bottom:4px}
+  .print-header hr{border:0.5px solid #ccc;margin-bottom:10px}
+}
+.print-footer{display:none!important}
+@media print{
+  .print-footer{display:block!important;text-align:center;font-size:10px;color:#999;margin-top:16px;border-top:0.5px solid #ccc;padding-top:8px}
+}
+
+/* ====== 响应式 ====== */
+@media (max-width:600px){
+  .container{padding:16px 12px}
+  .header{padding:24px 0 16px}
+  .header h1{font-size:22px;letter-spacing:2px}
+  .header .icon{font-size:40px}
+  .card{padding:16px 14px;margin-bottom:10px;border-radius:var(--radius-md)}
+  .q-text{font-size:13.5px;line-height:1.9}
+  .option{padding:11px 12px}
+  .option .text{font-size:13px}
+  .ability-map{grid-template-columns:1fr}
+  .feature-list{grid-template-columns:1fr}
+  .report-tab{font-size:11px;padding:10px 4px}
+  .profile-seal{font-size:18px;padding:10px 20px;letter-spacing:2px}
+  .teacher-summary{grid-template-columns:1fr}
+  .chain-name{width:50px;font-size:11px}
+  .step-indicator{gap:3px}
+  .step-dot{width:10px;height:10px}
+  .step-line{width:16px}
 }
 </style>
 </head>
@@ -130,21 +247,27 @@ body{font-family:"Microsoft YaHei","PingFang SC",sans-serif;background:var(--cre
     <div class="icon">📖</div>
     <h1>语文学情诊断</h1>
     <div class="sub">定位失分根因 · 精准提升方向</div>
+    <div class="ornament"></div>
   </div>
   <div class="card">
-    <p style="font-size:14px;line-height:1.9;color:var(--ink-light);">
-      欢迎你参加这次语文学习能力诊断！<br><br>
-      共 <b>20 道</b>题目，分为现代文阅读、古诗文阅读、写作、语言基础与运用四个板块。<br><br>
-      <b>大部分题目需要你实际阅读和判断</b>——凭你的真实语文能力来答；
-      <b>少数题目是关于你的学习习惯</b>——没有对错之分，选最像你的就好。<br><br>
-      诚实面对自己，是成长的开始。🌱
+    <p style="font-size:14px;line-height:1.9;color:var(--ink);margin-bottom:12px;">
+      <strong>欢迎你参加这次语文学习能力诊断！</strong> 共 <b>20 道</b>题目，预计 8-12 分钟完成。
+    </p>
+    <div class="feature-list">
+      <div class="feature-item"><span class="fi-icon">📖</span> 现代文阅读 ×5</div>
+      <div class="feature-item"><span class="fi-icon">📜</span> 古诗文阅读 ×5</div>
+      <div class="feature-item"><span class="fi-icon">✍️</span> 写作 ×5</div>
+      <div class="feature-item"><span class="fi-icon">📝</span> 语言基础 ×5</div>
+    </div>
+    <p style="font-size:12px;color:var(--ink-lighter);margin-top:8px;line-height:1.6;">
+      💡 大部分题目需要你实际阅读和判断，少数题目关于学习习惯——<b>没有对错之分，选最像你的就好</b>。诚实面对自己，是成长的开始 🌱
     </p>
   </div>
   <div class="card">
-    <p style="font-size:13px;color:var(--ink-light);margin-bottom:8px;">📝 作答前，请先填上你的名字：</p>
-    <input id="student-name" type="text" placeholder="输入你的姓名" style="width:100%;padding:11px 14px;border:1.5px solid var(--border);border-radius:10px;font-size:15px;outline:none;background:var(--white)">
+    <p style="font-size:13px;color:var(--ink-light);margin-bottom:10px;">📝 作答前，请先填上你的名字：</p>
+    <input id="student-name" type="text" placeholder="输入你的姓名" autocomplete="name">
   </div>
-  <button class="btn btn-primary" onclick="startDiagnosis()">开始诊断</button>
+  <button class="btn btn-primary" onclick="startDiagnosis()" aria-label="开始诊断">✨ 开始诊断</button>
   <div class="footer-note">预计用时 8-12 分钟</div>
 </div>
 
@@ -157,68 +280,68 @@ body{font-family:"Microsoft YaHei","PingFang SC",sans-serif;background:var(--cre
   </div>
   <div class="card" id="question-card"></div>
   <div style="display:flex;gap:10px;">
-    <button class="btn btn-outline btn-small" id="btn-prev" style="flex:1;display:none;" onclick="prevQuestion()">上一题</button>
-    <button class="btn btn-primary" id="btn-next" disabled style="flex:1;" onclick="nextQuestion()">下一题</button>
+    <button class="btn btn-outline btn-small" id="btn-prev" style="flex:1;display:none;" onclick="prevQuestion()" aria-label="上一题">← 上一题</button>
+    <button class="btn btn-primary" id="btn-next" disabled style="flex:1;" onclick="nextQuestion()" aria-label="下一题">下一题 →</button>
   </div>
-  <div class="footer-note" style="padding-top:12px;">选最像你的就好，诚实比什么都重要 😊</div>
+  <div class="footer-note">选最像你的就好，诚实比什么都重要 😊</div>
 </div>
 
 <!-- ====== 结果页 ====== -->
 <div id="screen-result" class="hidden">
-  <div class="header"><div class="icon">🎉</div><h1>你的诊断报告</h1></div>
-
-  <!-- 报告头（仅打印可见） -->
-  <div style="display:none;" class="print-header">
-    <p style="font-size:13px;margin-bottom:6px;">学生：<span id="print-name"></span>  日期：<span id="print-date"></span></p>
-    <hr style="border:0.5px solid #ccc;margin-bottom:10px;">
+  <div class="header">
+    <div class="icon">🎉</div>
+    <h1>你的诊断报告</h1>
+    <div class="ornament"></div>
   </div>
 
-  <!-- 诊断画像 -->
-  <div class="card" style="text-align:center;">
-    <div class="profile-badge" id="profile-badge"></div>
+  <!-- 打印页眉 -->
+  <div class="print-header">
+    <p>学生：<span id="print-name"></span>  日期：<span id="print-date"></span></p>
+    <hr>
+  </div>
+
+  <!-- 1. 诊断画像卡 + 根因链 -->
+  <div class="card profile-card">
+    <div class="profile-seal" id="profile-badge"></div>
     <div class="profile-tag" id="profile-tag"></div>
-    <p style="font-size:14px;line-height:1.8;color:var(--ink-light);margin-top:10px;text-align:left;" id="profile-desc"></p>
+    <p class="profile-desc" id="profile-desc"></p>
+    <div class="root-chain" id="root-chain"></div>
   </div>
 
-  <!-- 五维雷达图 -->
-  <div class="card"><h4 style="margin-bottom:12px;">🎯 五层根因雷达</h4><div class="radar-wrap"><canvas id="radar-student"></canvas></div></div>
-
-  <!-- 五维柱状图 -->
-  <div class="card"><h4 style="margin-bottom:12px;">📊 五层根因得分</h4><div id="section-bars"></div></div>
-
-  <!-- 五大板块 -->
-  <div class="card"><h4 style="margin-bottom:12px;">📋 语文五大板块能力</h4><div id="section-domains"></div></div>
-
-  <!-- ====== 三方报告 ====== -->
-  <!-- 学生报告 -->
+  <!-- 2. 能力地图（雷达+板块合并） -->
   <div class="card">
-    <h4 style="margin-bottom:12px;">📖 我的语文提升计划</h4>
-    <div class="audience-card" id="card-student-report"></div>
-  </div>
-
-  <!-- 家长寄语 -->
-  <div class="card" id="card-parent">
-    <h4 style="margin-bottom:8px;">🏠 给家长的话</h4>
-  </div>
-
-  <!-- 教师建议 -->
-  <div class="card">
-    <h4 style="margin-bottom:8px;">📝 给老师的教学参考</h4>
-    <div class="audience-card" id="card-teacher-advice"></div>
-  </div>
-
-  <!-- 同步状态 -->
-  <div class="card" id="card-sync" style="text-align:center;">
-    <div style="font-size:14px;padding:12px;">
-      <span id="sync-icon">⏳</span> <span id="sync-text">正在同步数据给老师...</span>
+    <h4>🗺️ 语文能力地图</h4>
+    <div class="ability-map">
+      <div class="radar-wrap"><canvas id="radar-student"></canvas></div>
+      <div id="domain-minis"></div>
     </div>
   </div>
 
-  <!-- 操作 -->
-  <div style="display:flex;gap:8px;margin-top:10px;">
-    <button class="btn btn-outline btn-small" onclick="printReport()" style="flex:1;">🖨️ 保存 / 打印报告</button>
-    <button class="btn btn-outline btn-small" onclick="restart()" style="flex:1;">重新诊断</button>
+  <!-- 3. 三方报告 Tab -->
+  <div class="card" style="padding:0;overflow:hidden;">
+    <div class="report-tabs" id="report-tabs">
+      <div class="report-tab active" data-tab="tab-student" onclick="switchReportTab('tab-student')">📖 我的提升计划</div>
+      <div class="report-tab" data-tab="tab-parent" onclick="switchReportTab('tab-parent')">🏠 给家长的话</div>
+      <div class="report-tab" data-tab="tab-teacher" onclick="switchReportTab('tab-teacher')">📝 给老师的参考</div>
+    </div>
+    <div class="report-tab-content active" id="tab-student"></div>
+    <div class="report-tab-content" id="tab-parent"></div>
+    <div class="report-tab-content" id="tab-teacher"></div>
   </div>
+
+  <!-- 4. 同步状态条 -->
+  <div class="sync-bar" id="card-sync">
+    <span id="sync-icon">⏳</span> <span id="sync-text">正在同步数据给老师...</span>
+  </div>
+
+  <!-- 操作按钮 -->
+  <div style="display:flex;gap:8px;margin-top:8px;">
+    <button class="btn btn-outline btn-small" onclick="printReport()" style="flex:1;">🖨️ 保存 / 打印报告</button>
+    <button class="btn btn-outline btn-small" onclick="restart()" style="flex:1;">🔄 重新诊断</button>
+  </div>
+
+  <!-- 打印页脚 -->
+  <div class="print-footer">语文学情诊断报告 · V2 根因诊断 · 生成于 <span id="print-date-ft"></span></div>
   <div class="footer-note">诊断帮助你看到自己的学习起点，真正的改变从行动开始 🌱</div>
 </div>
 </div>
@@ -226,79 +349,73 @@ body{font-family:"Microsoft YaHei","PingFang SC",sans-serif;background:var(--cre
 <script>
 // ====== 核心常量 ======
 const ROOT_CAUSES=[{id:0,key:'decode',name:'字词解码',icon:'🔤',sname:'解码层',question:'能否准确识别字词、流畅阅读？',lowMsg:'你在识别字词和流畅阅读方面存在一定困难——这是语文学习最基础的一环。字词就像盖房子的砖块，如果砖块认不全，房子就很难盖起来。'},{id:1,key:'comprehend',name:'意义理解',icon:'💭',sname:'理解层',question:'能否读懂句子和段落、进行推理？',lowMsg:'你能读通字词，但在"读出文字背后的意思"这个环节还需要加强。就像能听清楚别人说的每个字，但不太能抓住对方真正想表达什么。'},{id:2,key:'express',name:'语言表达',icon:'✍️',sname:'表达层',question:'能否把想法组织成清晰书面语言？',lowMsg:'你能理解文章在说什么，但把自己的想法写清楚对你来说是一个挑战。这就像心里有一幅很清楚的画面，但画出来别人看不明白。'},{id:3,key:'strategy',name:'学习策略',icon:'🎯',sname:'策略层',question:'审题、应试、自我监控是否有效？',lowMsg:'你的语文能力本身没有大问题，但在"怎么学"和"怎么考"的策略层面还有提升空间。就像你有一辆好车，但还不太熟悉最佳路线怎么走。'},{id:4,key:'knowledge',name:'知识储备',icon:'📚',sname:'积累层',question:'字词诗句和文学知识是否充足？',lowMsg:'你的语言基本功底还需要更多积累——成语、古诗文、文学常识这些"弹药库"还不够满。没有足够的积累，理解和表达都会受到限制。'}];
-const QUESTIONS=[
-{q:'阅读下面这段文字，回答问题：\n\n外婆家的院子里有一棵老槐树。每年五月，槐花开的时候，满院子都是甜丝丝的香气。外婆会搬出那把旧藤椅，坐在树下择菜。阳光从树叶的缝隙里漏下来，在她花白的头发上跳跃。\n\n那一年我考上了城里的初中，临走前去向外婆告别。外婆照旧坐在槐树下，手里剥着毛豆，说："去吧，好好读书。"声音和平时一样，没什么特别的。\n\n车开出去很远，我回头看，外婆还站在院门口。她抬起手，在空中停了一下，又放下了。那棵老槐树的枝叶在风里轻轻摇晃，像是替谁在挥手。\n\n【第1题】这篇短文主要表达了什么？',
- opts:[{text:'外婆对"我"的不舍和克制的情感',scores:[[1, 3], [0, 1]],correct:true},{text:'外婆平时喜欢在槐树下择菜的生活习惯',scores:[[1, -2], [0, -1]],tag:'表面阅读'},{text:'老槐树在五月开花时院子里很美',scores:[[1, -2], [0, -1]],tag:'表面阅读'},{text:'"我"考上了初中这件事值得高兴',scores:[[1, -2], [4, -1]],tag:'偏离主旨'}],
- dimTags:[1, 0]},
+
+const QUESTIONS=[{q:'阅读下面这段文字，回答问题：\n\n外婆家的院子里有一棵老槐树。每年五月，槐花开的时候，满院子都是甜丝丝的香气。外婆会搬出那把旧藤椅，坐在树下择菜。阳光从树叶的缝隙里漏下来，在她花白的头发上跳跃。\n\n那一年我考上了城里的初中，临走前去向外婆告别。外婆照旧坐在槐树下，手里剥着毛豆，说："去吧，好好读书。"声音和平时一样，没什么特别的。\n\n车开出去很远，我回头看，外婆还站在院门口。她抬起手，在空中停了一下，又放下了。那棵老槐树的枝叶在风里轻轻摇晃，像是替谁在挥手。\n\n【第1题】这篇短文主要表达了什么？',
+ opts:[{text:'外婆对"我"的不舍和克制的情感',scores:[[1,3],[0,1]],correct:true},{text:'外婆平时喜欢在槐树下择菜的生活习惯',scores:[[1,-2],[0,-1]],tag:'表面阅读'},{text:'老槐树在五月开花时院子里很美',scores:[[1,-2],[0,-1]],tag:'表面阅读'},{text:'"我"考上了初中这件事值得高兴',scores:[[1,-2],[4,-1]],tag:'偏离主旨'}],
+ dimTags:[1,0]},
 {q:'同上篇短文。外婆说"去吧，好好读书"时"声音和平时一样，没什么特别的"，这样写有什么深意？',
- opts:[{text:'表现外婆把不舍藏在平静之下，让情感更动人',scores:[[1, 3], [2, 1]],correct:true},{text:'说明外婆对"我"的离开其实不太在意',scores:[[1, -3], [0, -1]],tag:'理解反向'},{text:'说明外婆年纪大了，说话声音本来就没有起伏',scores:[[1, -2], [4, -1]],tag:'忽略语境'},{text:'作者这样写只是为了凑字数，没有特别的意思',scores:[[1, -1], [3, -3]],tag:'消极策略'}],
- dimTags:[1, 3]},
+ opts:[{text:'表现外婆把不舍藏在平静之下，让情感更动人',scores:[[1,3],[2,1]],correct:true},{text:'说明外婆对"我"的离开其实不太在意',scores:[[1,-3],[0,-1]],tag:'理解反向'},{text:'说明外婆年纪大了，说话声音本来就没有起伏',scores:[[1,-2],[4,-1]],tag:'忽略语境'},{text:'作者这样写只是为了凑字数，没有特别的意思',scores:[[1,-1],[3,-3]],tag:'消极策略'}],
+ dimTags:[1,3]},
 {q:'同上篇短文。文中"那棵老槐树的枝叶在风里轻轻摇晃，像是替谁在挥手"用了什么写法？',
- opts:[{text:'拟人——把槐树当作人来写，借景物表达人物情感',scores:[[1, 3], [0, 2]],correct:true},{text:'夸张——夸大了槐树的摇晃程度',scores:[[1, -2], [4, -1]],tag:'术语混淆'},{text:'对比——用槐树和外婆做对比',scores:[[1, -1], [4, -2]],tag:'术语混淆'},{text:'排比——连续写了好几样东西',scores:[[1, -2], [4, -2], [0, -1]],tag:'术语混淆'}],
- dimTags:[1, 4]},
+ opts:[{text:'拟人——把槐树当作人来写，借景物表达人物情感',scores:[[1,3],[0,2]],correct:true},{text:'夸张——夸大了槐树的摇晃程度',scores:[[1,-2],[4,-1]],tag:'术语混淆'},{text:'对比——用槐树和外婆做对比',scores:[[1,-1],[4,-2]],tag:'术语混淆'},{text:'排比——连续写了好几样东西',scores:[[1,-2],[4,-2],[0,-1]],tag:'术语混淆'}],
+ dimTags:[1,4]},
 {q:'文中"阳光从树叶的缝隙里漏下来，在她花白的头发上跳跃"——"漏"和"跳跃"这两个词用得怎么样？',
- opts:[{text:'"漏"写出光透过树叶的细碎感，"跳跃"写出光影晃动的活泼感，一静一动很有画面感',scores:[[1, 3], [2, 2], [4, 1]],correct:true},{text:'用词准确，让读者知道当时是白天',scores:[[1, -2], [2, -2]],tag:'浅层分析'},{text:'这两个词都很普通，没什么特别的',scores:[[1, -3], [2, -3], [3, -1]],tag:'感知薄弱'},{text:'应该换成"照"和"闪动"更好',scores:[[1, -1], [2, -1], [3, -2]],tag:'错误判断'}],
- dimTags:[1, 2]},
+ opts:[{text:'"漏"写出光透过树叶的细碎感，"跳跃"写出光影晃动的活泼感，一静一动很有画面感',scores:[[1,3],[2,2],[4,1]],correct:true},{text:'用词准确，让读者知道当时是白天',scores:[[1,-2],[2,-2]],tag:'浅层分析'},{text:'这两个词都很普通，没什么特别的',scores:[[1,-3],[2,-3],[3,-1]],tag:'感知薄弱'},{text:'应该换成"照"和"闪动"更好',scores:[[1,-1],[2,-1],[3,-2]],tag:'错误判断'}],
+ dimTags:[1,2]},
 {q:'做刚才这几道阅读题的过程中，你最接近下面哪种情况？（没有对错，选最像你的）',
- opts:[{text:'先读完文章再做题，做题时能回原文找到对应的句子',scores:[[3, 3], [0, 1], [1, 1]]},{text:'读完文章大概知道意思，做题时凭印象选，偶尔回看',scores:[[3, 0], [1, 0]]},{text:'直接看题目，然后去文章里找关键词，文章没有完整读完',scores:[[3, -2], [1, -2], [0, -1]]},{text:'读完觉得懂了但做题时在两个选项之间纠结很久',scores:[[3, -3], [1, -2], [0, -1]]}],
- dimTags:[3, 1]},
+ opts:[{text:'先读完文章再做题，做题时能回原文找到对应的句子',scores:[[3,3],[0,1],[1,1]]},{text:'读完文章大概知道意思，做题时凭印象选，偶尔回看',scores:[[3,0],[1,0]]},{text:'直接看题目，然后去文章里找关键词，文章没有完整读完',scores:[[3,-2],[1,-2],[0,-1]]},{text:'读完觉得懂了但做题时在两个选项之间纠结很久',scores:[[3,-3],[1,-2],[0,-1]]}],
+ dimTags:[3,1]},
 {q:'读孟浩然《宿建德江》："移舟泊烟渚，日暮客愁新。野旷天低树，江清月近人。"这首诗主要表达了什么情感？',
- opts:[{text:'旅途中的孤独和对故乡的思念',scores:[[1, 3], [4, 2]],correct:true},{text:'在江边停船看风景的愉快心情',scores:[[1, -3], [4, -1]],tag:'理解反向'},{text:'对自然风光和月色的赞美',scores:[[1, -2], [4, -1]],tag:'表面阅读'},{text:'和朋友一起泛舟游玩的快乐',scores:[[1, -2], [0, -1]],tag:'忽略语境'}],
- dimTags:[1, 4]},
+ opts:[{text:'旅途中的孤独和对故乡的思念',scores:[[1,3],[4,2]],correct:true},{text:'在江边停船看风景的愉快心情',scores:[[1,-3],[4,-1]],tag:'理解反向'},{text:'对自然风光和月色的赞美',scores:[[1,-2],[4,-1]],tag:'表面阅读'},{text:'和朋友一起泛舟游玩的快乐',scores:[[1,-2],[0,-1]],tag:'忽略语境'}],
+ dimTags:[1,4]},
 {q:'读下面文言句子："友人惭，下车引之。元方入门不顾。"这里的"引"最可能是什么意思？',
- opts:[{text:'拉、牵',scores:[[0, 3], [4, 2]],correct:true},{text:'引导',scores:[[0, -2], [4, -1]],tag:'义项混淆'},{text:'引用',scores:[[0, -3], [4, -1]],tag:'义项混淆'},{text:'引起',scores:[[0, -2], [4, -1]],tag:'义项混淆'}],
- dimTags:[0, 4]},
+ opts:[{text:'拉、牵',scores:[[0,3],[4,2]],correct:true},{text:'引导',scores:[[0,-2],[4,-1]],tag:'义项混淆'},{text:'引用',scores:[[0,-3],[4,-1]],tag:'义项混淆'},{text:'引起',scores:[[0,-2],[4,-1]],tag:'义项混淆'}],
+ dimTags:[0,4]},
 {q:'"春风又绿江南岸"——如果把"绿"换成"到""过""入"，表达效果有什么不同？',
- opts:[{text:'"绿"写出了春风使大地变绿这个动态的色彩变化，一个字让画面有了颜色和生命',scores:[[1, 3], [2, 2], [4, 1]],correct:true},{text:'换成"到"最准确直接，诗歌就应该简单明了',scores:[[1, -3], [2, -2], [4, -1]],tag:'审美偏差'},{text:'几个字意思差不多，用哪个都行，诗人只是随便选的',scores:[[1, -2], [2, -2], [3, -2]],tag:'感知薄弱'},{text:'"绿"不如"满"好，因为"满"更有春天的感觉',scores:[[1, -1], [2, -1]],tag:'有判断但不到位'}],
- dimTags:[1, 2]},
+ opts:[{text:'"绿"写出了春风使大地变绿这个动态的色彩变化，一个字让画面有了颜色和生命',scores:[[1,3],[2,2],[4,1]],correct:true},{text:'换成"到"最准确直接，诗歌就应该简单明了',scores:[[1,-3],[2,-2],[4,-1]],tag:'审美偏差'},{text:'几个字意思差不多，用哪个都行，诗人只是随便选的',scores:[[1,-2],[2,-2],[3,-2]],tag:'感知薄弱'},{text:'"绿"不如"满"好，因为"满"更有春天的感觉',scores:[[1,-1],[2,-1]],tag:'有判断但不到位'}],
+ dimTags:[1,2]},
 {q:'背诵古诗文时，下面哪种描述最接近你的真实情况？',
- opts:[{text:'先理解每句的意思和整首诗在说什么，理解了自然就记住了',scores:[[3, 3], [4, 2], [1, 1]]},{text:'反复大声朗读，靠节奏和押韵"顺"下来，不太管意思',scores:[[3, 0], [4, 0], [1, -1]]},{text:'边抄边背，抄几遍就记住了，但过一阵子又忘了',scores:[[3, -1], [4, -1]]},{text:'背得很吃力，经常背了忘忘了背，看到背诵就头疼',scores:[[3, -3], [4, -3], [1, -2]]}],
- dimTags:[3, 4]},
+ opts:[{text:'先理解每句的意思和整首诗在说什么，理解了自然就记住了',scores:[[3,3],[4,2],[1,1]]},{text:'反复大声朗读，靠节奏和押韵"顺"下来，不太管意思',scores:[[3,0],[4,0],[1,-1]]},{text:'边抄边背，抄几遍就记住了，但过一阵子又忘了',scores:[[3,-1],[4,-1]]},{text:'背得很吃力，经常背了忘忘了背，看到背诵就头疼',scores:[[3,-3],[4,-3],[1,-2]]}],
+ dimTags:[3,4]},
 {q:'下面这句文言文的翻译，哪个最准确？\n"学而不思则罔，思而不学则殆。"',
- opts:[{text:'只学习不思考就会迷惑，只思考不学习就会倦怠（没有收获）',scores:[[0, 3], [1, 3], [4, 2]],correct:true},{text:'学习的时候不要想太多，想太多就学不下去了',scores:[[0, -2], [1, -3]],tag:'解码错误'},{text:'学习和思考同样重要，缺一不可',scores:[[1, -1], [0, 0]],tag:'笼统不准确'},{text:'学了就要思考，否则等于白学',scores:[[0, -1], [1, -1]],tag:'不完整'}],
- dimTags:[0, 1]},
+ opts:[{text:'只学习不思考就会迷惑，只思考不学习就会倦怠（没有收获）',scores:[[0,3],[1,3],[4,2]],correct:true},{text:'学习的时候不要想太多，想太多就学不下去了',scores:[[0,-2],[1,-3]],tag:'解码错误'},{text:'学习和思考同样重要，缺一不可',scores:[[1,-1],[0,0]],tag:'笼统不准确'},{text:'学了就要思考，否则等于白学',scores:[[0,-1],[1,-1]],tag:'不完整'}],
+ dimTags:[0,1]},
 {q:'作文题目是《那一次，我真后悔》。下面哪个是最关键的要求？',
- opts:[{text:'必须写一件具体的事，重点写"后悔"的感受和原因',scores:[[3, 3], [1, 2]],correct:true},{text:'只要是关于后悔的都可以写，写感想也行',scores:[[3, -3], [1, -1]],tag:'审题偏差'},{text:'要写一件很大的事，小事不值得写',scores:[[3, -2], [1, -1]],tag:'审题偏差'},{text:'重点是写"后悔之后怎么改正"，后悔本身不重要',scores:[[3, -2], [1, -2]],tag:'偏离重点'}],
- dimTags:[3, 1]},
+ opts:[{text:'必须写一件具体的事，重点写"后悔"的感受和原因',scores:[[3,3],[1,2]],correct:true},{text:'只要是关于后悔的都可以写，写感想也行',scores:[[3,-3],[1,-1]],tag:'审题偏差'},{text:'要写一件很大的事，小事不值得写',scores:[[3,-2],[1,-1]],tag:'审题偏差'},{text:'重点是写"后悔之后怎么改正"，后悔本身不重要',scores:[[3,-2],[1,-2]],tag:'偏离重点'}],
+ dimTags:[3,1]},
 {q:'如果写《我的同桌》这篇作文，下面哪件事作为素材最出色？',
- opts:[{text:'有一次考试我没带橡皮，同桌把自己的橡皮切成两半分给我——这件事虽小但能写出人物性格',scores:[[2, 3], [1, 2], [4, 1]],correct:true},{text:'同桌学习成绩很好，每次都考班级前三名——说明同桌很优秀',scores:[[2, -2], [1, -1]],tag:'素材平淡'},{text:'同桌长得很高，爱打篮球，是校队的——描写同桌的外貌和爱好',scores:[[2, -2], [1, -1]],tag:'偏离主题'},{text:'同桌每天和我一起上学放学——写我们关系好',scores:[[2, -1], [4, -2]],tag:'素材单薄'}],
- dimTags:[2, 1]},
+ opts:[{text:'有一次考试我没带橡皮，同桌把自己的橡皮切成两半分给我——这件事虽小但能写出人物性格',scores:[[2,3],[1,2],[4,1]],correct:true},{text:'同桌学习成绩很好，每次都考班级前三名——说明同桌很优秀',scores:[[2,-2],[1,-1]],tag:'素材平淡'},{text:'同桌长得很高，爱打篮球，是校队的——描写同桌的外貌和爱好',scores:[[2,-2],[1,-1]],tag:'偏离主题'},{text:'同桌每天和我一起上学放学——写我们关系好',scores:[[2,-1],[4,-2]],tag:'素材单薄'}],
+ dimTags:[2,1]},
 {q:'下面是一篇作文中的句子，它们正确的逻辑顺序应该是？\n①外婆把糖饼翻了个面，金黄的饼面上冒起几个小泡\n②放学回家，还在巷子口就闻到了熟悉的甜香\n③外婆从锅里铲起糖饼，吹了吹，递到我手上\n④我咬了一口，外酥里软，红糖在嘴里慢慢化开',
- opts:[{text:'②①③④',scores:[[2, 3], [3, 2]],correct:true},{text:'②③①④',scores:[[2, -2], [3, -1]],tag:'逻辑偏差'},{text:'①②③④',scores:[[2, -2], [3, -2]],tag:'逻辑偏差'},{text:'②①④③',scores:[[2, -2], [3, -1]],tag:'逻辑偏差'}],
- dimTags:[2, 3]},
+ opts:[{text:'②①③④',scores:[[2,3],[3,2]],correct:true},{text:'②③①④',scores:[[2,-2],[3,-1]],tag:'逻辑偏差'},{text:'①②③④',scores:[[2,-2],[3,-2]],tag:'逻辑偏差'},{text:'②①④③',scores:[[2,-2],[3,-1]],tag:'逻辑偏差'}],
+ dimTags:[2,3]},
 {q:'原句："他很生气。"下面哪个改写最能打动读者？',
- opts:[{text:'他的脸涨得通红，拳头攥得紧紧的，嘴唇抖了半天才挤出一句话来',scores:[[2, 3], [1, 2], [4, 1]],correct:true},{text:'他非常非常生气，简直气坏了，从来没有这么生气过',scores:[[2, -3], [1, -1]],tag:'表达贫乏'},{text:'他生气了，因为有人做了让他不高兴的事情',scores:[[2, -2], [1, -1]],tag:'表达笼统'},{text:'他怒火中烧，气愤填膺，怒发冲冠',scores:[[1, -1], [2, 0], [4, -2]],tag:'堆砌成语'}],
- dimTags:[2, 1]},
+ opts:[{text:'他的脸涨得通红，拳头攥得紧紧的，嘴唇抖了半天才挤出一句话来',scores:[[2,3],[1,2],[4,1]],correct:true},{text:'他非常非常生气，简直气坏了，从来没有这么生气过',scores:[[2,-3],[1,-1]],tag:'表达贫乏'},{text:'他生气了，因为有人做了让他不高兴的事情',scores:[[2,-2],[1,-1]],tag:'表达笼统'},{text:'他怒火中烧，气愤填膺，怒发冲冠',scores:[[1,-1],[2,0],[4,-2]],tag:'堆砌成语'}],
+ dimTags:[2,1]},
 {q:'拿到作文题目后，你最常出现的情况是？（没有对错，选最像你的）',
- opts:[{text:'先花几分钟审题想清楚要写什么，心里有个大概的框架再动笔',scores:[[3, 3], [2, 1]]},{text:'脑子里有个大概想法就开始写，写着写着再想下面写什么',scores:[[3, -1], [2, -1]]},{text:'想半天不知道怎么开头，但开头写顺了后面就能顺着写下去',scores:[[3, -2], [2, -2]]},{text:'开头和中间都能写，结尾总是匆匆收场不知道写什么',scores:[[3, -2], [2, -2]]}],
- dimTags:[3, 2]},
+ opts:[{text:'先花几分钟审题想清楚要写什么，心里有个大概的框架再动笔',scores:[[3,3],[2,1]]},{text:'脑子里有个大概想法就开始写，写着写着再想下面写什么',scores:[[3,-1],[2,-1]]},{text:'想半天不知道怎么开头，但开头写顺了后面就能顺着写下去',scores:[[3,-2],[2,-2]]},{text:'开头和中间都能写，结尾总是匆匆收场不知道写什么',scores:[[3,-2],[2,-2]]}],
+ dimTags:[3,2]},
 {q:'下面哪个词语的字形完全正确？',
- opts:[{text:'迫不及待',scores:[[0, 3], [4, 2]],correct:true},{text:'迫不急待',scores:[[0, -2], [4, -1]],tag:'字形混淆'},{text:'迫不亟待',scores:[[0, -3], [4, -2]],tag:'字形混淆'},{text:'迫不及代',scores:[[0, -2], [4, -1]],tag:'字形混淆'}],
- dimTags:[0, 4]},
+ opts:[{text:'迫不及待',scores:[[0,3],[4,2]],correct:true},{text:'迫不急待',scores:[[0,-2],[4,-1]],tag:'字形混淆'},{text:'迫不亟待',scores:[[0,-3],[4,-2]],tag:'字形混淆'},{text:'迫不及代',scores:[[0,-2],[4,-1]],tag:'字形混淆'}],
+ dimTags:[0,4]},
 {q:'下面哪个句子中成语使用最恰当？',
- opts:[{text:'老师讲的故事很感人，我们都听得津津有味',scores:[[4, 3], [0, 2], [1, 2]],correct:true},{text:'听到这个好消息，大家都忍俊不禁地笑了起来',scores:[[4, -2], [0, -1]],tag:'成语误用'},{text:'运动会上他跑得最快，简直是罄竹难书',scores:[[4, -3], [0, -2], [1, -1]],tag:'成语误用'},{text:'他写的作文天花乱坠，让人看不明白',scores:[[4, -2], [0, -1], [1, -1]],tag:'成语误用'}],
- dimTags:[4, 0]},
+ opts:[{text:'老师讲的故事很感人，我们都听得津津有味',scores:[[4,3],[0,2],[1,2]],correct:true},{text:'听到这个好消息，大家都忍俊不禁地笑了起来',scores:[[4,-2],[0,-1]],tag:'成语误用'},{text:'运动会上他跑得最快，简直是罄竹难书',scores:[[4,-3],[0,-2],[1,-1]],tag:'成语误用'},{text:'他写的作文天花乱坠，让人看不明白',scores:[[4,-2],[0,-1],[1,-1]],tag:'成语误用'}],
+ dimTags:[4,0]},
 {q:'下面哪个句子没有语病？',
- opts:[{text:'我们要善于发现并改正自己的缺点',scores:[[0, 3], [1, 2], [4, 1]],correct:true},{text:'通过这次学习，使我明白了做人的道理',scores:[[0, -2], [1, -1]],tag:'语法感知弱'},{text:'同学们基本上全部都完成了作业',scores:[[0, -1], [1, -1]],tag:'语法感知弱'},{text:'他的写作水平有了明显的提高和进步',scores:[[0, -1], [1, -1], [4, -1]],tag:'语法感知弱'}],
- dimTags:[0, 1]},
+ opts:[{text:'我们要善于发现并改正自己的缺点',scores:[[0,3],[1,2],[4,1]],correct:true},{text:'通过这次学习，使我明白了做人的道理',scores:[[0,-2],[1,-1]],tag:'语法感知弱'},{text:'同学们基本上全部都完成了作业',scores:[[0,-1],[1,-1]],tag:'语法感知弱'},{text:'他的写作水平有了明显的提高和进步',scores:[[0,-1],[1,-1],[4,-1]],tag:'语法感知弱'}],
+ dimTags:[0,1]},
 {q:'例句："书籍是打开知识大门的钥匙。"仿照这个句式（用比喻），写一个关于"友谊"的句子。下面哪个仿写最贴切？',
- opts:[{text:'友谊是连接心灵的桥梁',scores:[[2, 3], [1, 2], [4, 1]],correct:true},{text:'友谊是两个人之间的关系',scores:[[2, -3], [1, -2]],tag:'没有比喻'},{text:'友谊让我们每天都很快乐',scores:[[2, -2], [1, -1]],tag:'没有比喻'},{text:'友谊就像春天的阳光',scores:[[2, 0], [1, 0]],tag:'比喻空泛'}],
- dimTags:[2, 1]},
+ opts:[{text:'友谊是连接心灵的桥梁',scores:[[2,3],[1,2],[4,1]],correct:true},{text:'友谊是两个人之间的关系',scores:[[2,-3],[1,-2]],tag:'没有比喻'},{text:'友谊让我们每天都很快乐',scores:[[2,-2],[1,-1]],tag:'没有比喻'},{text:'友谊就像春天的阳光',scores:[[2,0],[1,0]],tag:'比喻空泛'}],
+ dimTags:[2,1]},
 {q:'语文考试前一两周，你通常怎么复习？（没有对错，选最像你的）',
- opts:[{text:'我知道自己哪里薄弱（比如文言文不行），会有针对性地多花时间在那个地方',scores:[[3, 3], [4, 1], [0, 1]]},{text:'把课本和笔记从头翻一遍，老师划的重点都过一遍',scores:[[3, 0], [4, 1]]},{text:'做几套卷子找找手感，能复习多少算多少，没有特别的计划',scores:[[3, -2], [4, -2]]},{text:'翻翻书觉得没什么可复习的，或者根本不知道从哪里开始复习',scores:[[3, -3], [4, -3], [1, -2]]}],
- dimTags:[3, 4]},
+ opts:[{text:'我知道自己哪里薄弱（比如文言文不行），会有针对性地多花时间在那个地方',scores:[[3,3],[4,1],[0,1]]},{text:'把课本和笔记从头翻一遍，老师划的重点都过一遍',scores:[[3,0],[4,1]]},{text:'做几套卷子找找手感，能复习多少算多少，没有特别的计划',scores:[[3,-2],[4,-2]]},{text:'翻翻书觉得没什么可复习的，或者根本不知道从哪里开始复习',scores:[[3,-3],[4,-3],[1,-2]]}],
+ dimTags:[3,4]}
 ];
 
-const SECTIONS=[
-  {name:'现代文阅读',cls:'badge-reading',start:0,end:4},
-  {name:'古诗文阅读',cls:'badge-poetry',start:5,end:9},
-  {name:'写作',cls:'badge-writing',start:10,end:14},
-  {name:'语言基础与运用',cls:'badge-language',start:15,end:19}
-];
+const SECTIONS=[{name:'现代文阅读',cls:'badge-reading',start:0,end:4},{name:'古诗文阅读',cls:'badge-poetry',start:5,end:9},{name:'写作',cls:'badge-writing',start:10,end:14},{name:'语言基础与运用',cls:'badge-language',start:15,end:19}];
 
 // ====== 七大诊断画像 ======
-const PROFILES={
-P1:{id:'P1',name:'字词解码薄弱型',tag:'基础关卡',icon:'🔤',
+const PROFILES={P1:{id:'P1',name:'字词解码薄弱型',tag:'基础关卡',icon:'🔤',
   desc:'你在字词识别和阅读流畅度方面存在基础性困难。这是语文学习最底层的"地基"——如果不先解决这个问题，阅读理解、写作表达都会受到拖累。好消息是：这个层面的问题通过有针对性的训练是完全可以改善的。',
   studentTitle:'你的首要任务：打通阅读的第一关',
   studentPlan:['每天出声朗读一篇200字段落，遇到不认识的字当场查字典，记录在本子上——每天只做10分钟','每周认识30个新字词，将它们分类记在便签纸上贴在书桌前——"本周新字词"','两周后用你新认识的字词写一段话，看到自己可以用这些字词写东西，会非常有成就感'],
@@ -367,12 +484,10 @@ P7:{id:'P7',name:'均衡发展型',tag:'持续精进',icon:'⭐',
   teacherPriority:'该生各项根因均衡发展，可引导高阶突破。发挥其示范引领作用。',
   teacherStrategies:['引导挑战更复杂的文本类型——议论性散文、多文本比较阅读、文学短评','鼓励在班级分享学习方法和心得——"同伴示范"对其他学生也有帮助','提供"输出型"任务——整理知识点分享、给全班出题、做课前小讲座'],
   teacherMonitor:'关注是否在某些领域出现新的兴趣和突破点；防止"均衡"变成"平庸"。',
-  priority:[3,2,1,4,0]}
-};
+  priority:[3,2,1,4,0]}};
 
-// ====== 根因解释库（每层三级 x 三方视角） ======
-const RC_EXP = {
-0:{high:{desc:'字词识别和阅读流畅度良好——你能准确认读常见字词，阅读速度基本流畅，不会因为认字问题影响理解。',
+// ====== 根因解释库 ======
+const RC_EXP={0:{high:{desc:'字词识别和阅读流畅度良好——你能准确认读常见字词，阅读速度基本流畅，不会因为认字问题影响理解。',
   student:'你的字词基础很扎实。保持每天的阅读习惯，遇到不认识的字继续随手查。可以尝试读一些稍微"超年龄"的书来扩展词汇量。',
   parent:'孩子识字量和阅读流畅度都在正常范围以上。请继续保持每日阅读的习惯，可以适当增加一些有挑战性的读物。',
   teacher:'该生解码能力良好，阅读流畅度不影响课堂学习。可布置略高于当前水平的阅读材料促进词汇扩展。'},
@@ -431,24 +546,17 @@ const RC_EXP = {
  low:{desc:'知识储备明显不足——成语量少、古诗文积累薄弱、对文学常识感到陌生。这直接导致了在需要调用知识的题型上的持续失分。',
   student:'你现在的知识"弹药库"还比较空。别急，积累是语文学习中最不需要天赋、最能靠坚持做好的事。给你一个简单的启动计划：每天只做三件小事——①学一个你老是写错的字（真正搞懂它为什么这样写）；②记一个有趣的成语（不是背解释而是想想它能在什么场景用）；③背一句你喜欢的诗（先理解意思再背）。三件事加起来不超过10分钟，但坚持一学期你会脱胎换骨。',
   parent:'孩子目前最需要的是"知识积累"——成语、古诗、好词好句的储备还不够。好消息是：积累是所有语文能力中最不需要天赋、最能靠坚持做到的。在家建议：①每天只要求孩子积累3个知识点（一个易错字+一个成语+一句诗），不要贪多；②把这些知识点写在便签纸上贴在家里显眼处（冰箱、书桌前）；③每天吃晚饭时花2分钟口头抽查一下（不要像考试，就像聊天）；④每积累到50个，给孩子一个小奖励——让TA看到自己的进步。',
-  teacher:'该生积累层是当前重要干预点。建议：①从"微积累"启动——每天只要求3个知识点，建立"小但日日不断"的习惯；②引入"间隔复习轮"——每天花课前2-3分钟用卡片快速回顾之前积累的内容；③"积累可视化"——在教室墙上设"积累进度图"，让学生看到自己的积累量在增长，获得成就感；④与家长协调——老师的课堂积累和家长的家庭积累使用同一套知识卡片，形成合力；⑤监控指标：四周内学生在字音字形和成语运用上的正确率有可测量的提升。'}}
-};
+  teacher:'该生积累层是当前重要干预点。建议：①从"微积累"启动——每天只要求3个知识点，建立"小但日日不断"的习惯；②引入"间隔复习轮"——每天花课前2-3分钟用卡片快速回顾之前积累的内容；③"积累可视化"——在教室墙上设"积累进度图"，让学生看到自己的积累量在增长，获得成就感；④与家长协调——老师的课堂积累和家长的家庭积累使用同一套知识卡片，形成合力；⑤监控指标：四周内学生在字音字形和成语运用上的正确率有可测量的提升。'}}};
 
 // ====== 五大板块映射 ======
-const DOMAINS = {
-  '语基':{name:'语言基础与运用',dims:[{i:4,w:0.35},{i:0,w:0.35},{i:1,w:0.3}],desc:'字音字形、成语、病句、仿写等基础知识的掌握与运用。根因上主要反映积累层和解码层的水平。'},
-  '名著':{name:'名著阅读',dims:[{i:4,w:0.35},{i:1,w:0.35},{i:2,w:0.3}],desc:'对经典文学作品的熟悉程度和理解深度。根因上关联积累层、理解层和表达层。'},
-  '古诗文':{name:'古诗文阅读',dims:[{i:4,w:0.3},{i:0,w:0.3},{i:1,w:0.4}],desc:'古诗词背诵、文言实词积累与诗歌鉴赏能力。根因上涉及积累层、解码层和理解层的综合运用。'},
-  '阅读':{name:'现代文阅读',dims:[{i:1,w:0.35},{i:0,w:0.2},{i:3,w:0.25},{i:2,w:0.2}],desc:'审题策略、信息提取、文本理解与语言表达的综合运用。根因上理解层是核心。'},
-  '作文':{name:'写作',dims:[{i:2,w:0.35},{i:1,w:0.2},{i:3,w:0.25},{i:4,w:0.2}],desc:'语言表达、逻辑结构、审题策略与知识积累的综合能力。根因上表达层是核心。'}
-};
+const DOMAINS={'语基':{name:'语言基础与运用',dims:[{i:4,w:0.35},{i:0,w:0.35},{i:1,w:0.3}],hint:'字音字形、成语、病句、仿写——积累层和解码层是基础'},'名著':{name:'名著阅读',dims:[{i:4,w:0.35},{i:1,w:0.35},{i:2,w:0.3}],hint:'经典作品熟悉度——积累+理解+表达'},'古诗文':{name:'古诗文阅读',dims:[{i:4,w:0.3},{i:0,w:0.3},{i:1,w:0.4}],hint:'诗词背诵、文言实词、诗歌鉴赏——理解层是核心'},'阅读':{name:'现代文阅读',dims:[{i:1,w:0.35},{i:0,w:0.2},{i:3,w:0.25},{i:2,w:0.2}],hint:'审题策略+信息提取+文本理解+表达——理解层是核心'},'作文':{name:'写作',dims:[{i:2,w:0.35},{i:1,w:0.2},{i:3,w:0.25},{i:4,w:0.2}],hint:'语言表达+逻辑结构+审题+积累——表达层是核心'}};
 
 // ====== 工具函数 ======
 function mapScore(r){return Math.max(1,Math.min(99,Math.round((r-20)/60*98+1)))}
 function getLv(s){return s>=68?'high':(s<42?'low':'medium')}
 
 // ====== 状态管理 ======
-let currentQ=0, rawScores=[50,50,50,50,50], answers=[];
+let currentQ=0,rawScores=[50,50,50,50,50],answers=[];
 
 function getSection(i){return SECTIONS.find(function(s){return i>=s.start&&i<=s.end})}
 
@@ -457,8 +565,8 @@ function startDiagnosis(){
   const nameEl=document.getElementById('student-name');
   if(!nameEl.value.trim()){alert('请先填写你的姓名哦~');nameEl.focus();return}
   var saved=null;
-  try{ saved=JSON.parse(localStorage.getItem('yuwen_quiz_progress')); }catch(e){}
-  if(saved && saved.name===nameEl.value.trim() && saved.answers && saved.answers.length>0){
+  try{saved=JSON.parse(localStorage.getItem('yuwen_quiz_progress'));}catch(e){}
+  if(saved&&saved.name===nameEl.value.trim()&&saved.answers&&saved.answers.length>0){
     if(confirm('检测到你上次未完成的答题记录，是否继续上次的进度？\n（选"取消"将重新开始）')){
       currentQ=saved.currentQ||0;answers=saved.answers;rawScores=[50,50,50,50,50];
       document.getElementById('screen-start').classList.add('hidden');
@@ -481,7 +589,7 @@ function renderQuestion(){
   document.getElementById('section-label').innerHTML='<span class="section-badge '+sec.cls+'">'+sec.name+'</span>';
   const btnNext=document.getElementById('btn-next');
   const btnPrev=document.getElementById('btn-prev');
-  btnNext.disabled=true;btnNext.textContent=currentQ<QUESTIONS.length-1?'下一题':'查看诊断结果';
+  btnNext.disabled=true;btnNext.textContent=currentQ<QUESTIONS.length-1?'下一题 →':'✨ 查看诊断结果';
   btnPrev.style.display=currentQ===0?'none':'';
 
   // 步骤指示器
@@ -496,29 +604,47 @@ function renderQuestion(){
   document.getElementById('step-dots').innerHTML=dotsHTML;
 
   const labels=['A','B','C','D'];
-  let html='';
-  if(q.dimTags && q.dimTags.length>0){
+  var html='';
+  // 根因标签
+  if(q.dimTags&&q.dimTags.length>0){
     html+='<div style="margin-bottom:8px;">';
     q.dimTags.forEach(function(did){
-      html+='<span style="display:inline-block;padding:2px 8px;border-radius:8px;font-size:10px;background:#F3F0EB;color:#8B7355;margin-right:4px;letter-spacing:1px;">'+ROOT_CAUSES[did].icon+' '+ROOT_CAUSES[did].sname+'</span>';
+      var rc=ROOT_CAUSES[did];
+      html+='<span style="display:inline-block;padding:3px 9px;border-radius:9px;font-size:11px;background:#F3F0EB;color:#8B7355;margin-right:5px;letter-spacing:1px;">'+rc.icon+' '+rc.sname+'</span>';
     });
     html+='</div>';
   }
-  html+='<span class="q-num">'+(currentQ+1)+'</span> ';
-  html+='<h3 style="display:inline;white-space:pre-wrap;">'+q.q+'</h3><div class="options">';
+  // 题目文本
+  var qText=q.q;
+  var passageEnd=qText.indexOf('\n\n【');
+  if(passageEnd>0){
+    var passage=qText.substring(0,passageEnd);
+    var questionPart=qText.substring(passageEnd+2);
+    html+='<div class="q-passage">'+passage+'</div>';
+    html+='<span class="q-num">'+(currentQ+1)+'</span>';
+    html+='<span class="q-text">'+questionPart+'</span>';
+  }else{
+    html+='<span class="q-num">'+(currentQ+1)+'</span>';
+    html+='<span class="q-text">'+q.q+'</span>';
+  }
+  html+='<div class="options">';
   q.opts.forEach(function(opt,i){
     const sel=answers[currentQ]===i?' selected':'';
-    html+='<div class="option'+sel+'" onclick="selectOption('+i+')" id="opt-'+i+'">';
+    html+='<div class="option'+sel+'" onclick="selectOption('+i+')" id="opt-'+i+'" role="radio" aria-checked="'+(answers[currentQ]===i?'true':'false')+'">';
     html+='<div class="label">'+labels[i]+'</div><div class="text">'+opt.text+'</div></div>'
   });
-  html+='</div>';document.getElementById('question-card').innerHTML=html;
+  html+='</div>';
+  document.getElementById('question-card').innerHTML=html;
   if(answers[currentQ]!==undefined)btnNext.disabled=false
 }
 
 function selectOption(i){
-  answers[currentQ]=i;document.querySelectorAll('.option').forEach(function(e){e.classList.remove('selected')});
-  document.getElementById('opt-'+i).classList.add('selected');document.getElementById('btn-next').disabled=false;
-  try{ var p={answers:answers,currentQ:currentQ,name:document.getElementById('student-name').value.trim()}; localStorage.setItem('yuwen_quiz_progress',JSON.stringify(p)); }catch(e){}
+  answers[currentQ]=i;
+  document.querySelectorAll('.option').forEach(function(e){e.classList.remove('selected');e.setAttribute('aria-checked','false')});
+  var optEl=document.getElementById('opt-'+i);
+  optEl.classList.add('selected');optEl.setAttribute('aria-checked','true');
+  document.getElementById('btn-next').disabled=false;
+  try{var p={answers:answers,currentQ:currentQ,name:document.getElementById('student-name').value.trim()};localStorage.setItem('yuwen_quiz_progress',JSON.stringify(p));}catch(e){}
 }
 
 function prevQuestion(){if(currentQ>0){currentQ--;renderQuestion()}}
@@ -526,21 +652,19 @@ function nextQuestion(){if(currentQ<QUESTIONS.length-1){currentQ++;renderQuestio
 
 // ====== 层级化诊断 ======
 function diagnoseProfile(ns){
-  // 层级判定：从低层到高层依次检查
   var primary=null;
-  if(ns[0]<40) primary='P1';           // 解码层是首要根因
-  else if(ns[1]<40) primary='P2';      // 理解层
-  else if(ns[2]<40) primary='P3';      // 表达层
-  else if(ns[3]<40) primary='P4';      // 策略层
-  else if(ns[4]<40) primary='P5';      // 积累层
+  if(ns[0]<40)primary='P1';
+  else if(ns[1]<40)primary='P2';
+  else if(ns[2]<40)primary='P3';
+  else if(ns[3]<40)primary='P4';
+  else if(ns[4]<40)primary='P5';
   else{
-    // 检查是否有2+项<50（多因素复合型）
     var lowCount=0;
     for(var i=0;i<5;i++){if(ns[i]<50)lowCount++;}
-    if(lowCount>=2) primary='P6';
-    else primary='P7';  // 均衡发展型
+    if(lowCount>=2)primary='P6';
+    else primary='P7';
   }
-  return {profile:PROFILES[primary], profileKey:primary};
+  return {profile:PROFILES[primary],profileKey:primary};
 }
 
 // ====== 报告生成 ======
@@ -560,36 +684,46 @@ function showResult(){
   const profile=diag.profile;
   const name=document.getElementById('student-name').value.trim();
 
-  // 打印报告头
+  // 打印信息
+  var today=new Date().toLocaleDateString('zh-CN');
   document.getElementById('print-name').textContent=name;
-  document.getElementById('print-date').textContent=new Date().toLocaleDateString('zh-CN');
+  document.getElementById('print-date').textContent=today;
+  document.getElementById('print-date-ft').textContent=today;
 
-  // 诊断画像
+  // ====== 1. 诊断画像 + 根因链 ======
   document.getElementById('profile-badge').textContent=profile.name;
   document.getElementById('profile-tag').textContent=profile.icon+' '+profile.tag;
   document.getElementById('profile-desc').textContent=profile.desc;
 
-  // 五维雷达图
-  setTimeout(function(){drawRadar('radar-student',ns);},100);
-
-  // 五维柱状图
-  var barHTML='';
+  // 根因链可视化
+  var chainHTML='<p style="font-size:12px;color:var(--ink-lighter);margin-bottom:8px;text-align:center;">▼ 五层根因诊断链（从基础到高阶）</p>';
+  var bottleneckIdx=null;
+  var sortedByPriority=ns.map(function(v,i){return {v:v,i:i};}).sort(function(a,b){return a.v-b.v;});
+  bottleneckIdx=sortedByPriority[0].i;
+  var chainColors=['#B83A2A','#C77826','#5B8C5A','#4A7B9D','#8B7355'];
   ns.forEach(function(v,i){
     var lvl=getLv(v);
     var color=v>=68?'var(--green)':(v>=42?'var(--gold)':'var(--red)');
-    var label=lvl==='high'?'优势':(lvl==='medium'?'适中':'待提升');
-    barHTML+='<div class="bar-wrap-student"><div class="bar-lbl-student">'+ROOT_CAUSES[i].icon+' '+ROOT_CAUSES[i].sname+'</div><div class="bar-track-student"><div class="bar-fill-student" style="width:'+v+'%;background:'+color+'"></div></div><div class="bar-val-student">'+v+'</div><span style="font-size:10px;color:'+color+';width:36px;flex-shrink:0;">'+label+'</span></div>';
+    var label=lvl==='high'?'优势':(lvl==='medium'?'适中':'薄弱');
+    var isBottleneck=(i===bottleneckIdx&&lvl!=='high');
+    chainHTML+='<div class="chain-item'+(isBottleneck?' bottleneck':'')+'">';
+    chainHTML+='<div class="chain-num" style="background:'+chainColors[i]+'">'+(i+1)+'</div>';
+    chainHTML+='<span class="chain-icon">'+ROOT_CAUSES[i].icon+'</span>';
+    chainHTML+='<span class="chain-name">'+ROOT_CAUSES[i].sname+'</span>';
+    chainHTML+='<div class="chain-track"><div class="chain-fill" style="width:'+v+'%;background:'+color+'"></div></div>';
+    chainHTML+='<span class="chain-val" style="color:'+color+'">'+v+'</span>';
+    chainHTML+='<span class="chain-tag" style="background:'+color+'20;color:'+color+'">'+label+'</span>';
+    if(isBottleneck)chainHTML+='<span class="chain-bottleneck-badge">⚠ 当前瓶颈</span>';
+    chainHTML+='</div>';
   });
-  document.getElementById('section-bars').innerHTML=barHTML;
+  document.getElementById('root-chain').innerHTML=chainHTML;
 
-  // 五大板块
+  // ====== 2. 能力地图 ======
+  setTimeout(function(){drawRadar('radar-student',ns);},100);
+
   function calcDomainScores(ns){
     var result={};
-    for(var dk in DOMAINS){
-      var dom=DOMAINS[dk],score=0;
-      dom.dims.forEach(function(d){score+=ns[d.i]*d.w;});
-      result[dk]=Math.round(score);
-    }
+    for(var dk in DOMAINS){var dom=DOMAINS[dk],score=0;dom.dims.forEach(function(d){score+=ns[d.i]*d.w;});result[dk]=Math.round(score);}
     return result;
   }
   var domainScores=calcDomainScores(ns);
@@ -597,56 +731,63 @@ function showResult(){
   for(var dk in DOMAINS){
     var dom=DOMAINS[dk],ds=domainScores[dk];
     var dcolor=ds>=68?'var(--green)':(ds>=42?'var(--gold)':'var(--red)');
-    domainHTML+='<div class="domain-card-student"><strong>'+dom.name+'</strong><span class="domain-score-student" style="color:'+dcolor+'">'+ds+' 分</span><p style="font-size:12px;color:var(--ink-light);margin:4px 0 0;">'+dom.desc+'</p></div>';
+    domainHTML+='<div class="domain-mini">';
+    domainHTML+='<div class="dm-header"><span class="dm-name">'+dom.name+'</span><span class="dm-score" style="color:'+dcolor+'">'+ds+'</span></div>';
+    domainHTML+='<div class="dm-bar"><div class="dm-bar-fill" style="width:'+ds+'%;background:'+dcolor+'"></div></div>';
+    domainHTML+='<p class="dm-hint">'+dom.hint+'</p>';
+    domainHTML+='</div>';
   }
-  document.getElementById('section-domains').innerHTML=domainHTML;
+  document.getElementById('domain-minis').innerHTML=domainHTML;
 
-  // ====== 学生报告 ======
-  var weakRC=ns.map(function(v,i){return {v:v,i:i};}).sort(function(a,b){return a.v-b.v;});
-  var primaryRC=weakRC[0]; // 最弱根因
-  var strongRC=ns.map(function(v,i){return {v:v,i:i};}).sort(function(a,b){return b.v-a.v;})[0]; // 最强根因
-  var rcExp=RC_EXP[primaryRC.i][getLv(ns[primaryRC.i])];
+  // ====== 3. 三方报告 ======
+  var weakRC=ns.map(function(v,i){return {v:v,i:i};}).sort(function(a,b){return a.v-b.v;})[0];
+  var strongRC=ns.map(function(v,i){return {v:v,i:i};}).sort(function(a,b){return b.v-a.v;})[0];
+  var rcExp=RC_EXP[weakRC.i][getLv(ns[weakRC.i])];
 
+  // 学生报告
   var studentHTML='';
-  studentHTML+='<h5 style="font-size:15px;color:var(--red);margin-bottom:8px;">'+profile.studentTitle+'</h5>';
-  studentHTML+='<p style="margin-bottom:8px;"><strong>🔍 诊断发现：</strong>'+rcExp.desc+'</p>';
-  studentHTML+='<p style="margin-bottom:8px;"><strong>⚠️ 这对你的考试意味着什么：</strong>'+ROOT_CAUSES[primaryRC.i].lowMsg+'</p>';
-  studentHTML+='<p style="margin-bottom:8px;"><strong>💪 你的优势保护项：</strong>'+RC_EXP[strongRC.i].high.desc.substring(0,80)+'继续保持！</p>';
-  studentHTML+='<p style="margin-bottom:6px;"><strong>📋 你的提升计划：</strong></p>';
-  var steps=profile.studentPlan;
-  steps.forEach(function(step,i){
-    studentHTML+='<div class="advice-item"><span class="advice-num">'+(i+1)+'</span>'+step+'</div>';
-  });
-  document.getElementById('card-student-report').innerHTML=studentHTML;
+  studentHTML+='<h5 style="font-size:15px;color:var(--red);margin-bottom:10px;">'+profile.studentTitle+'</h5>';
+  studentHTML+='<div class="highlight-box"><span class="hl-icon">🔍</span><strong>诊断发现：</strong>'+rcExp.desc+'</div>';
+  studentHTML+='<div class="highlight-box"><span class="hl-icon">⚠️</span><strong>对你的考试意味着：</strong>'+ROOT_CAUSES[weakRC.i].lowMsg+'</div>';
+  studentHTML+='<p style="margin-bottom:4px;font-size:13px;"><strong>💪 你的优势保护项：</strong>'+RC_EXP[strongRC.i].high.desc.substring(0,80)+'继续保持！</p>';
+  studentHTML+='<div class="week-goal"><h5>🎯 本周就可以开始的三件事</h5><ol>';var steps=profile.studentPlan;
+  steps.forEach(function(step,i){studentHTML+='<li>'+step+'</li>';});
+  studentHTML+='</ol></div>';
+  document.getElementById('tab-student').innerHTML=studentHTML;
 
-  // ====== 家长寄语 ======
-  var parentHTML='<div class="parent-msg"><span class="icon">💌</span>';
-  parentHTML+='<p style="margin-bottom:8px;">'+profile.parentMsg+'</p>';
-  parentHTML+='<p style="margin-bottom:4px;"><strong>🏡 在家可以这样做：</strong></p>';
+  // 家长报告
+  var parentHTML='';
+  parentHTML+='<div class="highlight-box" style="background:linear-gradient(135deg,#FFFBF7,#FFF8F0);border-color:#D4C5A0;">';
+  parentHTML+='<span class="hl-icon">💌</span>'+profile.parentMsg+'</div>';
+  parentHTML+='<p style="font-size:13px;font-weight:700;color:var(--ink);margin-bottom:6px;">🏡 在家可以这样做（每天只需 10 分钟）</p>';
   var actions=profile.parentActions;
   actions.forEach(function(action,i){
-    parentHTML+='<p style="margin-bottom:4px;"><strong>'+(i+1)+'.</strong> '+action+'</p>';
+    parentHTML+='<div class="action-checklist"><span class="check-icon">✅</span><strong>'+(i+1)+'.</strong> '+action+'</div>';
   });
-  parentHTML+='</div>';
-  document.getElementById('card-parent').innerHTML='<h4 style="margin-bottom:8px;">🏠 给家长的话</h4>'+parentHTML;
+  document.getElementById('tab-parent').innerHTML=parentHTML;
 
-  // ====== 教师建议 ======
+  // 教师报告
   var teacherHTML='';
-  teacherHTML+='<p style="margin-bottom:6px;"><strong>🎯 诊断概要：</strong>'+profile.name+' — '+profile.teacherTitle+'</p>';
-  teacherHTML+='<p style="margin-bottom:6px;"><strong>📊 五层根因得分：</strong>';
-  ROOT_CAUSES.forEach(function(rc,i){teacherHTML+=rc.sname+' '+ns[i]+'分  ';});
+  teacherHTML+='<p style="margin-bottom:8px;font-size:13px;"><strong>🎯 诊断概要：</strong>'+profile.name+' — '+profile.studentTitle+'</p>';
+  teacherHTML+='<p style="margin-bottom:10px;font-size:13px;"><strong>📊 五层根因得分：</strong>';
+  ROOT_CAUSES.forEach(function(rc,i){teacherHTML+=rc.sname+' <b style="color:'+(ns[i]>=68?'var(--green)':(ns[i]>=42?'var(--gold)':'var(--red)'))+'">'+ns[i]+'</b>分 ';});
   teacherHTML+='</p>';
-  teacherHTML+='<p style="margin-bottom:6px;"><strong>📝 教学优先级：</strong>'+profile.teacherPriority+'</p>';
-  teacherHTML+='<p style="margin-bottom:6px;"><strong>💡 推荐课堂策略：</strong></p>';
+  teacherHTML+='<p style="margin-bottom:10px;font-size:13px;"><strong>📝 教学优先级：</strong>'+profile.teacherPriority+'</p>';
+  teacherHTML+='<p style="margin-bottom:6px;font-size:13px;font-weight:700;">💡 核心策略（3 步走）</p>';
+  teacherHTML+='<div class="teacher-summary">';
   var strats=profile.teacherStrategies;
   strats.forEach(function(s,i){
-    teacherHTML+='<div class="advice-item"><span class="advice-num">'+(i+1)+'</span>'+s+'</div>';
+    teacherHTML+='<div class="teacher-point"><span class="tp-num">'+(i+1)+'</span>'+s+'</div>';
   });
-  teacherHTML+='<p style="margin-top:8px;"><strong>📏 监控指标：</strong>'+profile.teacherMonitor+'</p>';
-  document.getElementById('card-teacher-advice').innerHTML=teacherHTML;
+  teacherHTML+='</div>';
+  teacherHTML+='<p style="font-size:12px;color:var(--ink-light);margin-top:6px;"><strong>📏 监控指标：</strong>'+profile.teacherMonitor+'</p>';
+  document.getElementById('tab-teacher').innerHTML=teacherHTML;
+
+  // 默认显示学生 tab
+  switchReportTab('tab-student');
 
   // 清除答题进度
-  try{ localStorage.removeItem('yuwen_quiz_progress'); }catch(e){}
+  try{localStorage.removeItem('yuwen_quiz_progress');}catch(e){}
 
   // 保存数据
   window._lastReport={name:name,ns:ns,profileKey:diag.profileKey,profileName:profile.name};
@@ -660,53 +801,62 @@ function showResult(){
   syncToTeacher({name:name,ns:ns,ts:new Date().toISOString()});
 }
 
-// ====== 数据同步（保持不变） ======
-var GITHUB_REPO = 'yuyubai176-star/yuwen-diagnosis';
-var GITHUB_TOKEN = 'ghp_' + 'V45u1Kj6NFk2yAtlZQXuMWXZenrK543m5NgW';
+// ====== Tab 切换 ======
+function switchReportTab(tabId){
+  document.querySelectorAll('.report-tab').forEach(function(t){t.classList.remove('active')});
+  document.querySelector('.report-tab[data-tab="'+tabId+'"]').classList.add('active');
+  document.querySelectorAll('.report-tab-content').forEach(function(c){c.classList.remove('active')});
+  document.getElementById(tabId).classList.add('active');
+}
 
-function githubPutFile(fname, content, message, cb){
-  fetch('https://api.github.com/repos/' + GITHUB_REPO + '/contents/' + fname, {
-    headers: { 'Authorization': 'token ' + GITHUB_TOKEN }
-  })
-  .then(function(r){ return r.json(); })
+// ====== 数据同步 ======
+var GITHUB_REPO='yuyubai176-star/yuwen-diagnosis';
+var GITHUB_TOKEN='ghp_'+'V45u1Kj6NFk2yAtlZQXuMWXZenrK543m5NgW';
+
+function githubPutFile(fname,content,message,cb){
+  fetch('https://api.github.com/repos/'+GITHUB_REPO+'/contents/'+fname,{headers:{'Authorization':'token '+GITHUB_TOKEN}})
+  .then(function(r){return r.json()})
   .then(function(fileInfo){
-    var body = {
-      message: message,
-      content: btoa(unescape(encodeURIComponent(content))),
-      branch: 'main'
-    };
-    if(fileInfo && fileInfo.sha){ body.sha = fileInfo.sha; }
-    return fetch('https://api.github.com/repos/' + GITHUB_REPO + '/contents/' + fname, {
-      method: 'PUT',
-      headers: { 'Authorization': 'token ' + GITHUB_TOKEN, 'Content-Type': 'application/json' },
-      body: JSON.stringify(body)
-    });
+    var body={message:message,content:btoa(unescape(encodeURIComponent(content))),branch:'main'};
+    if(fileInfo&&fileInfo.sha){body.sha=fileInfo.sha;}
+    return fetch('https://api.github.com/repos/'+GITHUB_REPO+'/contents/'+fname,{method:'PUT',headers:{'Authorization':'token '+GITHUB_TOKEN,'Content-Type':'application/json'},body:JSON.stringify(body)});
   })
-  .then(function(r){ return r.json(); })
-  .then(function(resp){ if(resp && resp.content){ cb(true); } else { cb(false); } })
-  .catch(function(){ cb(false); });
+  .then(function(r){return r.json()})
+  .then(function(resp){if(resp&&resp.content){cb(true)}else{cb(false)}})
+  .catch(function(){cb(false)});
 }
 
 function syncToTeacher(data){
-  document.getElementById('sync-icon').textContent = '⏳';
-  document.getElementById('sync-text').textContent = '正在同步数据给老师...';
-  document.getElementById('sync-text').style.color = '';
-  var fname = 'data/' + encodeURIComponent(data.name) + '.json';
-  var content = JSON.stringify(data, null, 0);
-  githubPutFile(fname, content, '诊断数据: ' + data.name, function(ok){
+  document.getElementById('sync-icon').textContent='⏳';
+  document.getElementById('sync-text').textContent='正在同步数据给老师...';
+  document.getElementById('sync-text').style.color='';
+  var fname='data/'+encodeURIComponent(data.name)+'.json';
+  var content=JSON.stringify(data,null,0);
+  githubPutFile(fname,content,'诊断数据: '+data.name,function(ok){
     if(ok){
-      document.getElementById('sync-icon').textContent = '✅';
-      document.getElementById('sync-text').textContent = '数据已同步给老师';
-      document.getElementById('sync-text').style.color = '#5B8C5A';
-    } else {
-      document.getElementById('sync-icon').textContent = '⚠️';
-      document.getElementById('sync-text').textContent = '同步失败，请稍后重试';
-      document.getElementById('sync-text').style.color = '#C77826';
+      document.getElementById('sync-icon').textContent='✅';
+      document.getElementById('sync-text').textContent='数据已同步给老师';
+      document.getElementById('sync-text').style.color='#5B8C5A';
+    }else{
+      document.getElementById('sync-icon').textContent='⚠️';
+      document.getElementById('sync-text').textContent='同步失败，请稍后重试';
+      document.getElementById('sync-text').style.color='#C77826';
     }
   });
 }
 
-function printReport(){window.print();}
+function printReport(){
+  // 打印时展开所有 tab
+  document.querySelectorAll('.report-tab-content').forEach(function(c){c.classList.add('active')});
+  window.print();
+  // 恢复 tab 状态
+  document.querySelectorAll('.report-tab-content').forEach(function(c){c.classList.remove('active')});
+  var activeTab=document.querySelector('.report-tab.active');
+  if(activeTab){
+    var tabId=activeTab.dataset.tab;
+    document.getElementById(tabId).classList.add('active');
+  }
+}
 
 // ====== 雷达图 ======
 let chartLoaded=false,chartLoading=false,chartCbs=[];
@@ -720,7 +870,7 @@ function drawRadar(id,ns){
   loadChart(function(){
     const ctx=el.getContext('2d');if(ctx._chart)ctx._chart.destroy();
     ctx._chart=new Chart(ctx,{type:'radar',
-      data:{labels:ROOT_CAUSES.map(function(d){return d.icon+' '+d.sname}),datasets:[{data:ns,backgroundColor:'rgba(184,58,42,0.10)',borderColor:'#B83A2A',borderWidth:2,pointBackgroundColor:'#B83A2A',pointBorderColor:'#fff',pointBorderWidth:2,pointRadius:5}]},
+      data:{labels:ROOT_CAUSES.map(function(d){return d.icon+' '+d.sname}),datasets:[{data:ns,backgroundColor:'rgba(184,58,42,0.08)',borderColor:'#B83A2A',borderWidth:2,pointBackgroundColor:'#B83A2A',pointBorderColor:'#fff',pointBorderWidth:2,pointRadius:5}]},
       options:{responsive:true,maintainAspectRatio:true,plugins:{legend:{display:false}},scales:{r:{min:0,max:100,ticks:{stepSize:20,backdropColor:'transparent',font:{size:10}},pointLabels:{font:{size:12}},grid:{color:'#E0D5C9'},angleLines:{color:'#E0D5C9'}}}}});
   });
 }
