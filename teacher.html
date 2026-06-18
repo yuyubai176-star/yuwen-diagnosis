@@ -1,63 +1,91 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="zh-CN">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>语文学情诊断 · 教师后台</title>
 <style>
+/* ====== CSS 设计系统 V3 ====== */
 :root {
-  --red:#B83A2A; --gold:#B8860B; --cream:#FBF7F2; --ink:#2C1810;
-  --ink-light:#5E5046; --white:#FFF; --border:#E0D5C9; --bg-card:#FFFBF7;
+  --red:#B83A2A; --red-light:#D4453A; --gold:#B8860B; --gold-light:#D4A017;
+  --cream:#FBF7F2; --ink:#2C1810; --ink-light:#5E5046; --ink-lighter:#8A7E76;
+  --white:#FFF; --border:#E0D5C9; --bg-card:#FFFBF7;
   --green:#5B8C5A; --blue:#4A7B9D; --orange:#C77826;
+  --shadow-sm:0 1px 3px rgba(44,24,16,0.04);
+  --shadow-md:0 3px 12px rgba(44,24,16,0.06);
+  --shadow-lg:0 6px 24px rgba(44,24,16,0.08);
+  --radius-sm:8px; --radius-md:12px; --radius-lg:16px;
+  --transition:0.2s cubic-bezier(0.4,0,0.2,1);
 }
 *{margin:0;padding:0;box-sizing:border-box}
-body{font-family:"Microsoft YaHei","PingFang SC",sans-serif;background:var(--cream);color:var(--ink);min-height:100vh}
+body{font-family:"Microsoft YaHei","PingFang SC",sans-serif;background:linear-gradient(180deg,#FBF7F2 0%,#F5EDE3 100%);color:var(--ink);min-height:100vh}
 .container{max-width:960px;margin:0 auto;padding:24px 20px}
 
+/* ====== 页头 ====== */
 .header{text-align:center;padding:32px 0 20px}
-.header .icon{font-size:40px;margin-bottom:6px}
+.header .icon{font-size:44px;margin-bottom:6px}
 .header h1{font-size:26px;color:var(--red);font-weight:700;letter-spacing:3px;margin-bottom:4px}
 .header .sub{font-size:13px;color:var(--ink-light);letter-spacing:1px}
+.header .ornament{width:80px;height:2px;background:linear-gradient(90deg,transparent,var(--gold),transparent);margin:10px auto 0;border-radius:1px}
 
-.card{background:var(--bg-card);border-radius:14px;padding:20px;margin-bottom:12px;box-shadow:0 2px 8px rgba(44,24,16,0.04);border:1px solid var(--border)}
+/* ====== 卡片 ====== */
+.card{background:var(--bg-card);border-radius:var(--radius-lg);padding:20px;margin-bottom:14px;box-shadow:var(--shadow-sm);border:1px solid var(--border);transition:box-shadow var(--transition)}
+.card:hover{box-shadow:var(--shadow-md)}
 .card h3{font-size:15px;color:var(--ink);margin-bottom:10px}
-.card h4{font-size:14px;color:var(--ink);margin-bottom:8px;padding-left:10px;border-left:3px solid var(--red)}
+.card h4{font-size:14px;color:var(--ink);margin-bottom:8px;padding-left:10px;border-left:3px solid var(--red);display:flex;align-items:center;gap:6px}
 
-.tabs{display:flex;gap:4px;margin-bottom:16px;background:var(--white);border-radius:12px;padding:4px;border:1px solid var(--border)}
-.tab{flex:1;text-align:center;padding:10px;border-radius:10px;cursor:pointer;font-size:14px;font-weight:600;color:var(--ink-light);transition:all .2s}
-.tab:hover{color:var(--ink)}
-.tab.active{background:var(--red);color:#fff}
+/* ====== Tab 导航 ====== */
+.tabs{display:flex;gap:4px;margin-bottom:16px;background:var(--white);border-radius:var(--radius-md);padding:4px;border:1px solid var(--border);box-shadow:var(--shadow-sm)}
+.tab{flex:1;text-align:center;padding:10px 6px;border-radius:var(--radius-sm);cursor:pointer;font-size:14px;font-weight:600;color:var(--ink-light);transition:all var(--transition)}
+.tab:hover{color:var(--ink);background:#FFFBF5}
+.tab.active{background:linear-gradient(135deg,var(--red),var(--red-light));color:#fff;box-shadow:0 2px 8px rgba(184,58,42,0.2)}
 
-.btn{display:inline-block;padding:10px 20px;border:none;border-radius:10px;font-size:14px;font-weight:600;cursor:pointer;transition:all .2s;letter-spacing:1px}
-.btn-primary{background:var(--red);color:#fff}
-.btn-primary:hover{opacity:.9}
+/* ====== 按钮 ====== */
+.btn{display:inline-block;padding:10px 20px;border:none;border-radius:var(--radius-sm);font-size:14px;font-weight:600;cursor:pointer;transition:all var(--transition);letter-spacing:1px}
+.btn:active{transform:scale(0.98)}
+.btn-primary{background:linear-gradient(135deg,var(--red),var(--red-light));color:#fff;box-shadow:0 2px 8px rgba(184,58,42,0.2)}
+.btn-primary:hover{box-shadow:0 4px 14px rgba(184,58,42,0.3);transform:translateY(-1px)}
 .btn-outline{background:var(--white);color:var(--red);border:2px solid var(--red)}
-.btn-outline:hover{background:#FFF5F3}
+.btn-outline:hover{background:#FFF5F3;transform:translateY(-1px)}
 .btn-small{padding:6px 14px;font-size:12px}
 .btn-danger{background:var(--white);color:#C0392B;border:2px solid #C0392B}
 .btn-danger:hover{background:#FDEDEC}
 
-textarea{width:100%;min-height:100px;padding:12px;border:1.5px solid var(--border);border-radius:10px;font-size:13px;font-family:monospace;resize:vertical;outline:none;background:var(--white);line-height:1.6}
-textarea:focus{border-color:var(--gold)}
-input[type=text],input[type=number],select{padding:8px 12px;border:1.5px solid var(--border);border-radius:8px;font-size:13px;outline:none;background:var(--white)}
-input:focus,select:focus{border-color:var(--gold)}
+/* ====== 表单 ====== */
+textarea{width:100%;min-height:100px;padding:12px;border:1.5px solid var(--border);border-radius:var(--radius-sm);font-size:13px;font-family:monospace;resize:vertical;outline:none;background:var(--white);line-height:1.6;transition:border-color var(--transition)}
+textarea:focus{border-color:var(--gold);box-shadow:0 0 0 3px rgba(184,134,11,0.08)}
+input[type=text],input[type=number],select{padding:9px 12px;border:1.5px solid var(--border);border-radius:var(--radius-sm);font-size:13px;outline:none;background:var(--white);transition:border-color var(--transition)}
+input:focus,select:focus{border-color:var(--gold);box-shadow:0 0 0 3px rgba(184,134,11,0.08)}
 
-.stats-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:10px;margin-bottom:12px}
-.stat-card{background:var(--white);border-radius:12px;padding:16px;text-align:center;border:1px solid var(--border)}
-.stat-card .num{font-size:32px;font-weight:700;color:var(--red)}
+/* ====== 统计卡片 ====== */
+.stats-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:12px;margin-bottom:12px}
+.stat-card{background:var(--white);border-radius:var(--radius-md);padding:18px 16px;text-align:center;border:1px solid var(--border);box-shadow:var(--shadow-sm);transition:all var(--transition)}
+.stat-card:hover{box-shadow:var(--shadow-md);transform:translateY(-1px)}
+.stat-card .num{font-size:34px;font-weight:700;color:var(--red);line-height:1.2}
 .stat-card .lbl{font-size:12px;color:var(--ink-light);margin-top:4px}
+.stat-card .mini-bar{height:4px;background:var(--cream);border-radius:2px;margin-top:6px;overflow:hidden}
+.stat-card .mini-bar-fill{height:100%;background:var(--red);border-radius:2px;transition:width .6s ease}
 
-.chart-row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+/* ====== 图表 ====== */
+.chart-row{display:grid;grid-template-columns:1fr 1fr;gap:14px}
 .chart-wrap{max-width:100%}
 .chart-wrap canvas{width:100%!important;height:auto!important}
 
+/* ====== 表格 ====== */
 table{width:100%;border-collapse:collapse;font-size:13px}
-th{text-align:left;padding:10px 8px;border-bottom:2px solid var(--border);color:var(--ink-light);font-weight:600;font-size:11px;letter-spacing:1px}
+th{text-align:left;padding:10px 8px;border-bottom:2px solid var(--border);color:var(--ink-light);font-weight:600;font-size:11px;letter-spacing:1px;white-space:nowrap}
 td{padding:10px 8px;border-bottom:1px solid var(--border);color:var(--ink)}
 tr:hover td{background:var(--cream)}
 .clickable{cursor:pointer;color:var(--red);font-weight:600}
 .clickable:hover{text-decoration:underline}
 
+/* ====== 迷你条（表格内） ====== */
+.mini-cell{min-width:50px}
+.mini-cell-bar{height:5px;background:var(--cream);border-radius:3px;overflow:hidden;margin-top:2px}
+.mini-cell-fill{height:100%;border-radius:3px}
+.mini-cell-val{font-size:11px;font-weight:700;line-height:1}
+
+/* ====== 标签 ====== */
 .tag{display:inline-block;padding:3px 10px;border-radius:10px;font-size:11px;font-weight:600;letter-spacing:1px}
 .tag-p1{background:#FFF0EE;color:var(--red)}
 .tag-p2{background:#FFF5F0;color:var(--orange)}
@@ -67,36 +95,41 @@ tr:hover td{background:var(--cream)}
 .tag-p6{background:#FFFBF0;color:var(--gold)}
 .tag-p7{background:#F0F4F8;color:#5B7A9D}
 
+/* ====== 柱状图 ====== */
 .bar-wrap{margin:6px 0;display:flex;align-items:center;gap:8px}
 .bar-lbl{width:100px;font-size:12px;color:var(--ink);text-align:right;flex-shrink:0}
-.bar-track{flex:1;height:18px;background:var(--cream);border-radius:9px;overflow:hidden}
-.bar-fill{height:100%;border-radius:9px;transition:width .4s}
+.bar-track{flex:1;height:20px;background:var(--cream);border-radius:10px;overflow:hidden}
+.bar-fill{height:100%;border-radius:10px;transition:width .6s ease}
 .bar-val{width:36px;font-size:12px;color:var(--ink-light);flex-shrink:0}
 
-.domain-card{border-left:4px solid var(--gold);padding:8px 14px;margin-bottom:8px;background:var(--white);border-radius:0 10px 10px 0}
+/* ====== 板块卡片 ====== */
+.domain-card{border-left:4px solid var(--gold);padding:8px 14px;margin-bottom:8px;background:var(--white);border-radius:0 var(--radius-sm) var(--radius-sm) 0}
 .domain-card strong{color:var(--ink)}
-.domain-card .domain-score{float:right;font-weight:700;color:var(--red)}
+.domain-card .domain-score{float:right;font-weight:700}
 
-.modal-overlay{display:none;position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(44,24,16,0.4);z-index:100;justify-content:center;align-items:flex-start;padding-top:40px;overflow-y:auto}
+/* ====== 弹窗 ====== */
+.modal-overlay{display:none;position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(44,24,16,0.4);z-index:100;justify-content:center;align-items:flex-start;padding-top:30px;overflow-y:auto}
 .modal-overlay.show{display:flex}
-.modal{background:var(--bg-card);border-radius:16px;padding:28px 24px;max-width:700px;width:95%;margin-bottom:40px;position:relative;box-shadow:0 8px 30px rgba(44,24,16,0.15)}
-.modal-close{position:absolute;top:12px;right:16px;font-size:22px;cursor:pointer;color:var(--ink-light);background:none;border:none}
+.modal{background:var(--bg-card);border-radius:var(--radius-lg);padding:24px;max-width:800px;width:95%;margin-bottom:40px;position:relative;box-shadow:var(--shadow-lg);max-height:85vh;overflow-y:auto}
+.modal-close{position:absolute;top:14px;right:18px;font-size:22px;cursor:pointer;color:var(--ink-light);background:none;border:none;z-index:10;transition:color var(--transition)}
 .modal-close:hover{color:var(--red)}
 
+/* ====== 弹窗内 Tab ====== */
+.modal-tabs{display:flex;gap:2px;margin-bottom:14px;background:var(--cream);border-radius:var(--radius-sm);padding:3px;border:1px solid var(--border)}
+.modal-tab{flex:1;text-align:center;padding:8px 6px;border-radius:6px;cursor:pointer;font-size:12px;font-weight:600;color:var(--ink-light);transition:all var(--transition)}
+.modal-tab:hover{color:var(--ink);background:var(--white)}
+.modal-tab.active{background:var(--white);color:var(--red);box-shadow:0 1px 3px rgba(0,0,0,0.08)}
+.modal-tab-content{display:none}
+.modal-tab-content.active{display:block}
+
+/* ====== 分割标题 ====== */
 .section-title{font-size:13px;font-weight:700;color:var(--ink);margin:16px 0 8px;padding-bottom:4px;border-bottom:1px solid var(--border);letter-spacing:1px}
 
+/* ====== 筛选栏 ====== */
 .filter-bar{display:flex;gap:8px;align-items:center;margin-bottom:10px;flex-wrap:wrap}
 .filter-bar select{min-width:120px}
 
-.footer-note{text-align:center;padding:16px 0;font-size:11px;color:var(--ink-light)}
-.empty-state{text-align:center;padding:40px 20px;color:var(--ink-light);font-size:14px;line-height:2}
-
-.advice-item{padding:11px 13px;margin-bottom:6px;background:var(--white);border-radius:9px;border:1px solid var(--border);font-size:13px;line-height:1.75;color:var(--ink-light)}
-.advice-num{display:inline-block;width:22px;height:22px;border-radius:50%;background:var(--red);color:#fff;text-align:center;line-height:22px;font-size:11px;font-weight:700;margin-right:7px;flex-shrink:0}
-
-.hidden{display:none!important}
-
-/* 对比面板 */
+/* ====== 对比面板 ====== */
 .compare-radar-row{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px}
 .compare-table{width:100%;border-collapse:collapse;font-size:12px}
 .compare-table th,.compare-table td{padding:8px 6px;border-bottom:1px solid var(--border);text-align:center}
@@ -108,13 +141,44 @@ tr:hover td{background:var(--cream)}
 .compare-bar-a{height:6px;background:var(--red);border-radius:3px}
 .compare-bar-b{height:6px;background:var(--blue);border-radius:3px}
 
+/* ====== 差异总结卡 ====== */
+.diff-summary{padding:14px 18px;background:linear-gradient(135deg,#FFFBF2,#FFF5E6);border:1px solid var(--gold);border-radius:var(--radius-md);margin-bottom:12px;font-size:13px;line-height:1.8}
+
+/* ====== 建议项 ====== */
+.advice-item{padding:11px 13px;margin-bottom:6px;background:var(--white);border-radius:var(--radius-sm);border:1px solid var(--border);font-size:13px;line-height:1.75;color:var(--ink-light)}
+.advice-num{display:inline-flex;align-items:center;justify-content:center;width:22px;height:22px;border-radius:50%;background:var(--red);color:#fff;font-size:11px;font-weight:700;margin-right:7px;flex-shrink:0}
+
+/* ====== 导入页双列布局 ====== */
+.import-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;align-items:start}
+.import-preview{text-align:center;padding:12px;background:var(--white);border-radius:var(--radius-sm);border:1px solid var(--border)}
+.import-preview canvas{max-width:220px!important;height:auto!important}
+
+/* ====== 弱项排行 ====== */
+.weakness-item{padding:10px 14px;margin-bottom:6px;background:var(--white);border-radius:var(--radius-sm);border:1px solid var(--border);display:flex;align-items:center;gap:10px;transition:all var(--transition)}
+.weakness-item:hover{box-shadow:var(--shadow-sm)}
+.weakness-item.top-3{border-left:3px solid var(--red);background:#FFFBF7}
+.weakness-rank{width:22px;height:22px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:#fff;flex-shrink:0}
+.weakness-name{font-size:13px;font-weight:600;width:70px;flex-shrink:0;color:var(--ink)}
+.weakness-track{flex:1;height:10px;background:var(--cream);border-radius:5px;overflow:hidden}
+.weakness-fill{height:100%;border-radius:5px;transition:width .6s ease}
+.weakness-val{font-size:13px;font-weight:700;width:32px;text-align:right;flex-shrink:0}
+.weakness-count{font-size:11px;color:var(--ink-lighter);width:70px;text-align:right;flex-shrink:0}
+
+/* ====== 通用工具类 ====== */
+.hidden{display:none!important}
+.footer-note{text-align:center;padding:16px 0;font-size:11px;color:var(--ink-lighter)}
+.empty-state{text-align:center;padding:40px 20px;color:var(--ink-light);font-size:14px;line-height:2}
+
+/* ====== 打印样式 ====== */
 @media print{
   body{background:#fff;color:#000;font-size:12px}
-  .tabs,.btn,.footer-note,.filter-bar,#tab-import,.modal-close{display:none!important}
+  .tabs,.btn,.footer-note,.filter-bar,#tab-import,.modal-close,.modal-tabs{display:none!important}
   .card{box-shadow:none;border:1px solid #ccc;break-inside:avoid;margin-bottom:8px;padding:12px 14px}
+  .card:hover{box-shadow:none}
   .header{padding:12px 0 6px}
   .header h1{color:#000;font-size:20px}
   .header .sub{font-size:11px}
+  .header .ornament{background:linear-gradient(90deg,transparent,#999,transparent)}
   .stat-card .num{font-size:24px;color:#000}
   .tag{border:1px solid #000;color:#000}
   .chart-row{grid-template-columns:1fr}
@@ -123,8 +187,35 @@ tr:hover td{background:var(--cream)}
   .domain-card{border-left-color:#000}
   .section-title{border-bottom-color:#ccc}
   .modal-overlay{position:static;display:block!important;background:none;padding:0}
-  .modal{box-shadow:none;max-width:100%;padding:12px}
+  .modal{box-shadow:none;max-width:100%;padding:12px;max-height:none;overflow:visible}
+  .modal-tab-content{display:block!important}
   table{font-size:10px}
+  th,td{padding:6px 4px}
+  .import-grid{grid-template-columns:1fr}
+  .weakness-item{border:1px solid #ddd}
+}
+
+/* ====== 响应式 ====== */
+@media (max-width:600px){
+  .container{padding:12px 10px}
+  .header{padding:20px 0 12px}
+  .header h1{font-size:20px;letter-spacing:1px}
+  .header .icon{font-size:34px}
+  .card{padding:14px 12px;margin-bottom:10px;border-radius:var(--radius-md)}
+  .tabs{gap:2px}
+  .tab{font-size:11px;padding:8px 3px}
+  .stats-row{grid-template-columns:1fr 1fr;gap:8px}
+  .stat-card{padding:12px 10px}
+  .stat-card .num{font-size:26px}
+  .chart-row{grid-template-columns:1fr}
+  .import-grid{grid-template-columns:1fr}
+  .modal{max-width:100%;padding:16px;border-radius:var(--radius-md)}
+  .modal-tab{font-size:10px;padding:6px 3px}
+  .filter-bar{flex-direction:column;align-items:stretch}
+  .bar-lbl{width:70px;font-size:11px}
+  .weakness-name{width:55px;font-size:11px}
+  .compare-radar-row{grid-template-columns:1fr}
+  table{font-size:11px}
   th,td{padding:6px 4px}
 }
 </style>
@@ -136,6 +227,7 @@ tr:hover td{background:var(--cream)}
   <div class="icon">🏫</div>
   <h1>语文学情诊断 · 教师后台</h1>
   <div class="sub">班级学情总览 · 个体根因分析 · 教学培养建议</div>
+  <div class="ornament"></div>
 </div>
 
 <div class="tabs">
@@ -146,33 +238,49 @@ tr:hover td{background:var(--cream)}
 
 <!-- ====== 导入页 ====== -->
 <div id="tab-import">
-<div class="card">
-    <h3>✍️ 手动录入学生数据</h3>
-    <p style="font-size:13px;color:var(--ink-light);margin-bottom:10px;">输入五层根因得分（0-100），系统自动判定诊断画像。</p>
-    <div id="manual-form">
-      <div style="margin-bottom:8px;">
-        <label style="font-size:13px;font-weight:600;">学生姓名</label>
-        <input id="mf-name" type="text" placeholder="输入姓名" style="width:100%;margin-top:4px;">
+<div class="import-grid">
+  <div>
+    <div class="card">
+      <h3>✍️ 手动录入学生数据</h3>
+      <p style="font-size:12px;color:var(--ink-lighter);margin-bottom:10px;">输入五层根因得分（0-100），系统自动判定诊断画像。</p>
+      <div id="manual-form">
+        <div style="margin-bottom:8px;">
+          <label style="font-size:13px;font-weight:600;">学生姓名</label>
+          <input id="mf-name" type="text" placeholder="输入姓名" style="width:100%;margin-top:4px;">
+        </div>
+        <div style="margin-bottom:10px;">
+          <label style="font-size:13px;font-weight:600;">五层根因得分（0-100）</label>
+          <div id="mf-dims" style="margin-top:4px;"></div>
+        </div>
+        <div style="display:flex;gap:6px;align-items:center;flex-wrap:wrap;">
+          <button class="btn btn-primary btn-small" onclick="manualAdd()">➕ 添加到班级</button>
+          <button class="btn btn-outline btn-small" onclick="fillDemoData()">🎲 填充演示数据</button>
+          <span id="mf-msg" style="font-size:12px;"></span>
+        </div>
       </div>
-      <div style="margin-bottom:8px;">
-        <label style="font-size:13px;font-weight:600;">五层根因得分（0-100）</label>
-        <div id="mf-dims" style="display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-top:4px;"></div>
-      </div>
-      <button class="btn btn-primary" onclick="manualAdd()">➕ 添加到班级</button>
-      <span id="mf-msg" style="margin-left:10px;font-size:13px;"></span>
     </div>
   </div>
-
-  <div class="card" style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;">
-    <span style="font-size:13px;color:var(--ink-light);">数据管理：</span>
-    <input type="file" id="import-file" accept=".json" style="display:none" onchange="importJSONFile(event)">
-    <button class="btn btn-outline btn-small" onclick="document.getElementById('import-file').click()">📂 导入JSON文件</button>
-    <button class="btn btn-outline btn-small" onclick="exportData()">📤 导出全部数据</button>
-    <button class="btn btn-outline btn-small" onclick="refreshFromStorage()">🔄 刷新数据</button>
-    <button class="btn btn-danger btn-small" onclick="clearAll()">🗑 清空全部数据</button>
-    <span style="font-size:12px;color:var(--ink-light);margin-left:auto;">当前学生数：<b id="total-count">0</b></span>
-    <span id="refresh-hint" style="font-size:11px;color:var(--green);display:none;width:100%;"></span>
+  <div>
+    <div class="card">
+      <h3>📋 数据管理</h3>
+      <div style="display:flex;flex-direction:column;gap:6px;">
+        <input type="file" id="import-file" accept=".json" style="display:none" onchange="importJSONFile(event)">
+        <button class="btn btn-outline btn-small" onclick="document.getElementById('import-file').click()" style="width:100%;">📂 导入 JSON 文件</button>
+        <button class="btn btn-outline btn-small" onclick="exportData()" style="width:100%;">📤 导出全部数据</button>
+        <button class="btn btn-outline btn-small" onclick="refreshFromStorage()" style="width:100%;">🔄 刷新数据</button>
+        <button class="btn btn-danger btn-small" onclick="clearAll()" style="width:100%;">🗑 清空全部数据</button>
+      </div>
+      <div style="margin-top:10px;padding:8px 12px;background:var(--cream);border-radius:var(--radius-sm);font-size:12px;color:var(--ink-light);">
+        当前学生数：<b id="total-count" style="color:var(--red);font-size:15px;">0</b>
+        <span id="refresh-hint" style="display:none;width:100%;margin-top:4px;"></span>
+      </div>
+    </div>
+    <div class="import-preview card" id="import-preview-card" style="display:none;">
+      <h4 style="border:none;padding:0;margin-bottom:6px;">预览雷达图</h4>
+      <canvas id="chart-import-preview"></canvas>
+    </div>
   </div>
+</div>
 </div>
 
 <!-- ====== 总览页 ====== -->
@@ -180,25 +288,25 @@ tr:hover td{background:var(--cream)}
   <div class="stats-row" id="stats-row"></div>
   <div class="chart-row">
     <div class="card"><h4>📊 诊断画像分布</h4><div class="chart-wrap" style="max-width:100%;"><canvas id="chart-type"></canvas></div></div>
-    <div class="card"><h4>🎯 班级整体五维根因雷达</h4><div class="chart-wrap" style="max-width:320px;margin:0 auto;"><canvas id="chart-radar"></canvas></div></div>
+    <div class="card"><h4>🎯 班级五维根因雷达</h4><div class="chart-wrap" style="max-width:320px;margin:0 auto;"><canvas id="chart-radar"></canvas></div></div>
   </div>
   <div class="card">
     <h4>⚠️ 班级共性薄弱根因排行</h4>
     <div id="weakness-ranking"></div>
   </div>
   <div style="text-align:center;margin-top:8px;">
-    <button class="btn btn-outline btn-small" onclick="window.print()">🖨️ 打印班级总览 / 导出PDF</button>
+    <button class="btn btn-outline btn-small" onclick="window.print()">🖨️ 打印班级总览 / 导出 PDF</button>
   </div>
 </div>
 
 <!-- ====== 学生列表页 ====== -->
 <div id="tab-students" class="hidden">
   <div class="filter-bar">
-    <span style="font-size:13px;color:var(--ink-light);">按画像筛选：</span>
+    <span style="font-size:13px;color:var(--ink-light);">画像筛选：</span>
     <select id="filter-type" onchange="renderStudentList()">
       <option value="all">全部画像</option>
     </select>
-    <span style="font-size:13px;color:var(--ink-light);margin-left:8px;">排序：</span>
+    <span style="font-size:13px;color:var(--ink-light);margin-left:4px;">排序：</span>
     <select id="sort-dim" onchange="renderStudentList()">
       <option value="avg">综合均分</option>
       <option value="语基">语基</option>
@@ -207,13 +315,16 @@ tr:hover td{background:var(--cream)}
       <option value="阅读">阅读</option>
       <option value="作文">作文</option>
     </select>
+    <label style="font-size:12px;color:var(--red);cursor:pointer;margin-left:auto;display:flex;align-items:center;gap:4px;">
+      <input type="checkbox" id="filter-attention" onchange="renderStudentList()" style="accent-color:var(--red);"> 仅看需要关注
+    </label>
   </div>
   <div class="card" style="overflow-x:auto;">
     <table>
       <thead><tr>
-        <th>姓名</th><th>诊断画像</th><th>解码</th><th>理解</th><th>表达</th><th>策略</th><th>积累</th><th>完成时间</th><th>操作</th>
+        <th>姓名</th><th>诊断画像</th><th>解码</th><th>理解</th><th>表达</th><th>策略</th><th>积累</th><th>均分</th><th>时间</th><th>操作</th>
       </tr></thead>
-      <tbody id="student-table-body"><tr><td colspan="9" class="empty-state">暂无学生数据，等待学生完成诊断后自动同步</td></tr></tbody>
+      <tbody id="student-table-body"><tr><td colspan="10" class="empty-state">暂无学生数据，等待学生完成诊断后自动同步</td></tr></tbody>
     </table>
   </div>
 
@@ -243,41 +354,40 @@ tr:hover td{background:var(--cream)}
 </div>
 
 <script>
-// ====== 核心常量（与学生版共用） ======
+// ====== 核心常量 ======
 const ROOT_CAUSES=[{id:0,key:'decode',name:'字词解码',icon:'🔤',sname:'解码层',question:'能否准确识别字词、流畅阅读？',lowMsg:'在识别字词和流畅阅读方面存在困难——这是语文学习最基础的一环。'},{id:1,key:'comprehend',name:'意义理解',icon:'💭',sname:'理解层',question:'能否读懂句子和段落、进行推理？',lowMsg:'能读通字词，但在"读出文字背后的意思"这个环节还需要加强。'},{id:2,key:'express',name:'语言表达',icon:'✍️',sname:'表达层',question:'能否把想法组织成清晰书面语言？',lowMsg:'能理解文章，但把自己的想法写清楚是一个挑战。'},{id:3,key:'strategy',name:'学习策略',icon:'🎯',sname:'策略层',question:'审题、应试、自我监控是否有效？',lowMsg:'语文能力本身没有大问题，但在"怎么学"和"怎么考"的策略层面还有提升空间。'},{id:4,key:'knowledge',name:'知识储备',icon:'📚',sname:'积累层',question:'字词诗句和文学知识是否充足？',lowMsg:'语言基本功底还需要更多积累——成语、古诗文、文学常识等"弹药库"还不够满。'}];
 
-const PROFILES={
-P1:{id:'P1',name:'字词解码薄弱型',tag:'基础关卡',icon:'🔤',tagClass:'tag-p1',
-  desc:'字词识别和阅读流畅度方面存在基础性困难。这是语文学习最底层的"地基"。',
+const PROFILES={P1:{id:'P1',name:'字词解码薄弱型',tag:'基础关卡',icon:'🔤',tagClass:'tag-p1',
+  desc:'字词识别和阅读流畅度方面存在基础性困难。',
   studentTitle:'首要任务：打通阅读的第一关',
-  parentMsg:'孩子目前在字词识别和阅读流畅度方面需要加强——这是语文学习最基础的一环。',
+  parentMsg:'孩子目前在字词识别和阅读流畅度方面需要加强。',
   parentActions:['每天陪孩子朗读10分钟，遇到不认识的字一起查、一起记','在家里贴一张"本周新字词"，让积累可见','不要急于求成——每天认识3-5个新字词就很好'],
-  teacherPriority:'解码层是当前首要干预点。课堂中关注该生朗读表现，及时纠正识字错误。',
+  teacherPriority:'解码层是当前首要干预点。课堂中关注该生朗读表现。',
   teacherStrategies:['布置"每日5分钟朗读+3个新词"的微习惯作业','使用"字源识字法"——讲字形结构帮助记忆','与家长协调：学校积累和家庭亲子朗读同步进行'],
   teacherMonitor:'两个月内朗读错误率明显下降；字词听写正确率提升10个百分点。',
   priority:[0,1,4,3,2]},
 P2:{id:'P2',name:'阅读理解断层型',tag:'意义建构',icon:'💭',tagClass:'tag-p2',
-  desc:'能较流畅地阅读字词，但在"读懂文字背后的意思"这个环节出现了断层。',
+  desc:'能较流畅地阅读字词，但在"读懂文字背后的意思"环节出现断层。',
   studentTitle:'突破口：从"读懂字"到"读懂意"',
-  parentMsg:'孩子能较流畅地阅读字词，但在"读懂深层意思"这个环节还需要加强。',
+  parentMsg:'孩子能较流畅地阅读字词，但在"读懂深层意思"环节还需加强。',
   parentActions:['每天一起读一个小故事，读完后让孩子用自己话讲一遍','问孩子"你觉得作者为什么要写这段"——不要检查对错','在生活中培养"推理"习惯——看到表情猜心情'],
-  teacherPriority:'理解层是核心瓶颈。该生字词解码基本过关，意义建构是当前最需要突破的环节。',
+  teacherPriority:'理解层是核心瓶颈。该生字词解码基本过关，意义建构是当前最需突破环节。',
   teacherStrategies:['课堂训练"推理三问"——写了什么→为什么写→写得怎么样','使用"出声思维法"——示范"我是怎么读懂这段话的"','从"短段落+单一问题"开始，降低认知负荷'],
   teacherMonitor:'四周内能独立完成200字段落准确复述；阅读理解正确率提升。',
   priority:[1,3,2,4,0]},
 P3:{id:'P3',name:'语言表达阻滞型',tag:'输出转化',icon:'✍️',tagClass:'tag-p3',
-  desc:'能理解文章也有自己的想法，但在"把想法组织成清晰文字"这个环节遇到了困难。',
-  studentTitle:'关键战役：把脑子里的想法"翻译"成纸上的文字',
-  parentMsg:'孩子能理解也有想法，但在"写出来"这个环节还需要帮助。',
+  desc:'能理解文章也有自己的想法，但在"把想法组织成清晰文字"环节遇到困难。',
+  studentTitle:'关键战役：把想法"翻译"成纸上的文字',
+  parentMsg:'孩子能理解也有想法，但在"写出来"环节还需要帮助。',
   parentActions:['让孩子先口头讲一遍要写的内容，讲顺了再去写','写完东西后先肯定再提建议','从"三句话日记"开始——每天只写三句'],
   teacherPriority:'表达层是核心障碍。"口头→书面"的转化是主要瓶颈。',
-  teacherStrategies:['使用"口述草稿法"——先口头组织答案再写下来','提供"表达脚手架"——常用答题句式模板','"分层训练"：第一步分层→第二步中心句→第三步支撑句'],
+  teacherStrategies:['使用"口述草稿法"——先口头组织答案再写下来','提供"表达脚手架"——常用答题句式模板','"分层训练"：分层→中心句→支撑句'],
   teacherMonitor:'四周内能写出层次分明的200字段落；答题条理性明显改善。',
   priority:[2,3,1,4,0]},
 P4:{id:'P4',name:'应试策略缺失型',tag:'方法优化',icon:'🎯',tagClass:'tag-p4',
-  desc:'语文基本功没有大问题，但在审题、组织答案、检查等应试策略上还没有形成有效习惯。',
+  desc:'语文基本功没有大问题，但在审题、组织答案、检查等应试策略上还没形成有效习惯。',
   studentTitle:'离更好的分数只差一套"答题方法"',
-  parentMsg:'孩子能力不差，但在学习方法策略上还需要优化——就像有好车但不太熟悉路线。',
+  parentMsg:'孩子能力不差，但在学习方法策略上还需要优化。',
   parentActions:['关注学习习惯多过关注分数——"你是怎么复习的""错题搞懂了吗"','帮孩子准备"错题小本"——写清"为什么错""下次怎么避免"','减少"考了多少分"的追问，增加"哪里比上次进步了"的引导'],
   teacherPriority:'策略训练是"性价比"最高的干预点——能力尚可，策略优化可直提分数。',
   teacherStrategies:['"审题专项"——每周2-3次纯审题训练（圈关键词+判断题型）','"元认知提示卡"——"题在问什么→用什么方法→怎么检查"','"策略复盘"——测试后写两句话的策略反思'],
@@ -286,16 +396,16 @@ P4:{id:'P4',name:'应试策略缺失型',tag:'方法优化',icon:'🎯',tagClass
 P5:{id:'P5',name:'知识储备不足型',tag:'弹药补给',icon:'📚',tagClass:'tag-p5',
   desc:'成语、古诗文、文学常识等"硬知识"的储备还不够。',
   studentTitle:'现在最缺的是"弹药"——语文知识储备',
-  parentMsg:'孩子最需要的是"知识积累"——这是最不需要天赋、最能靠坚持做到的。',
+  parentMsg:'孩子最需要的是"知识积累"——最不需要天赋、最能靠坚持做到的。',
   parentActions:['每天只积累3个知识点（一个字+一个成语+一句诗），不要贪多','把知识点写便签纸上贴在家里显眼处','吃饭时花2分钟口头抽查，每50个给奖励'],
   teacherPriority:'知识储备是当前瓶颈——积累提升将带动多个板块进步。',
   teacherStrategies:['从"微积累"启动——每天3个知识点，建立日日不断的习惯','引入"间隔复习轮"——课前2-3分钟卡片快速回顾','"积累可视化"——教室设"积累进度图"'],
   teacherMonitor:'四周内字音字形和成语运用正确率有可测量提升。',
   priority:[4,0,3,1,2]},
 P6:{id:'P6',name:'多因素复合型',tag:'系统提升',icon:'🔧',tagClass:'tag-p6',
-  desc:'语文学习在多个层面同时存在需要加强的地方。关键是有正确的优先级。',
+  desc:'语文学习在多个层面同时存在需要加强的地方。关键是找到正确的优先级。',
   studentTitle:'需要一个"分步走"的提升计划',
-  parentMsg:'孩子在多个方面需要同步提升。需要找到正确的提升顺序，请多一些耐心。',
+  parentMsg:'孩子在多个方面需要同步提升。需要找到正确的提升顺序。',
   parentActions:['先关注最基础的问题（字词和阅读），不要同时要求所有方面','每天固定15-20分钟"语文时间"，坚持比时长重要','关注进步而非差距——"今天又认识了3个新字"比"怎么才考了xx分"有效'],
   teacherPriority:'存在多维根因交织，按层级分步干预。解码>积累>理解>表达>策略。',
   teacherStrategies:['第一阶段（1-2周）：聚焦解码层——每日朗读+字词积累','第二阶段（3-4周）：加入理解层——短段落复述+推理三问','第三阶段（5-6周）：加入表达层——口述转书面+微写作'],
@@ -304,17 +414,14 @@ P6:{id:'P6',name:'多因素复合型',tag:'系统提升',icon:'🔧',tagClass:'t
 P7:{id:'P7',name:'均衡发展型',tag:'持续精进',icon:'⭐',tagClass:'tag-p7',
   desc:'各项语文根基能力发展比较均衡，没有明显短板。',
   studentTitle:'基础很扎实，可以选择一个方向深入突破',
-  parentMsg:'孩子语文基础比较均衡扎实。鼓励在感兴趣的领域深入探索比追求"全面发展"更有价值。',
+  parentMsg:'孩子语文基础比较均衡扎实。鼓励在感兴趣的领域深入探索。',
   parentActions:['多和孩子聊聊读过的书——"你最喜欢哪一段为什么"','鼓励用写作表达自己——日记、写信、读后感都可以','帮孩子找"阅读伙伴"一起读一起聊'],
   teacherPriority:'各项根因均衡发展，可引导高阶突破。发挥示范引领作用。',
   teacherStrategies:['引导挑战更复杂的文本——议论性散文、多文本比较阅读','鼓励在班级分享学习方法和心得','提供"输出型"任务——整理知识点分享、给全班出题'],
   teacherMonitor:'关注是否出现新的兴趣和突破点；防止"均衡"变成"平庸"。',
-  priority:[3,2,1,4,0]}
-};
+  priority:[3,2,1,4,0]}};
 
-// ====== 根因解释（简版，详情在弹窗中） ======
-const RC_EXP = {
-0:{high:{desc:'字词识别和阅读流畅度良好。',teacher:'解码能力良好。可布置略高于当前水平的阅读材料。'},
+const RC_EXP={0:{high:{desc:'字词识别和阅读流畅度良好。',teacher:'解码能力良好。可布置略高于当前水平的阅读材料。'},
  medium:{desc:'字词识别基本过关，偶尔遇到生词，阅读速度有时偏慢。',teacher:'多做"语境猜词"训练。推荐每日10-15分钟课外阅读。'},
  low:{desc:'字词识别存在困难，阅读速度偏慢——这是最需要优先解决的问题。',teacher:'首要干预点。每日5分钟朗读+3个新词微习惯。使用"字源识字法"。'}},
 1:{high:{desc:'阅读理解能力强，能准确把握主旨和隐含意义。',teacher:'理解层突出。可引导挑战议论性散文、多文本比较阅读。'},
@@ -325,52 +432,22 @@ const RC_EXP = {
  low:{desc:'有想法但难以转化为清晰有序的书面文字——"输入够但输出卡住"。',teacher:'核心障碍。低门槛启动→先说后写→分层训练→一句精改。'}},
 3:{high:{desc:'学习策略和应试策略良好，语文实力能充分发挥。',teacher:'策略层较强。可让其分享策略。引导从"使用者"变"反思者"。'},
  medium:{desc:'有一定策略意识但不够稳定系统。',teacher:'审题专项训练。引入"错题归因法"。考试前做"策略检查清单"。'},
- low:{desc:'策略层明星不足——审题薄弱、答题缺章法，能力不能有效"变现"。',teacher:'最值得投入的干预点。审题专项+元认知提示卡+策略复盘。'}},
+ low:{desc:'策略层明显不足——审题薄弱、答题缺章法，能力不能有效"变现"。',teacher:'最值得投入的干预点。审题专项+元认知提示卡+策略复盘。'}},
 4:{high:{desc:'语文知识储备扎实，能在读写中自然调用。',teacher:'积累扎实。引导从"积累者"变"输出者"。建立知识网络。'},
  medium:{desc:'课内基本知识能掌握，主动积累意识和系统性不够。',teacher:'教"间隔复习法"。引入"分类积累本"。"输出倒逼输入"。'},
- low:{desc:'知识储备明显不足，成语量少、古诗文积累薄弱。',teacher:'从"微积累"启动。间隔复习轮。积累可视化。与家长形成合力。'}}
-};
+ low:{desc:'知识储备明显不足，成语量少、古诗文积累薄弱。',teacher:'从"微积累"启动。间隔复习轮。积累可视化。与家长形成合力。'}}};
 
-// ====== 五大板块映射 ======
-const DOMAINS = {
-  '语基':{name:'语言基础与运用',dims:[{i:4,w:0.35},{i:0,w:0.35},{i:1,w:0.3}],desc:'字音字形、成语、病句、仿写等基础知识的掌握与运用。'},
-  '名著':{name:'名著阅读',dims:[{i:4,w:0.35},{i:1,w:0.35},{i:2,w:0.3}],desc:'对经典文学作品的熟悉程度和理解深度。'},
-  '古诗文':{name:'古诗文阅读',dims:[{i:4,w:0.3},{i:0,w:0.3},{i:1,w:0.4}],desc:'古诗词背诵、文言实词积累与诗歌鉴赏能力。'},
-  '阅读':{name:'现代文阅读',dims:[{i:1,w:0.35},{i:0,w:0.2},{i:3,w:0.25},{i:2,w:0.2}],desc:'审题策略、信息提取、文本理解与语言表达的综合运用。'},
-  '作文':{name:'写作',dims:[{i:2,w:0.35},{i:1,w:0.2},{i:3,w:0.25},{i:4,w:0.2}],desc:'语言表达、逻辑结构、审题策略与知识积累的综合能力。'}
-};
+const DOMAINS={'语基':{name:'语言基础与运用',dims:[{i:4,w:0.35},{i:0,w:0.35},{i:1,w:0.3}],desc:'字音字形、成语、病句、仿写等基础知识的掌握与运用。'},'名著':{name:'名著阅读',dims:[{i:4,w:0.35},{i:1,w:0.35},{i:2,w:0.3}],desc:'对经典文学作品的熟悉程度和理解深度。'},'古诗文':{name:'古诗文阅读',dims:[{i:4,w:0.3},{i:0,w:0.3},{i:1,w:0.4}],desc:'古诗词背诵、文言实词积累与诗歌鉴赏能力。'},'阅读':{name:'现代文阅读',dims:[{i:1,w:0.35},{i:0,w:0.2},{i:3,w:0.25},{i:2,w:0.2}],desc:'审题策略、信息提取、文本理解与语言表达的综合运用。'},'作文':{name:'写作',dims:[{i:2,w:0.35},{i:1,w:0.2},{i:3,w:0.25},{i:4,w:0.2}],desc:'语言表达、逻辑结构、审题策略与知识积累的综合能力。'}};
 
 // ====== 工具函数 ======
 function getLv(s){return s>=68?'high':(s<42?'low':'medium')}
 function mapScore(r){return Math.max(1,Math.min(99,Math.round((r-20)/60*98+1)))}
-function calcDomainScores(ns){
-  var result={};
-  for(var dk in DOMAINS){
-    var dom=DOMAINS[dk],score=0;
-    dom.dims.forEach(function(d){score+=ns[d.i]*d.w;});
-    result[dk]=Math.round(score);
-  }
-  return result;
-}
-
-function diagnoseProfile(ns){
-  var primary=null;
-  if(ns[0]<40) primary='P1';
-  else if(ns[1]<40) primary='P2';
-  else if(ns[2]<40) primary='P3';
-  else if(ns[3]<40) primary='P4';
-  else if(ns[4]<40) primary='P5';
-  else{
-    var lowCount=0;
-    for(var i=0;i<5;i++){if(ns[i]<50)lowCount++;}
-    if(lowCount>=2) primary='P6';
-    else primary='P7';
-  }
-  return {profileKey:primary,profileObj:PROFILES[primary]};
-}
+function calcDomainScores(ns){var result={};for(var dk in DOMAINS){var dom=DOMAINS[dk],score=0;dom.dims.forEach(function(d){score+=ns[d.i]*d.w;});result[dk]=Math.round(score);}return result;}
+function diagnoseProfile(ns){var primary=null;if(ns[0]<40)primary='P1';else if(ns[1]<40)primary='P2';else if(ns[2]<40)primary='P3';else if(ns[3]<40)primary='P4';else if(ns[4]<40)primary='P5';else{var lowCount=0;for(var i=0;i<5;i++){if(ns[i]<50)lowCount++;}if(lowCount>=2)primary='P6';else primary='P7';}return {profileKey:primary,profileObj:PROFILES[primary]};}
+function escHtml(s){var d=document.createElement('div');d.textContent=s;return d.innerHTML}
 
 // ====== 数据管理 ======
-const USE_API = true;
+const USE_API=true;
 const STORAGE_KEY='yuwen_diagnosis_students';
 const GITHUB_REPO='yuyubai176-star/yuwen-diagnosis';
 const GITHUB_TOKEN='ghp_'+'V45u1Kj6NFk2yAtlZQXuMWXZenrK543m5NgW';
@@ -381,53 +458,23 @@ function loadStudents(){return _studentsCache;}
 function getStudents(){return loadStudents().map(function(s){var p=PROFILES[s.profileKey]||PROFILES['P7'];return Object.assign({},s,{profileObj:p});});}
 function getRawStudents(){return loadStudents();}
 
-function githubAPI(url, opts){
-  opts = opts || {};
-  opts.headers = opts.headers || {};
-  if(GITHUB_TOKEN){opts.headers['Authorization'] = 'token ' + GITHUB_TOKEN;}
-  return fetch(url, opts).then(function(r){return r.json()}).catch(function(){return null});
-}
+function githubAPI(url,opts){opts=opts||{};opts.headers=opts.headers||{};if(GITHUB_TOKEN){opts.headers['Authorization']='token '+GITHUB_TOKEN;}return fetch(url,opts).then(function(r){return r.json()}).catch(function(){return null});}
 
 function fetchFromServer(){
   githubAPI(DATA_API).then(function(files){
     if(!Array.isArray(files)){_studentsCache=[];updateCount();return;}
-    var students=[];
-    var loaded=0;
+    var students=[],loaded=0;
     files.forEach(function(f){
       if(f.type!=='file')return;
       fetch(f.download_url).then(function(r){return r.json()}).then(function(data){
-        if(data && data.name && data.ns && Array.isArray(data.ns) && data.ns.length===5){
+        if(data&&data.name&&data.ns&&Array.isArray(data.ns)&&data.ns.length===5){
           var cls=diagnoseProfile(data.ns);
-          students.push({
-            id:f.sha.substring(0,12),
-            name:data.name,
-            ns:data.ns,
-            profileKey:cls.profileKey,
-            profileName:cls.profileObj.name,
-            profileTag:cls.profileObj.tag,
-            ts:data.ts||'',
-            notes:data.notes||''
-          });
+          students.push({id:f.sha.substring(0,12),name:data.name,ns:data.ns,profileKey:cls.profileKey,profileName:cls.profileObj.name,profileTag:cls.profileObj.tag,ts:data.ts||'',notes:data.notes||''});
         }
       }).catch(function(){}).then(function(){
-        loaded++;
-        if(loaded>=files.length){
-          var before=_studentsCache.length;
-          _studentsCache=students;
-          updateCount();
-          if(students.length>before&&before>0){
-            var hint=document.getElementById('refresh-hint');
-            hint.textContent='检测到 '+(students.length-before)+' 名新学生，数据已自动更新';
-            hint.style.display='block';hint.style.color='#5B8C5A';
-            setTimeout(function(){hint.style.display='none'},5000);
-          }
-          _lastKnownCount=students.length;
-          var activeTab=document.querySelector('.tab.active');
-          if(activeTab){
-            var tn=activeTab.dataset.tab;
-            if(tn==='overview')renderOverview();
-            if(tn==='students')renderStudentList();
-          }
+        loaded++;if(loaded>=files.length){var before=_studentsCache.length;_studentsCache=students;updateCount();
+          if(students.length>before&&before>0){var hint=document.getElementById('refresh-hint');hint.textContent='✓ 检测到 '+(students.length-before)+' 名新学生，数据已自动更新';hint.style.display='block';hint.style.color='#5B8C5A';setTimeout(function(){hint.style.display='none'},5000);}
+          _lastKnownCount=students.length;var activeTab=document.querySelector('.tab.active');if(activeTab){var tn=activeTab.dataset.tab;if(tn==='overview')renderOverview();if(tn==='students')renderStudentList();}
         }
       });
     });
@@ -439,122 +486,49 @@ function addStudent(raw){
   var fname='data/'+encodeURIComponent(raw.name)+'.json';
   var content=JSON.stringify({name:raw.name,ns:raw.ns,ts:raw.ts||new Date().toISOString()});
   var contentB64=btoa(unescape(encodeURIComponent(content)));
-  function doPut(sha){
-    var body={message:'添加/更新: '+raw.name,content:contentB64,branch:'main'};
-    if(sha)body.sha=sha;
-    return githubAPI('https://api.github.com/repos/'+GITHUB_REPO+'/contents/'+fname,{method:'PUT',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)});
-  }
-  githubAPI('https://api.github.com/repos/'+GITHUB_REPO+'/contents/'+fname).then(function(fileInfo){
-    return doPut(fileInfo&&fileInfo.sha?fileInfo.sha:null);
-  }).then(function(){
-    try{
-      var existing=JSON.parse(localStorage.getItem(STORAGE_KEY)||'[]');
-      var idx=existing.findIndex(function(s){return s.name===raw.name});
-      if(idx>=0)existing[idx]=raw;else existing.push(raw);
-      localStorage.setItem(STORAGE_KEY,JSON.stringify(existing));
-    }catch(e){}
+  function doPut(sha){var body={message:'添加/更新: '+raw.name,content:contentB64,branch:'main'};if(sha)body.sha=sha;return githubAPI('https://api.github.com/repos/'+GITHUB_REPO+'/contents/'+fname,{method:'PUT',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)});}
+  githubAPI('https://api.github.com/repos/'+GITHUB_REPO+'/contents/'+fname).then(function(fileInfo){return doPut(fileInfo&&fileInfo.sha?fileInfo.sha:null);}).then(function(){
+    try{var existing=JSON.parse(localStorage.getItem(STORAGE_KEY)||'[]');var idx=existing.findIndex(function(s){return s.name===raw.name});if(idx>=0)existing[idx]=raw;else existing.push(raw);localStorage.setItem(STORAGE_KEY,JSON.stringify(existing));}catch(e){}
     fetchFromServer();
   });
   updateCount();
 }
 
 function removeStudent(id){
-  var student=_studentsCache.find(function(s){return s.id===id});
-  if(!student)return;
+  var student=_studentsCache.find(function(s){return s.id===id});if(!student)return;
   var fname='data/'+encodeURIComponent(student.name)+'.json';
-  githubAPI('https://api.github.com/repos/'+GITHUB_REPO+'/contents/'+fname).then(function(file){
-    if(file&&file.sha){
-      return githubAPI('https://api.github.com/repos/'+GITHUB_REPO+'/contents/'+fname,{method:'DELETE',headers:{'Content-Type':'application/json'},body:JSON.stringify({message:'删除: '+student.name,sha:file.sha,branch:'main'})});
-    }
-  }).then(function(){
-    try{
-      var existing=JSON.parse(localStorage.getItem(STORAGE_KEY)||'[]');
-      existing=existing.filter(function(s){return s.id!==id});
-      localStorage.setItem(STORAGE_KEY,JSON.stringify(existing));
-    }catch(e){}
+  githubAPI('https://api.github.com/repos/'+GITHUB_REPO+'/contents/'+fname).then(function(file){if(file&&file.sha){return githubAPI('https://api.github.com/repos/'+GITHUB_REPO+'/contents/'+fname,{method:'DELETE',headers:{'Content-Type':'application/json'},body:JSON.stringify({message:'删除: '+student.name,sha:file.sha,branch:'main'})});}}).then(function(){
+    try{var existing=JSON.parse(localStorage.getItem(STORAGE_KEY)||'[]');existing=existing.filter(function(s){return s.id!==id});localStorage.setItem(STORAGE_KEY,JSON.stringify(existing));}catch(e){}
     fetchFromServer();
   });
 }
 
-// ====== 事件绑定 ======
-function updateCount(){
-  document.getElementById('total-count').textContent=loadStudents().length;
-  updateCompareSelects();
-}
+function updateCount(){document.getElementById('total-count').textContent=loadStudents().length;updateCompareSelects();}
 
-// ====== 学生对比 ======
-function updateCompareSelects(){
-  var selA=document.getElementById('compare-a');
-  var selB=document.getElementById('compare-b');
-  if(!selA||!selB)return;
-  var students=getStudents();
-  var curA=selA.value,curB=selB.value;
-  var opts='<option value="">— 选择学生 —</option>';
-  students.forEach(function(s){opts+='<option value="'+s.id+'">'+escHtml(s.name)+'</option>';});
-  selA.innerHTML=opts;selA.value=curA;
-  selB.innerHTML=opts;selB.value=curB;
-}
-
-function renderCompare(){
-  var idA=document.getElementById('compare-a').value;
-  var idB=document.getElementById('compare-b').value;
-  var container=document.getElementById('compare-result');
-  if(!idA||!idB){container.classList.add('hidden');return}
-  var students=getStudents();
-  var sA=students.find(function(s){return s.id===idA});
-  var sB=students.find(function(s){return s.id===idB});
-  if(!sA||!sB){container.classList.add('hidden');return}
-  container.classList.remove('hidden');
-  var dsA=calcDomainScores(sA.ns),dsB=calcDomainScores(sB.ns);
-  var pA=PROFILES[sA.profileKey],pB=PROFILES[sB.profileKey];
-
-  var html='';
-  // 双雷达图
-  html+='<div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px;">';
-  html+='<div><h4 style="color:var(--red);text-align:center;margin-bottom:4px;">'+escHtml(sA.name)+'</h4><div class="chart-wrap" style="max-width:220px;margin:0 auto;"><canvas id="chart-compare-a"></canvas></div></div>';
-  html+='<div><h4 style="color:var(--blue);text-align:center;margin-bottom:4px;">'+escHtml(sB.name)+'</h4><div class="chart-wrap" style="max-width:220px;margin:0 auto;"><canvas id="chart-compare-b"></canvas></div></div>';
-  html+='</div>';
-
-  // 五维对比表
-  html+='<table class="compare-table"><thead><tr><th>根因维度</th><th>'+escHtml(sA.name)+'</th><th>'+escHtml(sB.name)+'</th><th>差值</th><th>对比</th></tr></thead><tbody>';
-  ROOT_CAUSES.forEach(function(d,i){
-    var vA=sA.ns[i],vB=sB.ns[i],diff=vA-vB;
-    var diffCls=diff>0?'diff-pos':(diff<0?'diff-neg':'');
-    var diffStr=diff>0?'+'+diff:(diff===0?'0':''+diff);
-    var maxV=Math.max(vA,vB,1);
-    html+='<tr>';
-    html+='<td class="dim-name">'+d.icon+' '+d.sname+'</td>';
-    html+='<td style="font-weight:700;color:var(--red);">'+vA+'</td>';
-    html+='<td style="font-weight:700;color:var(--blue);">'+vB+'</td>';
-    html+='<td class="'+diffCls+'" style="font-weight:700;">'+diffStr+'</td>';
-    html+='<td><div class="compare-bar-wrap"><div class="compare-bar-a" style="width:'+Math.round(vA/maxV*60)+'px;"></div><div class="compare-bar-b" style="width:'+Math.round(vB/maxV*60)+'px;"></div></div></td>';
-    html+='</tr>';
-  });
-  html+='</tbody></table>';
-
-  // 五大板块对比
-  html+='<div class="section-title" style="margin-top:16px;">📊 五大板块对比</div>';
-  html+='<table class="compare-table"><thead><tr><th>板块</th><th>'+escHtml(sA.name)+'</th><th>'+escHtml(sB.name)+'</th><th>差值</th></tr></thead><tbody>';
-  for(var dk in DOMAINS){
-    var dAv=dsA[dk],dBv=dsB[dk],diff=dAv-dBv;
-    var diffStr2=diff>0?'+'+diff:(diff===0?'0':''+diff);
-    html+='<tr><td class="dim-name">'+DOMAINS[dk].name+'</td><td style="font-weight:700;color:var(--red);">'+dAv+'</td><td style="font-weight:700;color:var(--blue);">'+dBv+'</td><td class="'+(diff>0?'diff-pos':'diff-neg')+'" style="font-weight:700;">'+diffStr2+'</td></tr>';
+// ====== 演示数据 ======
+function fillDemoData(){
+  var demoNames=['张三','李四','王五','赵六','陈七','周八','吴九','郑十','钱十一','孙十二'];
+  var demoProfiles=['P1','P2','P3','P4','P5','P6','P7','P3','P2','P1'];
+  var demoNS=[[28,52,47,65,38],[63,25,55,42,60],[71,58,26,49,55],[65,70,64,27,52],[55,48,53,61,24],[30,42,38,52,35],[75,72,70,68,77],[72,55,32,48,62],[60,28,58,45,59],[26,55,46,62,32]];
+  var count=0;
+  for(var i=0;i<demoNames.length;i++){
+    var cls=diagnoseProfile(demoNS[i]);
+    addStudent({id:Date.now()+i,name:demoNames[i],ns:demoNS[i],profileKey:cls.profileKey,profileName:cls.profileObj.name,profileTag:cls.profileObj.tag,ts:new Date().toISOString()});
+    count++;
   }
-  html+='</tbody></table>';
-
-  // 画像对比
-  html+='<div class="section-title" style="margin-top:16px;">🧑 诊断画像对比</div>';
-  html+='<div style="display:flex;gap:12px;">';
-  html+='<div style="flex:1;text-align:center;padding:10px;background:var(--white);border-radius:10px;border:2px solid var(--red);"><span class="tag '+pA.tagClass+'" style="font-size:14px;padding:4px 12px;">'+pA.name+'</span><p style="font-size:12px;color:var(--ink-light);margin-top:6px;">'+pA.desc+'</p></div>';
-  html+='<div style="flex:1;text-align:center;padding:10px;background:var(--white);border-radius:10px;border:2px solid var(--blue);"><span class="tag '+pB.tagClass+'" style="font-size:14px;padding:4px 12px;">'+pB.name+'</span><p style="font-size:12px;color:var(--ink-light);margin-top:6px;">'+pB.desc+'</p></div>';
-  html+='</div>';
-
-  container.innerHTML=html;
-  setTimeout(function(){
-    drawIndivRadar('chart-compare-a',sA.ns,null);
-    drawIndivRadar('chart-compare-b',sB.ns,null);
-  },200);
+  document.getElementById('mf-msg').style.color='#5B8C5A';
+  document.getElementById('mf-msg').textContent='已添加 '+count+' 名演示学生';
+  setTimeout(function(){document.getElementById('mf-msg').textContent='';},3000);
+  setTimeout(function(){fetchFromServer();},2000);
 }
+
+// ====== 导出/清空 ======
+function exportData(){var students=loadStudents();if(students.length===0){alert('没有数据可导出');return}var json=JSON.stringify(students,null,2);var blob=new Blob([json],{type:'application/json'});var a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='语文学情诊断_学生数据_'+new Date().toISOString().slice(0,10)+'.json';a.click();URL.revokeObjectURL(a.href);}
+function clearAll(){if(!confirm('确定要清空全部学生数据吗？此操作不可恢复。\n\n建议先导出数据备份。'))return;githubAPI(DATA_API).then(function(files){if(Array.isArray(files)){var dels=files.filter(function(f){return f.type==='file'}).map(function(f){return githubAPI('https://api.github.com/repos/'+GITHUB_REPO+'/contents/'+f.path,{method:'DELETE',headers:{'Content-Type':'application/json'},body:JSON.stringify({message:'清空数据',sha:f.sha,branch:'main'})});});Promise.all(dels).then(function(){localStorage.removeItem(STORAGE_KEY);fetchFromServer();switchTab('import');});}});}
+function importJSONFile(event){var file=event.target.files[0];if(!file)return;var reader=new FileReader();reader.onload=function(e){try{var data=JSON.parse(e.target.result);var arr=Array.isArray(data)?data:[data];var success=0,fail=0;var toSubmit=[];arr.forEach(function(item){if(!item.name||!item.ns||!Array.isArray(item.ns)||item.ns.length!==5){fail++;return;}var cls=diagnoseProfile(item.ns);toSubmit.push({id:item.id||(Date.now()+Math.random().toString(36)),name:item.name,ns:item.ns,profileKey:cls.profileKey,profileName:cls.profileObj.name,profileTag:cls.profileObj.tag,ts:item.ts||new Date().toISOString()});success++;});var showHint=function(){var hint=document.getElementById('refresh-hint');hint.textContent='已导入 '+success+' 名学生'+(fail>0?'，'+fail+' 条失败':'');hint.style.display='block';hint.style.color=fail>0?'#C77826':'#5B8C5A';setTimeout(function(){hint.style.display='none'},4000);};if(USE_API){toSubmit.forEach(function(s){addStudent(s);});setTimeout(function(){fetchFromServer();showHint();},2000);}else{toSubmit.forEach(function(s){addStudent(s);});showHint();updateCount();}}catch(ex){alert('文件解析失败：'+ex.message)}};reader.readAsText(file);event.target.value='';}
+function refreshFromStorage(){if(USE_API){fetchFromServer();return;}var before=loadStudents().length;updateCount();var after=loadStudents().length;_lastKnownCount=after;var hint=document.getElementById('refresh-hint');if(after>before){hint.textContent='发现 '+(after-before)+' 名新学生数据！';hint.style.display='block';hint.style.color='#5B8C5A';setTimeout(function(){hint.style.display='none'},4000);}else{hint.textContent='数据已是最新（共 '+after+' 名学生）';hint.style.display='block';hint.style.color='var(--ink-light)';setTimeout(function(){hint.style.display='none'},3000);}var activeTab=document.querySelector('.tab.active');if(activeTab){var tabName=activeTab.dataset.tab;if(tabName==='overview')renderOverview();if(tabName==='students')renderStudentList();}}
+
+window.addEventListener('storage',function(e){if(e.key===STORAGE_KEY){updateCount();var hint=document.getElementById('refresh-hint');hint.textContent='检测到新数据同步，已自动更新';hint.style.display='block';hint.style.color='#5B8C5A';setTimeout(function(){hint.style.display='none'},4000);var activeTab=document.querySelector('.tab.active');if(activeTab){var tabName=activeTab.dataset.tab;if(tabName==='overview')renderOverview();if(tabName==='students')renderStudentList();}}});
 
 // ====== Tab 切换 ======
 function switchTab(name){
@@ -570,427 +544,271 @@ function switchTab(name){
 function initManualForm(){
   var html='';
   ROOT_CAUSES.forEach(function(d){
-    html+='<div style="display:flex;align-items:center;gap:6px;"><span style="font-size:11px;width:70px;text-align:right;flex-shrink:0;">'+d.icon+' '+d.sname+'</span><input type="number" id="mf-dim-'+d.id+'" value="50" min="0" max="100" style="flex:1;width:60px;"></div>';
+    html+='<div style="display:flex;align-items:center;gap:6px;margin-bottom:4px;"><span style="font-size:11px;width:80px;text-align:right;flex-shrink:0;">'+d.icon+' '+d.sname+'</span><input type="range" id="mf-dim-'+d.id+'" value="50" min="0" max="100" style="flex:1;" oninput="updateImportPreview()"><span id="mf-dim-val-'+d.id+'" style="font-size:12px;font-weight:600;width:28px;text-align:center;">50</span></div>';
   });
   document.getElementById('mf-dims').innerHTML=html;
 }
-
+function updateImportPreview(){
+  var ns=[];for(var i=0;i<5;i++){var v=parseInt(document.getElementById('mf-dim-'+i).value)||50;ns.push(v);document.getElementById('mf-dim-val-'+i).textContent=v;}
+  if(window._importPreviewChart){drawImportPreview(ns);}
+}
 function manualAdd(){
-  var name=document.getElementById('mf-name').value.trim();
-  if(!name){document.getElementById('mf-msg').textContent='请填写姓名';return}
-  var ns=[];
-  for(var i=0;i<5;i++){
-    var v=parseInt(document.getElementById('mf-dim-'+i).value)||50;
-    ns.push(Math.max(1,Math.min(99,v)));
-  }
-  var cls=diagnoseProfile(ns);
-  addStudent({
-    id:Date.now()+Math.random().toString(36),
-    name:name,ns:ns,
-    profileKey:cls.profileKey,
-    profileName:cls.profileObj.name,
-    profileTag:cls.profileObj.tag,
-    ts:new Date().toISOString()
-  });
-  document.getElementById('mf-msg').style.color='#5B8C5A';
-  document.getElementById('mf-msg').textContent='已添加 '+name;
-  document.getElementById('mf-name').value='';
-  updateCount();
-  setTimeout(function(){document.getElementById('mf-msg').textContent=''},3000);
+  var name=document.getElementById('mf-name').value.trim();if(!name){document.getElementById('mf-msg').textContent='请填写姓名';return}
+  var ns=[];for(var i=0;i<5;i++){var v=parseInt(document.getElementById('mf-dim-'+i).value)||50;ns.push(Math.max(1,Math.min(99,v)));}
+  var cls=diagnoseProfile(ns);addStudent({id:Date.now()+Math.random().toString(36),name:name,ns:ns,profileKey:cls.profileKey,profileName:cls.profileObj.name,profileTag:cls.profileObj.tag,ts:new Date().toISOString()});
+  document.getElementById('mf-msg').style.color='#5B8C5A';document.getElementById('mf-msg').textContent='已添加 '+name;
+  document.getElementById('mf-name').value='';updateCount();setTimeout(function(){document.getElementById('mf-msg').textContent='';},3000);
 }
-
-// ====== 导出/清空 ======
-function exportData(){
-  var students=loadStudents();
-  if(students.length===0){alert('没有数据可导出');return}
-  var json=JSON.stringify(students,null,2);
-  var blob=new Blob([json],{type:'application/json'});
-  var a=document.createElement('a');a.href=URL.createObjectURL(blob);
-  a.download='语文学情诊断_学生数据_'+new Date().toISOString().slice(0,10)+'.json';
-  a.click();URL.revokeObjectURL(a.href);
-}
-
-function clearAll(){
-  if(!confirm('确定要清空全部学生数据吗？此操作不可恢复。\n\n建议先导出数据备份。'))return;
-  githubAPI(DATA_API).then(function(files){
-    if(Array.isArray(files)){
-      var dels=files.filter(function(f){return f.type==='file'}).map(function(f){
-        return githubAPI('https://api.github.com/repos/'+GITHUB_REPO+'/contents/'+f.path,{method:'DELETE',headers:{'Content-Type':'application/json'},body:JSON.stringify({message:'清空数据',sha:f.sha,branch:'main'})});
-      });
-      Promise.all(dels).then(function(){
-        localStorage.removeItem(STORAGE_KEY);
-        fetchFromServer();
-        switchTab('import');
-      });
-    }
-  });
-}
-
-function importJSONFile(event){
-  var file=event.target.files[0];if(!file)return;
-  var reader=new FileReader();
-  reader.onload=function(e){
-    try{
-      var data=JSON.parse(e.target.result);
-      var arr=Array.isArray(data)?data:[data];
-      var success=0,fail=0;
-      var toSubmit=[];
-      arr.forEach(function(item){
-        if(!item.name||!item.ns||!Array.isArray(item.ns)||item.ns.length!==5){fail++;return;}
-        var cls=diagnoseProfile(item.ns);
-        toSubmit.push({
-          id:item.id||(Date.now()+Math.random().toString(36)),
-          name:item.name,ns:item.ns,
-          profileKey:cls.profileKey,profileName:cls.profileObj.name,profileTag:cls.profileObj.tag,
-          ts:item.ts||new Date().toISOString()
-        });
-        success++;
-      });
-      var showHint=function(){
-        var hint=document.getElementById('refresh-hint');
-        hint.textContent='已导入 '+success+' 名学生'+(fail>0?'，'+fail+' 条失败':'');
-        hint.style.display='block';hint.style.color=fail>0?'#C77826':'#5B8C5A';
-        setTimeout(function(){hint.style.display='none'},4000);
-      };
-      if(USE_API){
-        toSubmit.forEach(function(s){addStudent(s);});
-        setTimeout(function(){fetchFromServer();showHint();},2000);
-      }else{
-        toSubmit.forEach(function(s){addStudent(s);});
-        showHint();updateCount();
-      }
-    }catch(ex){alert('文件解析失败：'+ex.message)}
-  };
-  reader.readAsText(file);
-  event.target.value='';
-}
-
-function refreshFromStorage(){
-  if(USE_API){fetchFromServer();return;}
-  var before=loadStudents().length;
-  updateCount();
-  var after=loadStudents().length;
-  _lastKnownCount=after;
-  var hint=document.getElementById('refresh-hint');
-  if(after>before){
-    hint.textContent='发现 '+(after-before)+' 名新学生数据！';
-    hint.style.display='block';hint.style.color='#5B8C5A';
-    setTimeout(function(){hint.style.display='none'},4000);
-  }else{
-    hint.textContent='数据已是最新（共 '+after+' 名学生）';
-    hint.style.display='block';hint.style.color='var(--ink-light)';
-    setTimeout(function(){hint.style.display='none'},3000);
-  }
-  var activeTab=document.querySelector('.tab.active');
-  if(activeTab){
-    var tabName=activeTab.dataset.tab;
-    if(tabName==='overview')renderOverview();
-    if(tabName==='students')renderStudentList();
-  }
-}
-
-window.addEventListener('storage',function(e){
-  if(e.key===STORAGE_KEY){
-    updateCount();
-    var hint=document.getElementById('refresh-hint');
-    hint.textContent='检测到新数据同步，已自动更新';
-    hint.style.display='block';hint.style.color='#5B8C5A';
-    setTimeout(function(){hint.style.display='none'},4000);
-    var activeTab=document.querySelector('.tab.active');
-    if(activeTab){
-      var tabName=activeTab.dataset.tab;
-      if(tabName==='overview')renderOverview();
-      if(tabName==='students')renderStudentList();
-    }
-  }
-});
 
 // ====== 班级总览 ======
 function renderOverview(){
-  var students=getStudents();
-  if(students.length===0){
-    document.getElementById('stats-row').innerHTML='<div class="empty-state">暂无学生数据，等待学生完成诊断</div>';
-    document.getElementById('weakness-ranking').innerHTML='';
-    return;
-  }
-
-  // 统计卡片
-  var profileCount={};
-  students.forEach(function(s){var k=s.profileKey;profileCount[k]=(profileCount[k]||0)+1});
+  var students=getStudents();if(students.length===0){document.getElementById('stats-row').innerHTML='<div class="empty-state">暂无学生数据，等待学生完成诊断</div>';document.getElementById('weakness-ranking').innerHTML='';return;}
+  var profileCount={};students.forEach(function(s){var k=s.profileKey;profileCount[k]=(profileCount[k]||0)+1});
   var topProfile=Object.entries(profileCount).sort(function(a,b){return b[1]-a[1]})[0];
-  var avgNs=ROOT_CAUSES.map(function(_,i){
-    var sum=students.reduce(function(acc,s){return acc+s.ns[i]},0);
-    return Math.round(sum/students.length);
-  });
+  var avgNs=ROOT_CAUSES.map(function(_,i){var sum=students.reduce(function(acc,s){return acc+s.ns[i]},0);return Math.round(sum/students.length);});
   var avgWeakest=avgNs.map(function(v,i){return {v:v,i:i}}).sort(function(a,b){return a.v-b.v})[0];
+  // 薄弱学生计数
+  var weakCounts=ROOT_CAUSES.map(function(_,i){return students.filter(function(s){return s.ns[i]<42}).length;});
 
   var statsHTML='';
-  statsHTML+='<div class="stat-card"><div class="num">'+students.length+'</div><div class="lbl">班级总人数</div></div>';
-  statsHTML+='<div class="stat-card"><div class="num">'+Object.keys(profileCount).length+'</div><div class="lbl">涵盖画像数</div></div>';
-  statsHTML+='<div class="stat-card"><div class="num">'+(topProfile?PROFILES[topProfile[0]].name:'—')+'</div><div class="lbl">最多画像</div></div>';
-  statsHTML+='<div class="stat-card"><div class="num">'+ROOT_CAUSES[avgWeakest.i].sname+'</div><div class="lbl">共性薄弱根因</div></div>';
+  statsHTML+='<div class="stat-card"><div class="num">'+students.length+'</div><div class="lbl">👥 班级总人数</div></div>';
+  statsHTML+='<div class="stat-card"><div class="num">'+Object.keys(profileCount).length+'</div><div class="lbl">🎨 涵盖画像数</div></div>';
+  statsHTML+='<div class="stat-card"><div class="num" style="font-size:18px;">'+(topProfile?PROFILES[topProfile[0]].name:'—')+'</div><div class="lbl">📌 最多画像 ('+(topProfile?topProfile[1]:0)+'人)</div></div>';
+  statsHTML+='<div class="stat-card"><div class="num">'+ROOT_CAUSES[avgWeakest.i].sname+'</div><div class="lbl">⚠️ 共性薄弱 ('+avgWeakest.v+'分)</div><div class="mini-bar"><div class="mini-bar-fill" style="width:'+avgWeakest.v+'%;background:'+(avgWeakest.v>=68?'var(--green)':(avgWeakest.v>=42?'var(--gold)':'var(--red)'))+'"></div></div></div>';
   document.getElementById('stats-row').innerHTML=statsHTML;
 
-  // 画像分布图
+  // 画像分布 (doughnut)
   setTimeout(function(){drawProfileChart(profileCount)},200);
-
-  // 五维雷达图
+  // 班级雷达 (带理想线)
   setTimeout(function(){drawOverviewRadar(avgNs)},400);
 
   // 薄弱根因排行
-  var ranked=avgNs.map(function(v,i){return {v:v,i:i}}).sort(function(a,b){return a.v-b.v});
+  var ranked=avgNs.map(function(v,i){return {v:v,i:i,weakCount:weakCounts[i]}}).sort(function(a,b){return a.v-b.v});
+  var rankColors=['#B83A2A','#C77826','#8B7355'];
   var weakHTML='';
   ranked.forEach(function(item,idx){
-    var pct=item.v;
-    var color=pct>=68?'var(--green)':(pct>=42?'var(--gold)':'var(--red)');
-    weakHTML+='<div class="bar-wrap"><div class="bar-lbl">'+(idx+1)+'. '+ROOT_CAUSES[item.i].sname+'</div><div class="bar-track"><div class="bar-fill" style="width:'+pct+'%;background:'+color+'"></div></div><div class="bar-val">'+pct+'</div></div>';
+    var pct=item.v,color=pct>=68?'var(--green)':(pct>=42?'var(--gold)':'var(--red)');
+    var isTop=idx<3;
+    weakHTML+='<div class="weakness-item'+(isTop?' top-3':'')+'">';
+    weakHTML+='<div class="weakness-rank" style="background:'+(isTop?rankColors[idx]:'#C0B8B0')+'">'+(idx+1)+'</div>';
+    weakHTML+='<span class="weakness-name">'+ROOT_CAUSES[item.i].icon+' '+ROOT_CAUSES[item.i].sname+'</span>';
+    weakHTML+='<div class="weakness-track"><div class="weakness-fill" style="width:'+pct+'%;background:'+color+'"></div></div>';
+    weakHTML+='<span class="weakness-val" style="color:'+color+'">'+pct+'</span>';
+    weakHTML+='<span class="weakness-count">'+(item.weakCount>0?item.weakCount+'人<42':'')+'</span>';
+    weakHTML+='</div>';
   });
   document.getElementById('weakness-ranking').innerHTML=weakHTML;
 }
 
 // ====== 学生列表 ======
 function renderStudentList(){
-  var students=getStudents();
-  var filterType=document.getElementById('filter-type').value;
-  var sortKey=document.getElementById('sort-dim').value;
+  var students=getStudents();var filterType=document.getElementById('filter-type').value;var sortKey=document.getElementById('sort-dim').value;var attentionOnly=document.getElementById('filter-attention').checked;
 
   var profileKeys=[...new Set(students.map(function(s){return s.profileKey}))];
-  var filterHTML='<option value="all">全部画像</option>';
-  profileKeys.forEach(function(k){filterHTML+='<option value="'+k+'">'+PROFILES[k].name+'</option>'});
-  document.getElementById('filter-type').innerHTML=filterHTML;
-  document.getElementById('filter-type').value=filterType;
+  var profileCounts={};students.forEach(function(s){profileCounts[s.profileKey]=(profileCounts[s.profileKey]||0)+1});
+  var filterHTML='<option value="all">全部画像 ('+students.length+')</option>';
+  profileKeys.forEach(function(k){filterHTML+='<option value="'+k+'">'+PROFILES[k].name+' ('+(profileCounts[k]||0)+')</option>'});
+  document.getElementById('filter-type').innerHTML=filterHTML;document.getElementById('filter-type').value=filterType;
 
   var filtered=students;
   if(filterType!=='all')filtered=filtered.filter(function(s){return s.profileKey===filterType});
-  if(sortKey==='avg'){
-    filtered.sort(function(a,b){return (b.ns.reduce(function(s,v){return s+v},0)/5)-(a.ns.reduce(function(s,v){return s+v},0)/5)});
-  }else{
-    filtered.sort(function(a,b){return calcDomainScores(b.ns)[sortKey]-calcDomainScores(a.ns)[sortKey]});
-  }
+  if(attentionOnly)filtered=filtered.filter(function(s){return s.ns.some(function(v){return v<42})});
+  if(sortKey==='avg'){filtered.sort(function(a,b){return (b.ns.reduce(function(s,v){return s+v},0)/5)-(a.ns.reduce(function(s,v){return s+v},0)/5)});}
+  else{filtered.sort(function(a,b){return calcDomainScores(b.ns)[sortKey]-calcDomainScores(a.ns)[sortKey]});}
 
-  if(filtered.length===0){
-    document.getElementById('student-table-body').innerHTML='<tr><td colspan="9" class="empty-state">暂无匹配的学生数据</td></tr>';
-    return;
-  }
+  if(filtered.length===0){document.getElementById('student-table-body').innerHTML='<tr><td colspan="10" class="empty-state">暂无匹配的学生数据</td></tr>';return;}
 
   var html='';
   filtered.forEach(function(s){
-    var p=PROFILES[s.profileKey];
-    var date=s.ts?new Date(s.ts).toLocaleDateString('zh-CN'):'—';
-    var time=s.ts?new Date(s.ts).toLocaleTimeString('zh-CN',{hour:'2-digit',minute:'2-digit'}):'';
+    var p=PROFILES[s.profileKey];var date=s.ts?new Date(s.ts).toLocaleDateString('zh-CN'):'—';var time=s.ts?new Date(s.ts).toLocaleTimeString('zh-CN',{hour:'2-digit',minute:'2-digit'}):'';
+    var avg=Math.round(s.ns.reduce(function(a,b){return a+b},0)/5);
     html+='<tr>';
     html+='<td class="clickable" onclick="openStudentDetail(\''+s.id+'\')">'+escHtml(s.name)+(s.notes?' <span style="font-size:10px;" title="有教师批注">📝</span>':'')+'</td>';
     html+='<td><span class="tag '+p.tagClass+'">'+p.name+'</span></td>';
-    // 五层根因得分
     ROOT_CAUSES.forEach(function(rc,i){
-      var v=s.ns[i];
-      var color=v>=68?'var(--green)':(v>=42?'var(--gold)':'var(--red)');
-      html+='<td style="font-weight:700;color:'+color+'">'+v+'</td>';
+      var v=s.ns[i],color=v>=68?'var(--green)':(v>=42?'var(--gold)':'var(--red)');
+      html+='<td class="mini-cell"><span class="mini-cell-val" style="color:'+color+'">'+v+'</span><div class="mini-cell-bar"><div class="mini-cell-fill" style="width:'+v+'%;background:'+color+'"></div></div></td>';
     });
-    html+='<td style="font-size:12px;white-space:nowrap;">'+date+'<br>'+time+'</td>';
+    var avgColor=avg>=68?'var(--green)':(avg>=42?'var(--gold)':'var(--red)');
+    html+='<td style="font-weight:700;color:'+avgColor+';">'+avg+'</td>';
+    html+='<td style="font-size:11px;white-space:nowrap;">'+date+'<br>'+time+'</td>';
     html+='<td style="white-space:nowrap;"><button class="btn btn-outline btn-small" onclick="event.stopPropagation();openStudentDetail(\''+s.id+'\')">详情</button> <button class="btn btn-danger btn-small" onclick="event.stopPropagation();removeStudent(\''+s.id+'\');renderStudentList();updateCount()">删除</button></td>';
     html+='</tr>';
   });
   document.getElementById('student-table-body').innerHTML=html;
 }
 
-function escHtml(s){var d=document.createElement('div');d.textContent=s;return d.innerHTML}
+// ====== 学生对比 ======
+function updateCompareSelects(){var selA=document.getElementById('compare-a'),selB=document.getElementById('compare-b');if(!selA||!selB)return;var students=getStudents();var curA=selA.value,curB=selB.value;var opts='<option value="">— 选择学生 —</option>';students.forEach(function(s){opts+='<option value="'+s.id+'">'+escHtml(s.name)+'</option>';});selA.innerHTML=opts;selA.value=curA;selB.innerHTML=opts;selB.value=curB;}
+function renderCompare(){var idA=document.getElementById('compare-a').value,idB=document.getElementById('compare-b').value;var container=document.getElementById('compare-result');if(!idA||!idB){container.classList.add('hidden');return}var students=getStudents();var sA=students.find(function(s){return s.id===idA}),sB=students.find(function(s){return s.id===idB});if(!sA||!sB){container.classList.add('hidden');return}container.classList.remove('hidden');var dsA=calcDomainScores(sA.ns),dsB=calcDomainScores(sB.ns);var pA=PROFILES[sA.profileKey],pB=PROFILES[sB.profileKey];
+  // 差异总结
+  var diffs=[];ROOT_CAUSES.forEach(function(d,i){var diff=sA.ns[i]-sB.ns[i];if(Math.abs(diff)>=5)diffs.push({name:d.sname,diff:diff,icon:d.icon});});
+  diffs.sort(function(a,b){return Math.abs(b.diff)-Math.abs(a.diff)});
+  var summaryHTML='';
+  if(diffs.length>0){
+    var biggest=diffs[0];var adv=biggest.diff>0?sA.name:sB.name;var advDim=biggest.diff>0?biggest.name:biggest.name;
+    summaryHTML='<div class="diff-summary"><strong>📋 差异总结：</strong>';
+    summaryHTML+=escHtml(adv)+' 在 <strong>'+advDim+'</strong> 上领先 '+Math.abs(biggest.diff)+' 分。';
+    if(diffs.length>1){var second=diffs[1];var adv2=second.diff>0?sA.name:sB.name;summaryHTML+=' '+escHtml(adv2)+' 在 <strong>'+second.name+'</strong> 上更优（差 '+Math.abs(second.diff)+' 分）。';}
+    summaryHTML+='</div>';
+  }else{summaryHTML='<div class="diff-summary"><strong>📋 差异总结：</strong>两位学生在五层根因上表现非常接近。</div>';}
 
-// ====== 个体详情弹窗 ======
+  var html=summaryHTML;
+  html+='<div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px;">';
+  html+='<div><h4 style="color:var(--red);text-align:center;margin-bottom:4px;">'+escHtml(sA.name)+'</h4><div class="chart-wrap" style="max-width:200px;margin:0 auto;"><canvas id="chart-compare-a"></canvas></div></div>';
+  html+='<div><h4 style="color:var(--blue);text-align:center;margin-bottom:4px;">'+escHtml(sB.name)+'</h4><div class="chart-wrap" style="max-width:200px;margin:0 auto;"><canvas id="chart-compare-b"></canvas></div></div>';
+  html+='</div>';
+  html+='<table class="compare-table"><thead><tr><th>根因维度</th><th>'+escHtml(sA.name)+'</th><th>'+escHtml(sB.name)+'</th><th>差值</th><th>对比</th></tr></thead><tbody>';
+  ROOT_CAUSES.forEach(function(d,i){var vA=sA.ns[i],vB=sB.ns[i],diff=vA-vB;var diffCls=diff>0?'diff-pos':(diff<0?'diff-neg':'');var diffStr=diff>0?'+'+diff:(diff===0?'0':''+diff);var maxV=Math.max(vA,vB,1);html+='<tr><td class="dim-name">'+d.icon+' '+d.sname+'</td><td style="font-weight:700;color:var(--red);">'+vA+'</td><td style="font-weight:700;color:var(--blue);">'+vB+'</td><td class="'+diffCls+'" style="font-weight:700;">'+diffStr+'</td><td><div class="compare-bar-wrap"><div class="compare-bar-a" style="width:'+Math.round(vA/maxV*60)+'px;"></div><div class="compare-bar-b" style="width:'+Math.round(vB/maxV*60)+'px;"></div></div></td></tr>';});
+  html+='</tbody></table>';
+  html+='<div class="section-title" style="margin-top:16px;">📊 五大板块对比</div>';
+  html+='<table class="compare-table"><thead><tr><th>板块</th><th>'+escHtml(sA.name)+'</th><th>'+escHtml(sB.name)+'</th><th>差值</th></tr></thead><tbody>';
+  for(var dk in DOMAINS){var dAv=dsA[dk],dBv=dsB[dk],diff=dAv-dBv;var diffStr2=diff>0?'+'+diff:(diff===0?'0':''+diff);html+='<tr><td class="dim-name">'+DOMAINS[dk].name+'</td><td style="font-weight:700;color:var(--red);">'+dAv+'</td><td style="font-weight:700;color:var(--blue);">'+dBv+'</td><td class="'+(diff>0?'diff-pos':'diff-neg')+'" style="font-weight:700;">'+diffStr2+'</td></tr>';}
+  html+='</tbody></table>';
+  html+='<div class="section-title" style="margin-top:16px;">🧑 诊断画像对比</div>';
+  html+='<div style="display:flex;gap:12px;">';
+  html+='<div style="flex:1;text-align:center;padding:10px;background:var(--white);border-radius:10px;border:2px solid var(--red);"><span class="tag '+pA.tagClass+'" style="font-size:14px;padding:4px 12px;">'+pA.name+'</span><p style="font-size:12px;color:var(--ink-light);margin-top:6px;">'+pA.desc+'</p></div>';
+  html+='<div style="flex:1;text-align:center;padding:10px;background:var(--white);border-radius:10px;border:2px solid var(--blue);"><span class="tag '+pB.tagClass+'" style="font-size:14px;padding:4px 12px;">'+pB.name+'</span><p style="font-size:12px;color:var(--ink-light);margin-top:6px;">'+pB.desc+'</p></div>';
+  html+='</div>';
+  container.innerHTML=html;
+  setTimeout(function(){drawIndivRadar('chart-compare-a',sA.ns,null);drawIndivRadar('chart-compare-b',sB.ns,null);},200);
+}
+
+// ====== 个体详情弹窗（4 Tab） ======
+var _detailStudent=null;
+function switchModalTab(tabId,student){
+  document.querySelectorAll('.modal-tab').forEach(function(t){t.classList.remove('active')});
+  document.querySelector('.modal-tab[data-mtab="'+tabId+'"]').classList.add('active');
+  document.querySelectorAll('.modal-tab-content').forEach(function(c){c.classList.remove('active')});
+  document.getElementById('mtab-'+tabId).classList.add('active');
+  if(tabId==='overview'&&student){setTimeout(function(){drawIndivRadar('chart-indiv-radar',student.ns,student.avgNs);},150);}
+}
+
 function openStudentDetail(id){
-  var raw=loadStudents().find(function(s){return s.id===id});
-  if(!raw)return;
-  var student=Object.assign({},raw,{profileObj:PROFILES[raw.profileKey]||PROFILES['P7']});
+  var raw=loadStudents().find(function(s){return s.id===id});if(!raw)return;
+  var student=Object.assign({},raw,{profileObj:PROFILES[raw.profileKey]||PROFILES['P7']});_detailStudent=student;
   var ns=student.ns,p=student.profileObj;
   var ranked=ns.map(function(v,i){return {v:v,i:i}}).sort(function(a,b){return b.v-a.v});
   var weakRC=ranked[ranked.length-1];
-
-  // 计算班级均值
-  var allStudents=loadStudents();
-  var avgNs=null;
-  if(allStudents.length>=2){
-    avgNs=[0,0,0,0,0];
-    var count=0;
-    allStudents.forEach(function(s){
-      if(s.id!==id&&s.ns&&s.ns.length===5){
-        for(var i=0;i<5;i++)avgNs[i]+=s.ns[i];
-        count++;
-      }
-    });
-    if(count>0)for(var i=0;i<5;i++)avgNs[i]=Math.round(avgNs[i]/count);
-    else avgNs=null;
-  }
-
+  var allStudents=loadStudents();var avgNs=null;
+  if(allStudents.length>=2){avgNs=[0,0,0,0,0];var count=0;allStudents.forEach(function(s){if(s.id!==id&&s.ns&&s.ns.length===5){for(var i=0;i<5;i++)avgNs[i]+=s.ns[i];count++;}});if(count>0)for(var i=0;i<5;i++)avgNs[i]=Math.round(avgNs[i]/count);else avgNs=null;}
+  student.avgNs=avgNs;
   var domainScores=calcDomainScores(ns);
-  var rcExp=RC_EXP[weakRC.i][getLv(ns[weakRC.i])];
 
   var html='';
   html+='<button class="modal-close" onclick="closeModal()">✕</button>';
-
   // 头部
-  html+='<div style="text-align:center;margin-bottom:16px;">';
+  html+='<div style="text-align:center;margin-bottom:12px;">';
   html+='<h2 style="color:var(--red);margin-bottom:4px;">'+escHtml(student.name)+'</h2>';
   html+='<span class="tag '+p.tagClass+'" style="font-size:14px;padding:6px 16px;">'+p.name+' · '+p.tag+'</span>';
-  html+='<p style="font-size:13px;color:var(--ink-light);margin-top:8px;">'+p.desc+'</p>';
-  if(student.ts)html+='<p style="font-size:11px;color:var(--ink-light);">诊断日期：'+new Date(student.ts).toLocaleDateString('zh-CN')+'</p>';
+  if(student.ts)html+='<p style="font-size:11px;color:var(--ink-light);margin-top:4px;">诊断日期：'+new Date(student.ts).toLocaleDateString('zh-CN')+'</p>';
   html+='<button class="btn btn-outline btn-small" onclick="event.stopPropagation();printStudentReport()" style="margin-top:8px;">🖨️ 打印此报告</button>';
   html+='</div>';
 
-  // 五维雷达
-  html+='<div class="card"><h4>🎯 五层根因雷达'+(avgNs?'<span style="font-size:11px;color:var(--blue);font-weight:400;">（虚线 = 班级均值）</span>':'')+'</h4><div class="chart-wrap" style="max-width:320px;margin:0 auto;"><canvas id="chart-indiv-radar"></canvas></div></div>';
+  // 内部 Tab
+  html+='<div class="modal-tabs">';
+  html+='<div class="modal-tab active" data-mtab="overview" onclick="switchModalTab(\'overview\',_detailStudent)">📊 诊断概览</div>';
+  html+='<div class="modal-tab" data-mtab="teaching" onclick="switchModalTab(\'teaching\',_detailStudent)">📝 教学方案</div>';
+  html+='<div class="modal-tab" data-mtab="parent" onclick="switchModalTab(\'parent\',_detailStudent)">🏠 家校共育</div>';
+  html+='<div class="modal-tab" data-mtab="notes" onclick="switchModalTab(\'notes\',_detailStudent)">✏️ 批注</div>';
+  html+='</div>';
 
-  // 五层根因解读
-  html+='<div class="card"><h4>📋 五层根因解读</h4>';
+  // Tab 1: 诊断概览
+  html+='<div class="modal-tab-content active" id="mtab-overview">';
+  html+='<div class="card" style="box-shadow:none;border:1px solid var(--border);"><h4>🎯 五层根因雷达'+(avgNs?'<span style="font-size:11px;color:var(--blue);font-weight:400;">（虚线 = 班级均值）</span>':'')+'</h4><div class="chart-wrap" style="max-width:300px;margin:0 auto;"><canvas id="chart-indiv-radar"></canvas></div></div>';
+  html+='<div class="card" style="box-shadow:none;border:1px solid var(--border);"><h4>📋 五层根因解读</h4>';
   ROOT_CAUSES.forEach(function(rc){
-    var lv=getLv(ns[rc.id]),exp=RC_EXP[rc.id][lv];
-    var color=lv==='high'?'var(--green)':(lv==='medium'?'var(--gold)':'var(--red)');
-    var label=lv==='high'?'优势':(lv==='medium'?'适中':'待提升');
-    html+='<div style="margin-bottom:10px;padding:8px 12px;background:var(--white);border-radius:8px;border-left:3px solid '+color+';">';
-    html+='<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px;">';
-    html+='<strong>'+rc.icon+' '+rc.name+'</strong>';
-    html+='<span style="font-size:12px;color:'+color+';font-weight:600;">'+ns[rc.id]+'分 · '+label+'</span></div>';
-    html+='<p style="font-size:12px;color:var(--ink-light);line-height:1.7;margin:0;">'+exp.desc+'</p>';
-    html+='</div>';
-  });
-  html+='</div>';
+    var lv=getLv(ns[rc.id]),exp=RC_EXP[rc.id][lv];var color=lv==='high'?'var(--green)':(lv==='medium'?'var(--gold)':'var(--red)');var label=lv==='high'?'优势':(lv==='medium'?'适中':'待提升');
+    html+='<div style="margin-bottom:8px;padding:8px 12px;background:var(--white);border-radius:8px;border-left:3px solid '+color+';">';
+    html+='<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:3px;"><strong>'+rc.icon+' '+rc.name+'</strong><span style="font-size:12px;color:'+color+';font-weight:600;">'+ns[rc.id]+'分 · '+label+'</span></div>';
+    html+='<p style="font-size:12px;color:var(--ink-light);line-height:1.7;margin:0;">'+exp.desc+'</p></div>';
+  });html+='</div>';
+  html+='<div class="card" style="box-shadow:none;border:1px solid var(--border);"><h4>📊 语文五大板块</h4>';
+  for(var dk in DOMAINS){var dom=DOMAINS[dk],ds=domainScores[dk];var dcolor=ds>=68?'var(--green)':(ds>=42?'var(--gold)':'var(--red)');html+='<div class="domain-card"><strong>'+dom.name+'</strong><span class="domain-score" style="color:'+dcolor+'">'+ds+' 分</span><p style="font-size:12px;color:var(--ink-light);margin:4px 0 0;">'+dom.desc+'</p></div>';}
+  html+='</div></div>';
 
-  // 五大板块
-  html+='<div class="card"><h4>📊 语文五大板块</h4>';
-  for(var dk in DOMAINS){
-    var dom=DOMAINS[dk],ds=domainScores[dk];
-    var dcolor=ds>=68?'var(--green)':(ds>=42?'var(--gold)':'var(--red)');
-    html+='<div class="domain-card">';
-    html+='<strong>'+dom.name+'</strong><span class="domain-score" style="color:'+dcolor+'">'+ds+' 分</span>';
-    html+='<p style="font-size:12px;color:var(--ink-light);margin:4px 0 0;">'+dom.desc+'</p>';
-    html+='</div>';
-  }
-  html+='</div>';
+  // Tab 2: 教学方案
+  html+='<div class="modal-tab-content" id="mtab-teaching">';
+  html+='<div class="card" style="box-shadow:none;border:1px solid var(--border);"><h4>📝 教学培养案</h4>';
+  html+='<p style="font-size:13px;color:var(--ink-light);margin-bottom:6px;"><strong>诊断概要：</strong>'+p.name+' — '+p.studentTitle+'</p>';
+  html+='<p style="font-size:13px;color:var(--ink-light);margin-bottom:6px;"><strong>📊 五层根因得分：</strong>';
+  ROOT_CAUSES.forEach(function(rc,i){html+=rc.sname+' <b style="color:'+(ns[i]>=68?'var(--green)':(ns[i]>=42?'var(--gold)':'var(--red)'))+'">'+ns[i]+'</b>分 ';});html+='</p>';
+  html+='<p style="font-size:13px;color:var(--ink-light);margin-bottom:10px;"><strong>教学优先级：</strong>'+p.teacherPriority+'</p>';
+  html+='<p style="font-size:12px;color:var(--ink-light);margin-bottom:6px;font-weight:700;">💡 推荐课堂策略：</p>';
+  p.teacherStrategies.forEach(function(s,i){html+='<div class="advice-item" style="margin-bottom:8px;"><span class="advice-num">'+(i+1)+'</span>'+s+'</div>';});
+  html+='<p style="font-size:12px;color:var(--ink-light);margin-top:8px;"><strong>📏 监控指标：</strong>'+p.teacherMonitor+'</p>';html+='</div></div>';
 
-  // 教学培养案
-  html+='<div class="card"><h4>📝 教学培养案</h4>';
-  html+='<p style="font-size:12px;color:var(--ink-light);margin-bottom:6px;"><strong>诊断概要：</strong>'+p.name+' — '+p.studentTitle+'</p>';
-  html+='<p style="font-size:12px;color:var(--ink-light);margin-bottom:10px;"><strong>教学优先级：</strong>'+p.teacherPriority+'</p>';
-  html+='<p style="font-size:12px;color:var(--ink-light);margin-bottom:8px;"><strong>推荐课堂策略：</strong></p>';
-  p.teacherStrategies.forEach(function(s,i){
-    html+='<div class="advice-item" style="margin-bottom:8px;"><span class="advice-num">'+(i+1)+'</span>'+s+'</div>';
-  });
-  html+='<p style="font-size:12px;color:var(--ink-light);margin-top:8px;"><strong>📏 监控指标：</strong>'+p.teacherMonitor+'</p>';
-  html+='</div>';
-
-  // 教师批注
-  html+='<div class="card"><h4>✏️ 教师批注</h4>';
-  html+='<textarea id="note-'+student.id+'" placeholder="在此添加对 '+escHtml(student.name)+' 的教学观察和批注..." style="min-height:80px;">'+(student.notes||'')+'</textarea>';
-  html+='<div style="margin-top:6px;display:flex;gap:8px;align-items:center;">';
-  html+='<button class="btn btn-primary btn-small" onclick="saveTeacherNote(\''+student.id+'\')">💾 保存批注</button>';
-  html+='<span id="note-msg-'+student.id+'" style="font-size:12px;"></span></div></div>';
-
-  // 家校共育建议
-  html+='<div class="card"><h4>🏠 家校共育建议</h4>';
+  // Tab 3: 家校共育
+  html+='<div class="modal-tab-content" id="mtab-parent">';
+  html+='<div class="card" style="box-shadow:none;border:1px solid var(--border);"><h4>🏠 家校共育建议</h4>';
   html+='<div class="section-title">📌 给家长的关键告知</div>';
   html+='<p style="font-size:13px;line-height:1.85;color:var(--ink-light);">'+p.parentMsg+'</p>';
   html+='<div class="section-title">🏡 在家可以这样做</div>';
-  p.parentActions.forEach(function(a,i){
-    html+='<div style="margin-bottom:6px;font-size:13px;line-height:1.7;color:var(--ink-light);"><strong>'+(i+1)+'.</strong> '+a+'</div>';
-  });
+  p.parentActions.forEach(function(a,i){html+='<div style="margin-bottom:6px;font-size:13px;line-height:1.7;color:var(--ink-light);"><strong>'+(i+1)+'.</strong> '+a+'</div>';});
   var commTiming=getLv(ns[weakRC.i])==='low'?'建议每两周与语文老师沟通一次，了解孩子在该根因维度的进展。':'建议每月与语文老师沟通一次，关注孩子在薄弱维度的改善迹象。';
   html+='<div class="section-title">📞 建议沟通时机</div>';
-  html+='<p style="font-size:13px;line-height:1.85;color:var(--ink-light);">'+commTiming+'</p>';
-  html+='</div>';
+  html+='<p style="font-size:13px;line-height:1.85;color:var(--ink-light);">'+commTiming+'</p>';html+='</div></div>';
+
+  // Tab 4: 批注
+  html+='<div class="modal-tab-content" id="mtab-notes">';
+  html+='<div class="card" style="box-shadow:none;border:1px solid var(--border);"><h4>✏️ 教师批注</h4>';
+  html+='<textarea id="note-'+student.id+'" placeholder="在此添加对 '+escHtml(student.name)+' 的教学观察和批注..." style="min-height:100px;">'+(student.notes||'')+'</textarea>';
+  html+='<div style="margin-top:6px;display:flex;gap:8px;align-items:center;">';
+  html+='<button class="btn btn-primary btn-small" onclick="saveTeacherNote(\''+student.id+'\')">💾 保存批注</button>';
+  html+='<span id="note-msg-'+student.id+'" style="font-size:12px;"></span></div></div></div>';
 
   document.getElementById('modal-content').innerHTML=html;
   document.getElementById('modal-overlay').classList.add('show');
-  setTimeout(function(){drawIndivRadar('chart-indiv-radar',ns,avgNs)},300);
+  setTimeout(function(){drawIndivRadar('chart-indiv-radar',ns,avgNs);},300);
 }
 
-function printStudentReport(){
-  var modal=document.querySelector('.modal');
-  var btns=modal.querySelectorAll('.btn,.modal-close,textarea');
-  btns.forEach(function(b){b.style.display='none'});
-  window.print();
-  btns.forEach(function(b){b.style.display=''});
-}
-
-function closeModal(){
-  document.getElementById('modal-overlay').classList.remove('show');
-  var canvas=document.getElementById('chart-indiv-radar');
-  if(canvas){var ctx=canvas.getContext('2d');if(ctx._chart)ctx._chart.destroy();}
-}
+function printStudentReport(){var modal=document.querySelector('.modal');var btns=modal.querySelectorAll('.btn,.modal-close,textarea');btns.forEach(function(b){b.style.display='none'});window.print();btns.forEach(function(b){b.style.display=''});}
+function closeModal(){document.getElementById('modal-overlay').classList.remove('show');var canvas=document.getElementById('chart-indiv-radar');if(canvas){var ctx=canvas.getContext('2d');if(ctx._chart)ctx._chart.destroy();}_detailStudent=null;}
 
 // ====== 教师批注保存 ======
-function saveTeacherNote(id){
-  var student=loadStudents().find(function(s){return s.id===id});
-  if(!student)return;
-  var ta=document.getElementById('note-'+id);
-  var notes=ta?ta.value.trim():'';
-  student.notes=notes;
-  var fname='data/'+encodeURIComponent(student.name)+'.json';
-  var content=JSON.stringify({name:student.name,ns:student.ns,ts:student.ts||'',notes:notes});
-  githubAPI('https://api.github.com/repos/'+GITHUB_REPO+'/contents/'+fname).then(function(fileInfo){
-    var body={message:'批注: '+student.name,content:btoa(unescape(encodeURIComponent(content))),branch:'main'};
-    if(fileInfo&&fileInfo.sha)body.sha=fileInfo.sha;
-    return githubAPI('https://api.github.com/repos/'+GITHUB_REPO+'/contents/'+fname,{method:'PUT',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)});
-  }).then(function(){
-    var msgEl=document.getElementById('note-msg-'+id);
-    if(msgEl){msgEl.textContent='已保存';msgEl.style.color='#5B8C5A';setTimeout(function(){msgEl.textContent=''},2000);}
-  }).catch(function(){
-    var msgEl=document.getElementById('note-msg-'+id);
-    if(msgEl){msgEl.textContent='保存失败';msgEl.style.color='var(--red)';}
-  });
-}
+function saveTeacherNote(id){var student=loadStudents().find(function(s){return s.id===id});if(!student)return;var ta=document.getElementById('note-'+id);var notes=ta?ta.value.trim():'';student.notes=notes;var fname='data/'+encodeURIComponent(student.name)+'.json';var content=JSON.stringify({name:student.name,ns:student.ns,ts:student.ts||'',notes:notes});githubAPI('https://api.github.com/repos/'+GITHUB_REPO+'/contents/'+fname).then(function(fileInfo){var body={message:'批注: '+student.name,content:btoa(unescape(encodeURIComponent(content))),branch:'main'};if(fileInfo&&fileInfo.sha)body.sha=fileInfo.sha;return githubAPI('https://api.github.com/repos/'+GITHUB_REPO+'/contents/'+fname,{method:'PUT',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)});}).then(function(){var msgEl=document.getElementById('note-msg-'+id);if(msgEl){msgEl.textContent='已保存';msgEl.style.color='#5B8C5A';setTimeout(function(){msgEl.textContent=''},2000);}}).catch(function(){var msgEl=document.getElementById('note-msg-'+id);if(msgEl){msgEl.textContent='保存失败';msgEl.style.color='var(--red)';}});}
 
 // ====== Chart.js ======
 let chartLoaded=false,chartLoading=false,chartCbs=[];
-function loadChart(cb){
-  if(chartLoaded){cb();return}
-  chartCbs.push(cb);if(chartLoading)return;chartLoading=true;
-  var urls=['https://registry.npmmirror.com/chart.js/4.4.0/files/dist/chart.umd.min.js','https://unpkg.com/chart.js@4.4.0/dist/chart.umd.min.js','https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js'];
-  function tryLoad(i){
-    if(i>=urls.length){chartLoaded=true;chartLoading=false;chartCbs.forEach(function(c){c()});chartCbs=[];return}
-    var s=document.createElement('script');s.src=urls[i];
-    s.onload=function(){chartLoaded=true;chartLoading=false;chartCbs.forEach(function(c){c()});chartCbs=[]};
-    s.onerror=function(){tryLoad(i+1)};document.head.appendChild(s)
-  }
-  tryLoad(0)
-}
+function loadChart(cb){if(chartLoaded){cb();return}chartCbs.push(cb);if(chartLoading)return;chartLoading=true;var urls=['https://registry.npmmirror.com/chart.js/4.4.0/files/dist/chart.umd.min.js','https://unpkg.com/chart.js@4.4.0/dist/chart.umd.min.js','https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js'];function tryLoad(i){if(i>=urls.length){chartLoaded=true;chartLoading=false;chartCbs.forEach(function(c){c()});chartCbs=[];return}var s=document.createElement('script');s.src=urls[i];s.onload=function(){chartLoaded=true;chartLoading=false;chartCbs.forEach(function(c){c()});chartCbs=[]};s.onerror=function(){tryLoad(i+1)};document.head.appendChild(s)}tryLoad(0)}
 
 var CHART_COLORS=['#B83A2A','#C77826','#4A7B9D','#8B7355','#5B8C5A','#B8860B','#9B4D7A','#5B7A9D'];
 
 function drawProfileChart(profileCount){
-  var canvas=document.getElementById('chart-type');
-  if(!canvas)return;
+  var canvas=document.getElementById('chart-type');if(!canvas)return;
   loadChart(function(){
-    var labels=[],data=[],colors=[];
-    var i=0;
-    for(var k in profileCount){
-      labels.push(PROFILES[k].name);data.push(profileCount[k]);colors.push(CHART_COLORS[i%CHART_COLORS.length]);i++;
-    }
-    var ctx=canvas.getContext('2d');
-    if(ctx._chart)ctx._chart.destroy();
-    ctx._chart=new Chart(ctx,{type:'bar',data:{labels:labels,datasets:[{data:data,backgroundColor:colors,borderRadius:6}]},options:{responsive:true,maintainAspectRatio:true,plugins:{legend:{display:false}},scales:{y:{beginAtZero:true,ticks:{stepSize:1}}}}});
+    var labels=[],data=[],colors=[],i=0;for(var k in profileCount){labels.push(PROFILES[k].name);data.push(profileCount[k]);colors.push(CHART_COLORS[i%CHART_COLORS.length]);i++;}
+    var ctx=canvas.getContext('2d');if(ctx._chart)ctx._chart.destroy();
+    ctx._chart=new Chart(ctx,{type:'doughnut',data:{labels:labels,datasets:[{data:data,backgroundColor:colors,borderColor:'#fff',borderWidth:2}]},options:{responsive:true,maintainAspectRatio:true,plugins:{legend:{position:'bottom',labels:{font:{size:10},padding:12,usePointStyle:true,pointStyleWidth:8}}},cutout:'55%'}});
   });
 }
 
 function drawOverviewRadar(ns){
-  var canvas=document.getElementById('chart-radar');
-  if(!canvas)return;
+  var canvas=document.getElementById('chart-radar');if(!canvas)return;
   loadChart(function(){
-    var ctx=canvas.getContext('2d');
-    if(ctx._chart)ctx._chart.destroy();
-    ctx._chart=new Chart(ctx,{type:'radar',data:{labels:ROOT_CAUSES.map(function(d){return d.icon+' '+d.sname}),datasets:[{data:ns,backgroundColor:'rgba(184,58,42,0.10)',borderColor:'#B83A2A',borderWidth:2,pointBackgroundColor:'#B83A2A',pointBorderColor:'#fff',pointBorderWidth:2,pointRadius:5}]},options:{responsive:true,maintainAspectRatio:true,plugins:{legend:{display:false}},scales:{r:{min:0,max:100,ticks:{stepSize:20,backdropColor:'transparent',font:{size:10}},pointLabels:{font:{size:11}},grid:{color:'#E0D5C9'},angleLines:{color:'#E0D5C9'}}}}});
+    var ctx=canvas.getContext('2d');if(ctx._chart)ctx._chart.destroy();
+    var datasets=[{data:ns,label:'班级均值',backgroundColor:'rgba(184,58,42,0.08)',borderColor:'#B83A2A',borderWidth:2,pointBackgroundColor:'#B83A2A',pointBorderColor:'#fff',pointBorderWidth:2,pointRadius:5}];
+    // 理想线 75
+    datasets.push({data:[75,75,75,75,75],label:'参考线(75)',backgroundColor:'transparent',borderColor:'rgba(184,134,11,0.4)',borderWidth:1.5,borderDash:[8,4],pointRadius:0,fill:false});
+    ctx._chart=new Chart(ctx,{type:'radar',data:{labels:ROOT_CAUSES.map(function(d){return d.icon+' '+d.sname}),datasets:datasets},options:{responsive:true,maintainAspectRatio:true,plugins:{legend:{position:'bottom',labels:{font:{size:10},padding:10,usePointStyle:true}}},scales:{r:{min:0,max:100,ticks:{stepSize:20,backdropColor:'transparent',font:{size:10}},pointLabels:{font:{size:11}},grid:{color:'#E0D5C9'},angleLines:{color:'#E0D5C9'}}}}});
   });
 }
 
 function drawIndivRadar(id,ns,avgNs){
-  var canvas=document.getElementById(id);
-  if(!canvas)return;
+  var canvas=document.getElementById(id);if(!canvas)return;
   loadChart(function(){
-    var ctx=canvas.getContext('2d');
-    if(ctx._chart)ctx._chart.destroy();
-    var datasets=[{data:ns,label:'该生',backgroundColor:'rgba(184,58,42,0.10)',borderColor:'#B83A2A',borderWidth:2,pointBackgroundColor:'#B83A2A',pointBorderColor:'#fff',pointBorderWidth:2,pointRadius:5}];
-    if(avgNs&&Array.isArray(avgNs)&&avgNs.length===5){
-      datasets.push({data:avgNs,label:'班级均值',backgroundColor:'rgba(74,123,157,0.05)',borderColor:'#4A7B9D',borderWidth:1.5,borderDash:[6,3],pointBackgroundColor:'#4A7B9D',pointBorderColor:'#fff',pointBorderWidth:1,pointRadius:3});
-    }
-    ctx._chart=new Chart(ctx,{type:'radar',data:{labels:ROOT_CAUSES.map(function(d){return d.icon+' '+d.sname}),datasets:datasets},options:{responsive:true,maintainAspectRatio:true,plugins:{legend:{display:!!avgNs,position:'bottom',labels:{font:{size:10},padding:12}}},scales:{r:{min:0,max:100,ticks:{stepSize:20,backdropColor:'transparent',font:{size:10}},pointLabels:{font:{size:11}},grid:{color:'#E0D5C9'},angleLines:{color:'#E0D5C9'}}}}});
+    var ctx=canvas.getContext('2d');if(ctx._chart)ctx._chart.destroy();
+    var datasets=[{data:ns,label:'该生',backgroundColor:'rgba(184,58,42,0.08)',borderColor:'#B83A2A',borderWidth:2,pointBackgroundColor:'#B83A2A',pointBorderColor:'#fff',pointBorderWidth:2,pointRadius:5}];
+    if(avgNs&&Array.isArray(avgNs)&&avgNs.length===5){datasets.push({data:avgNs,label:'班级均值',backgroundColor:'rgba(74,123,157,0.05)',borderColor:'#4A7B9D',borderWidth:1.5,borderDash:[6,3],pointBackgroundColor:'#4A7B9D',pointBorderColor:'#fff',pointBorderWidth:1,pointRadius:3});}
+    ctx._chart=new Chart(ctx,{type:'radar',data:{labels:ROOT_CAUSES.map(function(d){return d.icon+' '+d.sname}),datasets:datasets},options:{responsive:true,maintainAspectRatio:true,plugins:{legend:{display:!!avgNs,position:'bottom',labels:{font:{size:10},padding:12,usePointStyle:true}}},scales:{r:{min:0,max:100,ticks:{stepSize:20,backdropColor:'transparent',font:{size:10}},pointLabels:{font:{size:11}},grid:{color:'#E0D5C9'},angleLines:{color:'#E0D5C9'}}}}});
+  });
+}
+
+function drawImportPreview(ns){
+  var canvas=document.getElementById('chart-import-preview');if(!canvas)return;
+  loadChart(function(){
+    var ctx=canvas.getContext('2d');if(ctx._chart)ctx._chart.destroy();
+    ctx._chart=new Chart(ctx,{type:'radar',data:{labels:ROOT_CAUSES.map(function(d){return d.icon+' '+d.sname}),datasets:[{data:ns,backgroundColor:'rgba(184,58,42,0.08)',borderColor:'#B83A2A',borderWidth:2,pointBackgroundColor:'#B83A2A',pointBorderColor:'#fff',pointBorderWidth:2,pointRadius:4}]},options:{responsive:true,maintainAspectRatio:true,plugins:{legend:{display:false}},scales:{r:{min:0,max:100,ticks:{stepSize:20,backdropColor:'transparent',font:{size:8}},pointLabels:{font:{size:9}},grid:{color:'#E0D5C9'},angleLines:{color:'#E0D5C9'}}}}});
   });
 }
 
@@ -998,41 +816,10 @@ function drawIndivRadar(id,ns,avgNs){
 let _lastKnownCount=0;
 function init(){
   initManualForm();
-  if(USE_API){
-    fetchFromServer();
-    _lastKnownCount=0;
-    setInterval(fetchFromServer,4000);
-  }else{
-    _lastKnownCount=loadStudents().length;
-    setInterval(function(){
-      var current=loadStudents().length;
-      if(current>_lastKnownCount){
-        var diff=current-_lastKnownCount;
-        _lastKnownCount=current;
-        updateCount();
-        var hint=document.getElementById('refresh-hint');
-        hint.textContent='检测到 '+diff+' 名新学生完成诊断，数据已自动更新';
-        hint.style.display='block';hint.style.color='#5B8C5A';
-        setTimeout(function(){hint.style.display='none'},5000);
-        var activeTab=document.querySelector('.tab.active');
-        if(activeTab){
-          var tn=activeTab.dataset.tab;
-          if(tn==='overview')renderOverview();
-          if(tn==='students')renderStudentList();
-        }
-      }
-    },5000);
-  }
-  updateCount();
-  switchTab('import');
-  if(USE_API){
-    setTimeout(function(){
-      var hint=document.getElementById('refresh-hint');
-      hint.textContent='服务器模式：学生完成诊断后自动同步到此处';
-      hint.style.display='block';hint.style.color='var(--blue)';
-      setTimeout(function(){hint.style.display='none'},4000);
-    },500);
-  }
+  if(USE_API){fetchFromServer();_lastKnownCount=0;setInterval(fetchFromServer,4000);}
+  else{_lastKnownCount=loadStudents().length;setInterval(function(){var current=loadStudents().length;if(current>_lastKnownCount){var diff=current-_lastKnownCount;_lastKnownCount=current;updateCount();var hint=document.getElementById('refresh-hint');hint.textContent='检测到 '+diff+' 名新学生完成诊断，数据已自动更新';hint.style.display='block';hint.style.color='#5B8C5A';setTimeout(function(){hint.style.display='none'},5000);var activeTab=document.querySelector('.tab.active');if(activeTab){var tn=activeTab.dataset.tab;if(tn==='overview')renderOverview();if(tn==='students')renderStudentList();}}},5000);}
+  updateCount();switchTab('import');
+  if(USE_API){setTimeout(function(){var hint=document.getElementById('refresh-hint');hint.textContent='✓ 服务器模式：学生完成诊断后自动同步到此处';hint.style.display='block';hint.style.color='var(--blue)';setTimeout(function(){hint.style.display='none'},4000);},500);}
 }
 init();
 </script>
